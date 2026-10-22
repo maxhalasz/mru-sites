@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import { render } from 'astro:content';
+import { published, longDate } from '../../data/util';
+
+export async function getStaticPaths() {
+  const news = await published('news');
+  return news.map((n) => ({ params: { slug: n.id }, props: { n } }));
+}
+const { n } = Astro.props;
+const { Content } = await render(n);
+---
+<Base title={n.data.title} current="/newsroom/" description={n.data.summary}>
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / <a href="/newsroom/">Newsroom</a></div>
+      <span class="tag">{n.data.category}</span> <span class="muted small">{longDate(n.data.date)}</span>
+      <h1 style="margin-top:.6rem;max-width:26ch">{n.data.title}</h1>
+    </div>
+  </div>
+  <section class="band">
+    <div class="wrap prose">
+      <p style="font-size:1.2rem;color:var(--slate)">{n.data.summary}</p>
+      <Content />
+      <p class="small muted" style="margin-top:2rem">Media contact: <a href="mailto:press@neurostat.example">press@neurostat.example</a></p>
+      <p><a href="/newsroom/">Back to newsroom</a></p>
+    </div>
+  </section>
+</Base>

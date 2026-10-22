@@ -1,4 +1,106 @@
 ---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { published, longDate } from '../data/util';
+import { last, change, changePct } from '../data/stock';
+
+const news = (await published('news')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+const pipeline = await published('pipeline');
+const active = pipeline.filter((p) => p.data.phase !== 'Discontinued');
+const count = (ph: string) => active.filter((p) => p.data.phase === ph).length;
+const areas = [
+  ['Sleep & Circadian Health', 'Treatments for insomnia, shift work disorder and disrupted body clocks.', '/science/#sleep'],
+  ['Memory & Cognition', 'Research into how memory is stored, lost and retrieved, and how performance holds up under strain.', '/science/#memory'],
+  ['Neurodiagnostics', 'Wearable and digital tools that measure sleep, fatigue and cognition outside the laboratory.', '/science/#neurodiagnostics'],
+];
+const up = change >= 0;
 ---
-<html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>NeuroStat Holding AG</title></head>
-<body><h1>NeuroStat</h1></body></html>
+<Base title="NeuroStat" current="/">
+  <section class="hero">
+    <Placeholder file="home-hero.jpg" ratio="21 / 9" label="Photograph: a physician checking a colleague's alertness on a remote night shift" />
+    <div class="wrap">
+      <p class="eyebrow" style="color:#9fb2c8">NeuroStat Holding AG</p>
+      <h1>Our hope lies in the questions neuroscience has not yet answered.</h1>
+      <p>We develop medicines and tools for sleep, memory and cognition, and we test them with the people who work where it is hardest to stay well.</p>
+      <p><a class="btn" href="/science/" style="background:#fff;color:#14243a">Our science</a></p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <p class="eyebrow">Therapeutic areas</p>
+      <h2>Three areas, one question: how does the brain keep working?</h2>
+      <div class="grid c3" style="margin-top:1.5rem">
+        {areas.map(([t, d, h]) => (
+          <a class="card" href={h} style="text-decoration:none;color:inherit">
+            <h3>{t}</h3>
+            <p class="muted">{d}</p>
+            <span class="more">Read more</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap grid c2" style="align-items:center;gap:3rem">
+      <Placeholder file="home-extreme-environment.jpg" ratio="4 / 3" label="Photograph: a clinic room on a remote installation at night" />
+      <div>
+        <p class="eyebrow">Medicine at the edge</p>
+        <h2>Where help is far away, preparation counts</h2>
+        <p>On polar stations, offshore installations and military bases, people work long rotations in the cold and the dark, with the nearest hospital a long way off. Our Baseline and Halo platforms give occupational physicians a clear picture of sleep, fatigue and cognition before problems become incidents.</p>
+        <p>The same conditions teach us how the brain behaves under strain. They inform our clinical research.</p>
+        <p><a href="/products/baseline/">About NeuroStat Baseline</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:1rem">
+        <div><p class="eyebrow">Newsroom</p><h2>Latest news</h2></div>
+        <a href="/newsroom/">All news</a>
+      </div>
+      <div class="grid c3">
+        {news.map((n) => (
+          <a class="card" href={`/newsroom/${n.id}/`} style="text-decoration:none;color:inherit">
+            <span class="tag" style="align-self:flex-start">{n.data.category}</span>
+            <h3 style="margin-top:.8rem">{n.data.title}</h3>
+            <p class="muted small">{longDate(n.data.date)}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band dark">
+    <div class="wrap grid c2" style="gap:3rem">
+      <div>
+        <p class="eyebrow" style="color:#9fb2c8">Pipeline</p>
+        <h2>{active.length} programmes in development</h2>
+        <p>From early studies to registration, across sleep, memory and neurodiagnostics.</p>
+        <p><a class="btn" href="/pipeline/" style="background:#fff;color:#14243a">View pipeline</a></p>
+      </div>
+      <div class="grid c4" style="gap:1rem">
+        {['I', 'II', 'III', 'Registration'].map((ph) => (
+          <div style="border:1px solid #2c4160;padding:1rem">
+            <div style="font:500 2.2rem var(--font-head)">{count(ph)}</div>
+            <div class="small" style="color:#b9c6d6">{ph === 'Registration' ? 'Registration' : `Phase ${ph}`}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <p class="eyebrow">Investors</p>
+      <div class="ticker">
+        <div><span class="muted small">SIX: NEUS</span><div class="px">CHF {last.close.toFixed(2)}</div></div>
+        <div class={`chg ${up ? 'up' : 'down'}`}>{up ? '+' : ''}{change.toFixed(2)} ({up ? '+' : ''}{changePct.toFixed(2)}%)</div>
+        <div class="muted small">Close, {longDate(new Date(last.date))}</div>
+      </div>
+      <a href="/investors/">Investor information</a>
+    </div>
+  </section>
+</Base>

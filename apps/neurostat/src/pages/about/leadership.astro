@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import { published } from '../../data/util';
+
+const all = (await published('leadership')).sort((a, b) => a.data.order - b.data.order);
+const groups: [string, string][] = [
+  ['executive', 'Executive Committee'],
+  ['board', 'Board of Directors'],
+  ['extended', 'Extended leadership'],
+];
+const slug = (n: string) => n.toLowerCase().replace(/^dr\. /, '').replace(/[^a-z]+/g, '-');
+---
+<Base title="Leadership" current="/about/">
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / <a href="/about/">About</a> / Leadership</div>
+      <h1>Leadership</h1>
+      <p>The people who run NeuroStat and oversee its work.</p>
+    </div>
+  </div>
+  {groups.map(([key, title]) => {
+    const people = all.filter((p) => p.data.group === key);
+    return people.length > 0 && (
+      <section class={`band ${key === 'board' ? 'alt' : ''}`}>
+        <div class="wrap">
+          <h2>{title}</h2>
+          <div class="grid c4" style="margin-top:1.2rem">
+            {people.map((p) => (
+              <div class="person">
+                <Placeholder file={`portrait-${slug(p.data.name)}.jpg`} ratio="4 / 5" label={`Portrait of ${p.data.name}`} />
+                <h3>{p.data.name}</h3>
+                <p class="muted">{p.data.role}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+  <section class="band">
+    <div class="wrap prose">
+      <h2>Founder</h2>
+      <p>NeuroStat was founded in 2003 by Dr. Adriond Fisher together with a group of clinicians.</p>
+    </div>
+  </section>
+</Base>

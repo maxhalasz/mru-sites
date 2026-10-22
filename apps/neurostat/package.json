@@ -5,12 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --port 4321",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check"
   },
   "dependencies": {
-    "astro": "7.4.2"
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/courier-prime": "^5.2.8",
+    "@fontsource/roboto-condensed": "^5.2.8",
+    "@fontsource/source-sans-3": "^5.2.9",
+    "astro": "7.4.2",
+    "pagefind": "^1.5.2"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",

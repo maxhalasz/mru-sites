@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import { published } from '../../data/util';
+const products = (await published('products')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Products" current="/products/" description="NeuroStat medicines, devices and digital platforms.">
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / Products</div>
+      <h1>Products</h1>
+      <p>Medicines, a medical device and a digital platform, developed for sleep, migraine and cognition.</p>
+    </div>
+  </div>
+  <section class="band">
+    <div class="wrap">
+      <div class="grid c3">
+        {products.map((p) => (
+          <a class="card" href={`/products/${p.id}/`} style="text-decoration:none;color:inherit">
+            <span class="tag" style="align-self:flex-start">{p.data.kind}</span>
+            <h3 style="margin-top:.8rem">{p.data.name}</h3>
+            <p class="muted small" style="margin-bottom:.6rem">{p.data.generic}</p>
+            <p>{p.data.tagline}</p>
+            <span class="more">Details</span>
+          </a>
+        ))}
+      </div>
+      <p class="form-note small" style="margin-top:2rem">Product availability and indications differ between countries. The information on this website is intended for a global audience and does not replace the advice of a healthcare professional. Read the package leaflet before use.</p>
+    </div>
+  </section>
+</Base>

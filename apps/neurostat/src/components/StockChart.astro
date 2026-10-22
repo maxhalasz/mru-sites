@@ -1,0 +1,40 @@
+---
+import { range } from '../data/stock';
+interface Props { r: '1M' | '1Y' | '5Y' | 'MAX'; hidden?: boolean }
+const { r, hidden = false } = Astro.props;
+const pts = range(r);
+const W = 900, H = 340, L = 56, R = 16, T = 16, B = 34;
+const min = Math.floor(Math.min(...pts.map((p) => p.close)) / 5) * 5;
+const max = Math.ceil(Math.max(...pts.map((p) => p.close)) / 5) * 5;
+const x0 = Date.parse(pts[0].date), x1 = Date.parse(pts[pts.length - 1].date);
+const X = (d: string) => L + ((Date.parse(d) - x0) / (x1 - x0)) * (W - L - R);
+const Y = (v: number) => T + (1 - (v - min) / (max - min)) * (H - T - B);
+const d = pts.map((p, i) => `${i ? 'L' : 'M'}${X(p.date).toFixed(1)} ${Y(p.close).toFixed(1)}`).join('');
+const yTicks = Array.from({ length: 5 }, (_, i) => min + ((max - min) * i) / 4);
+const nX = r === '1M' ? 4 : 5;
+const xTicks = Array.from({ length: nX }, (_, i) => pts[Math.round(((pts.length - 1) * i) / (nX - 1))]);
+const fmt = (s: string) => {
+  const dt = new Date(s + 'T00:00:00Z');
+  return r === '1M' || r === '1Y'
+    ? dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: r === '1Y' ? '2-digit' : undefined, timeZone: 'UTC' })
+    : String(dt.getUTCFullYear());
+};
+const first = pts[0], lastP = pts[pts.length - 1];
+---
+<figure class="chart" data-r={r} hidden={hidden} style="margin:0">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`t-${r}`} style="width:100%;height:auto;background:#fff;border:1px solid var(--line)">
+    <title id={`t-${r}`}>NEUS share price in CHF, {r === 'MAX' ? 'since listing' : r}. From CHF {first.close.toFixed(2)} on {first.date} to CHF {lastP.close.toFixed(2)} on {lastP.date}.</title>
+    {yTicks.map((v) => (
+      <g>
+        <line x1={L} x2={W - R} y1={Y(v)} y2={Y(v)} stroke="#e1e7ee" />
+        <text x={L - 8} y={Y(v) + 4} text-anchor="end" font-size="12" fill="#5c6b7d">{Math.round(v)}</text>
+      </g>
+    ))}
+    {xTicks.map((p) => (
+      <text x={X(p.date)} y={H - 10} text-anchor="middle" font-size="12" fill="#5c6b7d">{fmt(p.date)}</text>
+    ))}
+    <path d={d} fill="none" stroke="#14243a" stroke-width="2" stroke-linejoin="round" />
+    <circle cx={X(lastP.date)} cy={Y(lastP.close)} r="4" fill="#14243a" />
+  </svg>
+  <figcaption class="small muted" style="margin-top:.5rem">Share price in CHF, SIX Swiss Exchange. Closing prices up to {lastP.date}.</figcaption>
+</figure>

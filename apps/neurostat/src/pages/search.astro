@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Search" current="" noindex search={false}>
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / Search</div>
+      <h1>Search</h1>
+    </div>
+  </div>
+  <section class="band">
+    <div class="wrap">
+      <div id="search"></div>
+      <noscript><p class="muted">Search needs JavaScript. You can also browse the menu above.</p></noscript>
+    </div>
+  </section>
+  <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+  <script is:inline src="/pagefind/pagefind-ui.js"></script>
+  <script is:inline>
+    window.addEventListener('DOMContentLoaded', function () {
+      if (!window.PagefindUI) return;
+      new PagefindUI({ element: '#search', showSubResults: false, resetStyles: false, showImages: false });
+    });
+  </script>
+</Base>

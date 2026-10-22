@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="You are leaving this website" noindex search={false}>
+  <div class="page-head">
+    <div class="wrap">
+      <h1>You are now leaving the NeuroStat website</h1>
+      <p>The link you selected leads to a website that is not operated by NeuroStat.</p>
+    </div>
+  </div>
+  <section class="band">
+    <div class="wrap prose">
+      <p>NeuroStat is not responsible for the content or the privacy practices of external websites. Their terms and policies apply once you leave.</p>
+      <p class="doc-no" id="dest" style="word-break:break-all"></p>
+      <p>
+        <a class="btn" id="go" href="/" hidden>Continue</a>
+        <a class="btn ghost" href="/">Stay on NeuroStat.com</a>
+      </p>
+      <noscript><p class="muted">JavaScript is needed to show the destination. Please use the back button to return.</p></noscript>
+    </div>
+  </section>
+  <script is:inline>
+    (function () {
+      var dest = document.getElementById('dest'), go = document.getElementById('go');
+      try {
+        var to = new URLSearchParams(location.search).get('to');
+        var u = to && new URL(to);
+        if (!u || (u.protocol !== 'https:' && u.protocol !== 'http:')) throw new Error('bad');
+        dest.textContent = u.href;
+        go.href = u.href;
+        go.rel = 'noopener nofollow';
+        go.hidden = false;
+      } catch (e) {
+        dest.textContent = 'The destination of this link is not valid.';
+      }
+    })();
+  </script>
+</Base>

@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+import ExtLink from '../components/ExtLink.astro';
+import { published } from '../data/util';
+const pubs = (await published('publications')).sort((a, b) => b.data.year - a.data.year);
+---
+<Base title="Science" current="/science/" description="NeuroStat's research approach and areas: sleep and circadian health, memory and cognition, and neurodiagnostics.">
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / Science</div>
+      <h1>Science</h1>
+      <p>We start with questions neuroscience has not yet answered.</p>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="wrap prose">
+      <h2>Our approach</h2>
+      <p>Most of our programmes began with an open question: why does a memory that is still stored become impossible to reach, why does cognition fail in a predictable order when sleep is restricted, why do some people adapt to a night shift and others never do. We pick questions where a better answer would change treatment, and we test the answer in the people who face the problem.</p>
+      <p>That often means studying people in demanding settings: offshore installations, polar stations and military bases, as well as hospital wards and sleep laboratories. Those settings give us clean, repeatable exposure to sleep loss, isolation and circadian disruption.</p>
+    </div>
+  </section>
+
+  <section class="band alt" id="sleep">
+    <div class="wrap prose">
+      <p class="eyebrow">Research area</p>
+      <h2>Sleep &amp; Circadian Health</h2>
+      <p>Sleep is regulated by two systems: a homeostatic drive that builds the longer we are awake, and a circadian clock in the suprachiasmatic nucleus that sets when we are ready to sleep. Shift work, travel and long polar rotations pull the two out of alignment.</p>
+      <p>Vesperil acts on the melatonin MT1/MT2 receptors to support sleep timing. Lunavel blocks orexin receptors to reduce the wake drive. Our current research focuses on resynchronising the clock after abrupt shifts (NS-455) and on reducing sleep inertia (NS-318).</p>
+      <p><a href="/products/">Products</a> · <a href="/pipeline/">Pipeline</a></p>
+    </div>
+  </section>
+
+  <section class="band" id="memory">
+    <div class="wrap prose">
+      <p class="eyebrow">Research area</p>
+      <h2>Memory &amp; Cognition</h2>
+      <p>Some forgetting is a failure of storage, and some is a failure of retrieval. In several kinds of amnesia after head injury or severe stress, the evidence suggests that memories continue to be stored but can no longer be reached. Work in animals has shown that such memories can be brought back when the neurons that hold them, the memory engram, are reactivated.</p>
+      <p><b>NS-091 (retrevamide)</b> is based on this idea. It acts on a persistent molecular signature of silent engrams and reactivates only the ensemble of neurons that holds the lost memory. Other memories are left alone. NS-091 is in a Phase III study in patients with retrograde amnesia after trauma.</p>
+      <p>NS-760 (adravacetam) addresses a different problem: keeping attention and working memory steady during long isolation and disrupted sleep. It is being studied in <a href="/clinical-trials/boreas-2/">BOREAS-2</a>.</p>
+      <h3>Selected background literature</h3>
+      <ol class="small" style="padding-left:1.2rem">
+        <li>Liu X, Ramirez S, Pang PT, et al. Optogenetic stimulation of a hippocampal engram activates fear memory recall. <i>Nature</i> 484, 381–385 (2012). <ExtLink href="https://doi.org/10.1038/nature11028">doi:10.1038/nature11028</ExtLink></li>
+        <li>Ryan TJ, Roy DS, Pignatelli M, Arons A, Tonegawa S. Engram cells retain memory under retrograde amnesia. <i>Science</i> 348, 1007–1013 (2015). <ExtLink href="https://doi.org/10.1126/science.aaa5542">doi:10.1126/science.aaa5542</ExtLink></li>
+        <li>Roy DS, Arons A, Mitchell TI, et al. Memory retrieval by activating engram cells in mouse models of early Alzheimer's disease. <i>Nature</i> 531, 508–512 (2016). <ExtLink href="https://doi.org/10.1038/nature17172">doi:10.1038/nature17172</ExtLink></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band alt" id="neurodiagnostics">
+    <div class="wrap prose">
+      <p class="eyebrow">Research area</p>
+      <h2>Neurodiagnostics</h2>
+      <p>Measuring sleep and cognition normally means a visit to a laboratory. Our wearable and digital tools move that measurement into the workplace. Halo records EEG with dry electrodes. Baseline measures attention, memory and decision making against a person's own baseline. Both are used by occupational physicians, and both feed back into our research.</p>
+      <p><a href="/products/halo/">NeuroStat Halo</a> · <a href="/products/baseline/">NeuroStat Baseline</a></p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap prose">
+      <h2>Publications and posters</h2>
+      {pubs.length === 0
+        ? <p class="muted">No publications are listed at the moment.</p>
+        : (
+          <ul class="list-plain">
+            {pubs.map((p) => (
+              <li>
+                <span class="tag">{p.data.kind}</span>
+                <p style="margin:.5rem 0 0"><b>{p.data.title}</b><br /><span class="muted small">{p.data.authors}. {p.data.venue}, {p.data.year}.</span></p>
+                {p.data.file && <p class="small"><a href={p.data.file}>Download PDF</a></p>}
+              </li>
+            ))}
+          </ul>
+        )}
+    </div>
+  </section>
+</Base>

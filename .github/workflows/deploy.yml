@@ -26,6 +26,12 @@ jobs:
       - name: Leak check
         run: node scripts/leak-check.mjs apps/neurostat/dist apps/kelvara/dist
 
+      - name: Link check
+        run: node scripts/link-check.mjs apps/neurostat/dist apps/kelvara/dist
+
+      - name: Clue check
+        run: grep -q "AnchorPoint" apps/neurostat/dist/js/cookie-banner.js
+
       - name: Publish NeuroStat
         uses: peaceiris/actions-gh-pages@v4
         with:

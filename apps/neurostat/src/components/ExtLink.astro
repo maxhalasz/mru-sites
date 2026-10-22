@@ -1,0 +1,7 @@
+---
+// Every link that leaves the site goes through the "leaving" notice first.
+interface Props { href: string; class?: string }
+const { href, class: cls } = Astro.props;
+const target = `/leaving/?to=${encodeURIComponent(href)}`;
+---
+<a href={target} class={cls} rel="noopener nofollow"><slot /></a>

@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Healthcare Professionals" current="" description="Information for healthcare professionals.">
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / Healthcare Professionals</div>
+      <h1>Healthcare Professionals</h1>
+      <p>Product and study information for physicians, pharmacists and occupational health teams.</p>
+    </div>
+  </div>
+  <section class="band">
+    <div class="wrap prose">
+      <div data-hcp-gate>
+        <div class="form-note">
+          <p><b>Are you a healthcare professional?</b></p>
+          <p>The content in this section is intended for healthcare professionals.</p>
+          <p style="margin:0"><button type="button" class="btn" data-hcp-yes>Yes, I am a healthcare professional</button> <a class="btn ghost" href="/">No</a></p>
+        </div>
+      </div>
+      <div data-hcp-content hidden>
+        <h2>Prescribing information</h2>
+        <ul>
+          <li><a href="/products/vesperil/">Vesperil (ormelteon)</a></li>
+          <li><a href="/products/lunavel/">Lunavel (corexant)</a></li>
+          <li><a href="/products/migrestil/">Migrestil (tolugepant)</a></li>
+          <li><a href="/products/halo/">NeuroStat Halo</a></li>
+          <li><a href="/products/baseline/">NeuroStat Baseline</a></li>
+        </ul>
+        <h2>Medical information</h2>
+        <p>For questions about our products, including off-label questions and requests for data on file, contact <a href="mailto:medinfo@neurostat.example">medinfo@neurostat.example</a>.</p>
+        <h2>Reporting adverse reactions</h2>
+        <p>Report suspected adverse reactions to your national pharmacovigilance centre and to NeuroStat at <a href="mailto:safety@neurostat.example">safety@neurostat.example</a>.</p>
+        <h2>Clinical studies</h2>
+        <p>See <a href="/clinical-trials/">Clinical Trials</a> for studies that are recruiting or by invitation.</p>
+      </div>
+      <noscript><p class="muted small">Enable JavaScript to confirm you are a healthcare professional and view this section.</p></noscript>
+    </div>
+  </section>
+</Base>

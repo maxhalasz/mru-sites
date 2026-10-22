@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import ExtLink from '../components/ExtLink.astro';
+import { published, shortDate } from '../data/util';
+const jobs = (await published('jobs')).sort((a, b) => +b.data.date - +a.data.date);
+---
+<Base title="Careers" current="/careers/" description="Work at NeuroStat: open positions in Zürich and field positions with our partners.">
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / Careers</div>
+      <h1>Careers</h1>
+      <p>Join people who work on how the brain keeps going when conditions are hard.</p>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="wrap grid c2" style="gap:3rem;align-items:center">
+      <div class="prose">
+        <h2>Life at NeuroStat</h2>
+        <p>We are about 1,100 people in Zürich, Basel, Boston and London. Our teams include clinicians, neuroscientists, statisticians, engineers and regulatory specialists. We work in small groups, review each other's work openly and spend time with the people who use what we make.</p>
+        <p>We offer flexible working, a research sabbatical after five years, and support for continuing education.</p>
+      </div>
+      <Placeholder file="careers-team.jpg" ratio="4 / 3" label="Photograph: a team in a laboratory in Zürich" />
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <h2>Open positions in Zürich</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Position</th><th>Team</th><th>Location</th><th>Posted</th></tr></thead>
+          <tbody>
+            {jobs.map((j) => (
+              <tr>
+                <td><b>{j.data.title}</b><br /><span class="doc-no">{j.data.reference}</span></td>
+                <td>{j.data.team}</td>
+                <td>{j.data.location}</td>
+                <td>{shortDate(j.data.date)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted" style="margin-top:1rem">Applications are made through our recruitment portal. The portal is closed for these positions while the current selection round is under way. Please check back in the new year.</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap prose">
+      <h2>Field positions with our partners</h2>
+      <p>NeuroStat works with partner companies that offer field positions in demanding environments, including offshore work in the Norwegian North Sea.</p>
+      <p><b>Ødemark A, Norwegian North Sea — Kelvara Petrochemicals AS.</b> Positions for the 2028/29 winter rotation have been filled. Current openings are listed on <ExtLink href="https://kelvarapetro.github.io/en/careers/">Kelvara's careers page</ExtLink>.</p>
+    </div>
+  </section>
+</Base>

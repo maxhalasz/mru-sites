@@ -1,0 +1,55 @@
+---
+interface Props { current?: string }
+const { current = '' } = Astro.props;
+const nav = [
+  ['About', '/about/'],
+  ['Science', '/science/'],
+  ['Products', '/products/'],
+  ['Pipeline', '/pipeline/'],
+  ['Clinical Trials', '/clinical-trials/'],
+  ['Investors', '/investors/'],
+  ['Newsroom', '/newsroom/'],
+  ['Careers', '/careers/'],
+];
+---
+<div class="utility">
+  <div class="wrap">
+    <a href="/healthcare-professionals/">Healthcare Professionals</a>
+    <a href="/contact/">Contact</a>
+    <a href="/search/">Search</a>
+    <select aria-label="Region and language" class="region">
+      <option>Global (English)</option>
+    </select>
+  </div>
+</div>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="NeuroStat, home">
+      <img src="/favicon.svg" alt="" width="44" height="38" />
+      <span class="wordmark">NEUROSTAT</span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav" id="menu-btn">Menu</button>
+    <nav class="nav" id="nav" aria-label="Main">
+      {nav.map(([label, href]) => (
+        <a href={href} aria-current={current === href ? 'page' : undefined}>{label}</a>
+      ))}
+    </nav>
+  </div>
+</header>
+<style>
+  .brand { display: flex; align-items: center; gap: .9rem; text-decoration: none; }
+  .brand img { height: 40px; width: auto; }
+  .wordmark { font: 500 1.35rem var(--font-head); letter-spacing: .34em; color: var(--navy); }
+  .region { width: auto; padding: .1rem .4rem; font-size: .85rem; background: transparent; color: #dfe6ee; border: 1px solid #4b6080; }
+  .region option { color: #14243a; }
+</style>
+<script is:inline>
+  (function () {
+    var b = document.getElementById('menu-btn'), n = document.getElementById('nav');
+    if (!b || !n) return;
+    b.addEventListener('click', function () {
+      var open = n.classList.toggle('open');
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  })();
+</script>

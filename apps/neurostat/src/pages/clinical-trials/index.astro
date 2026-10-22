@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import { published } from '../../data/util';
+const trials = (await published('trials')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Clinical Trials" current="/clinical-trials/" description="NeuroStat clinical studies and our policy on study transparency.">
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / Clinical Trials</div>
+      <h1>Clinical Trials</h1>
+      <p>Studies sponsored by NeuroStat that are recruiting or under way.</p>
+    </div>
+  </div>
+  <section class="band">
+    <div class="wrap">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Study</th><th>Phase</th><th>Status</th><th>Details</th></tr></thead>
+          <tbody>
+            {trials.map((t) => (
+              <tr>
+                <td><span class="doc-no">{t.data.id}</span><br /><b>{t.data.title}</b></td>
+                <td>{t.data.phase}</td>
+                <td>{t.data.status}</td>
+                <td><a href={`/clinical-trials/${t.id}/`}>View</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <section class="band alt" id="transparency">
+    <div class="wrap prose">
+      <h2>Our policy on study transparency</h2>
+      <p>We register every interventional study in a public trial registry before the first participant is enrolled. We publish the results of our studies, whether or not they are positive, within twelve months of study completion, and we report summary results to participants and to the authorities as required.</p>
+      <p>Researchers can request anonymised participant-level data from completed studies through our medical information service. Requests are reviewed by an independent panel.</p>
+      <p>We are not able to give medical advice or to enrol people directly. If you are interested in taking part in a study, please speak to your doctor.</p>
+    </div>
+  </section>
+</Base>

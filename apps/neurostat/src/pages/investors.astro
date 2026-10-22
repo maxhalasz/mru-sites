@@ -1,0 +1,105 @@
+---
+import Base from '../layouts/Base.astro';
+import StockChart from '../components/StockChart.astro';
+import { published, shortDate, longDate } from '../data/util';
+import { last, change, changePct } from '../data/stock';
+
+const reports = (await published('reports')).filter((r) => r.data.kind !== 'Governance').sort((a, b) => +b.data.date - +a.data.date);
+const up = change >= 0;
+const ranges = ['1M', '1Y', '5Y', 'MAX'] as const;
+const calendar = [
+  ['November 2028', 'Third-quarter 2028 results'],
+  ['February 2029', 'Full-year 2028 results'],
+  ['April 2029', 'Annual General Meeting 2029'],
+];
+---
+<Base title="Investors" current="/investors/" description="NeuroStat share price, reports and financial calendar.">
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / Investors</div>
+      <h1>Investors</h1>
+      <p>Share price, financial reports and the financial calendar.</p>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="wrap">
+      <p class="eyebrow">SIX Swiss Exchange · NEUS</p>
+      <div class="ticker">
+        <div class="px">CHF {last.close.toFixed(2)}</div>
+        <div class={`chg ${up ? 'up' : 'down'}`}>{up ? '+' : ''}{change.toFixed(2)} ({up ? '+' : ''}{changePct.toFixed(2)}%)</div>
+        <div class="muted small">Close, {longDate(new Date(last.date))}</div>
+      </div>
+      <div class="range" data-range role="group" aria-label="Chart range">
+        {ranges.map((r) => <button type="button" data-r={r} aria-pressed={r === '1Y' ? 'true' : 'false'}>{r === 'MAX' ? 'Max' : r}</button>)}
+      </div>
+      {ranges.map((r) => <StockChart r={r} hidden={r !== '1Y'} />)}
+      <noscript><p class="muted small">Enable JavaScript to switch the chart range.</p></noscript>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <h2>Financial highlights</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>CHF million</th><th>H1 2028</th><th>FY 2027</th><th>FY 2026</th></tr></thead>
+          <tbody>
+            <tr><td>Revenue</td><td>603</td><td>1,184</td><td>1,149</td></tr>
+            <tr><td>Core operating profit</td><td>171</td><td>322</td><td>296</td></tr>
+            <tr><td>Net profit</td><td>118</td><td>231</td><td>187</td></tr>
+            <tr><td>Research and development</td><td>162</td><td>318</td><td>301</td></tr>
+            <tr><td>Dividend per share (CHF)</td><td>n/a</td><td>1.10</td><td>1.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted" style="margin-top:.8rem">Net profit in 2026 includes an impairment related to the discontinued tolugepant prevention programme.</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap grid c2" style="gap:3rem;align-items:start">
+      <div>
+        <h2>Reports and presentations</h2>
+        <ul class="list-plain">
+          {reports.map((r) => (
+            <li>
+              <span class="tag">{r.data.kind}</span>
+              <p style="margin:.5rem 0 0">{r.data.title} <span class="muted small">· {shortDate(r.data.date)}</span></p>
+              <p class="small" style="margin:.2rem 0 0"><a href={r.data.file ?? `/docs/${r.id}.pdf`}>Download PDF</a></p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2>Financial calendar</h2>
+        <table>
+          <tbody>{calendar.map(([d, e]) => <tr><td style="white-space:nowrap">{d}</td><td>{e}</td></tr>)}</tbody>
+        </table>
+        <h2 style="margin-top:2rem">Share information</h2>
+        <table>
+          <tbody>
+            <tr><th scope="row">Listing</th><td>SIX Swiss Exchange, since 2010</td></tr>
+            <tr><th scope="row">Ticker</th><td>NEUS</td></tr>
+            <tr><th scope="row">ISIN</th><td class="doc-no">CH0471833928</td></tr>
+            <tr><th scope="row">Shares outstanding</th><td>95,420,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap prose">
+      <h2>Governance and general meeting</h2>
+      <p>The 2028 Annual General Meeting was held on 20 April 2028. Our articles of association and corporate governance report are available under <a href="/about/governance/">Governance</a>.</p>
+      <h2>Investor alerts</h2>
+      <form data-confirm="alert-done" data-ref-prefix="NS-IR">
+        <div class="field"><label for="ir-email">Email address</label><input id="ir-email" name="email" type="email" required autocomplete="email" /></div>
+        <div class="field"><label><input type="checkbox" required /> I agree to receive investor alerts and accept the <a href="/privacy/">privacy policy</a>.</label></div>
+        <button class="btn" type="submit">Subscribe</button>
+      </form>
+      <div class="confirm" id="alert-done" hidden><p>Thank you. Your subscription request has been received.</p><p class="doc-no">Reference <span data-ref></span></p></div>
+    </div>
+  </section>
+</Base>

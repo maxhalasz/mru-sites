@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { published } from '../data/util';
+const items = (await published('pipeline')).sort((a, b) => a.data.order - b.data.order);
+const phases: [string, string][] = [['I', 'Phase I'], ['II', 'Phase II'], ['III', 'Phase III'], ['Registration', 'Registration']];
+const discontinued = items.filter((i) => i.data.phase === 'Discontinued');
+---
+<Base title="Pipeline" current="/pipeline/" description="NeuroStat development pipeline by phase.">
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / Pipeline</div>
+      <h1>Pipeline</h1>
+      <p>Programmes in clinical development, by phase. A brand name is only given after approval.</p>
+    </div>
+  </div>
+  <section class="band">
+    <div class="wrap">
+      <div class="phase-grid">
+        {phases.map(([key, label]) => (
+          <div class="phase-col">
+            <h3>{label}</h3>
+            {items.filter((i) => i.data.phase === key).map((i) => (
+              <div class="asset">
+                <b>{i.data.code}</b>{i.data.generic ? <span> · {i.data.generic}</span> : null}
+                <div class="small muted">{i.data.area}</div>
+                <div class="small">{i.data.summary}</div>
+                {i.data.note === 'BOREAS-2' && <div class="small"><a href="/clinical-trials/boreas-2/">BOREAS-2</a></div>}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="band alt">
+    <div class="wrap prose">
+      <h2>Discontinued programmes</h2>
+      <ul class="list-plain">
+        {discontinued.map((i) => (
+          <li><b>{i.data.code}</b>{i.data.generic ? ` · ${i.data.generic}` : ''}<br /><span class="muted small">{i.data.note}.</span> {i.data.summary}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>

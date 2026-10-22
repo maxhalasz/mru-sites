@@ -1,0 +1,83 @@
+---
+import Base from '../../layouts/Base.astro';
+import ExtLink from '../../components/ExtLink.astro';
+import { published } from '../../data/util';
+
+export async function getStaticPaths() {
+  const trials = await published('trials');
+  return trials.map((t) => ({ params: { slug: t.id }, props: { t } }));
+}
+const { t } = Astro.props;
+const d = t.data;
+const isBoreas = t.id === 'boreas-2';
+---
+<Base title={d.id} current="/clinical-trials/" description={d.summary}>
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / <a href="/clinical-trials/">Clinical Trials</a> / {d.id}</div>
+      <p class="doc-no" style="margin-bottom:.4rem">{d.id}</p>
+      <h1>{d.id}: {d.title}</h1>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="wrap prose">
+      <p>{d.summary}</p>
+      <table>
+        <tbody>
+          <tr><th scope="row">Phase</th><td>{d.phase}</td></tr>
+          <tr><th scope="row">Status</th><td>{d.status}</td></tr>
+          {isBoreas
+            ? <tr><th scope="row">Study site</th><td>Ødemark A, Norwegian North Sea, operated by <ExtLink href="https://kelvarapetro.github.io/en/">Kelvara Petrochemicals AS</ExtLink></td></tr>
+            : d.site && <tr><th scope="row">Study site</th><td>{d.site}</td></tr>}
+        </tbody>
+      </table>
+
+      {isBoreas && (
+        <>
+          <p style="margin-top:1.5rem">Participation is voluntary. Eligible crew at participating installations can ask the installation medic about the study. The questionnaire below gives a first indication of whether you may be eligible.</p>
+          <p><a href="/docs/ns-760-profile-poster.pdf">NS-760 physicochemical and pharmacokinetic profile (poster, PDF)</a></p>
+
+          <h2>Eligibility questionnaire</h2>
+          <form data-confirm="eligibility-result" data-ref-prefix="NS-BS" data-eligibility novalidate>
+            <div class="field">
+              <label for="q-age">Are you between 18 and 65 years old?</label>
+              <select id="q-age" name="age" required data-ok="yes"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+            </div>
+            <div class="field">
+              <label for="q-work">Do you work extended rotations at a participating offshore installation?</label>
+              <select id="q-work" name="work" required data-ok="yes"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+            </div>
+            <div class="field">
+              <label for="q-seiz">Have you ever been diagnosed with epilepsy or had a seizure?</label>
+              <select id="q-seiz" name="seizure" required data-ok="no"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+            </div>
+            <div class="field">
+              <label for="q-organ">Do you have a diagnosis of severe liver or kidney disease?</label>
+              <select id="q-organ" name="organ" required data-ok="no"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+            </div>
+            <div class="field">
+              <label for="q-meds">Do you regularly take prescription stimulants or sedatives?</label>
+              <select id="q-meds" name="meds" required data-ok="no"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+            </div>
+            <div class="field">
+              <label for="q-allergy">Have you had an allergic reaction to a racetam medicine?</label>
+              <select id="q-allergy" name="allergy" required data-ok="no"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+            </div>
+            <div class="field">
+              <label for="q-stay">Do you expect to stay on the installation for the whole winter rotation?</label>
+              <select id="q-stay" name="stay" required data-ok="yes"><option value="">Select</option><option value="yes">Yes</option><option value="no">No</option></select>
+            </div>
+            <button class="btn" type="submit">Check my answers</button>
+          </form>
+          <div class="confirm" id="eligibility-result" hidden>
+            <h3>Thank you</h3>
+            <p data-outcome></p>
+            <p>This questionnaire is only a first indication. The study physician makes the final decision. Please speak to the installation medic if you would like to know more.</p>
+            <p class="doc-no">Reference <span data-ref></span></p>
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "neurostat", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev:neurostat"], "port": 4321 },
+    { "name": "kelvara", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev:kelvara"], "port": 4322 }
+  ]
+}

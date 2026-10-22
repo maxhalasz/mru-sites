@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import { published, shortDate } from '../../data/util';
+const reports = (await published('reports')).filter((r) => r.data.kind === 'Governance').sort((a, b) => +b.data.date - +a.data.date);
+---
+<Base title="Governance" current="/about/">
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="/">Home</a> / <a href="/about/">About</a> / Governance</div>
+      <h1>Governance</h1>
+      <p>How NeuroStat is directed and controlled.</p>
+    </div>
+  </div>
+  <section class="band">
+    <div class="wrap prose">
+      <h2>Board of Directors</h2>
+      <p>The Board of Directors has overall responsibility for the strategy, supervision and organisation of the company. It is elected by the shareholders at the Annual General Meeting for a term of one year. The Chair is Thomas Eggenberger.</p>
+      <h2>Committees</h2>
+      <ul>
+        <li><b>Audit and Risk Committee</b>: oversees financial reporting, internal control and risk management.</li>
+        <li><b>Nomination and Compensation Committee</b>: prepares appointments to the Board and the Executive Committee and proposes the compensation framework.</li>
+        <li><b>Science and Safety Committee</b>: reviews the research strategy, clinical programmes and the safety of marketed products.</li>
+      </ul>
+      <h2>Executive Committee</h2>
+      <p>The Executive Committee, led by the Chief Executive Officer, is responsible for the operational management of the group.</p>
+      <h2>Documents</h2>
+      <ul>
+        {reports.map((r) => <li>{r.data.title} <span class="muted small">({shortDate(r.data.date)})</span></li>)}
+      </ul>
+      <h2>Reporting a concern</h2>
+      <p>Employees and third parties can report a suspected breach of law or company policy in confidence through our independent reporting channel. Details are in the Code of Conduct.</p>
+    </div>
+  </section>
+</Base>
