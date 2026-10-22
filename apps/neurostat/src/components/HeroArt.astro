@@ -1,0 +1,29 @@
+---
+// Background artwork for the home page hero: the NeuroStat mark, large and faint, on a deep navy field.
+import { NEUROSTAT_MARK, neurostatMarkPaths } from '@mru/brand/mark';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+const photo = existsSync(join(process.cwd(), 'public', 'img', 'home-hero.jpg'));
+const m = NEUROSTAT_MARK;
+---
+<div class="hero-art" aria-hidden="true">
+  {photo ? (<><img class="hero-photo" src="/img/home-hero.jpg" alt="" /><div class="hero-shade"></div></>) : (
+  <svg viewBox="0 0 1600 700" preserveAspectRatio="xMaxYMid slice">
+    <defs>
+      <linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#1d3556" />
+        <stop offset="1" stop-color="#0c1727" />
+      </linearGradient>
+      <radialGradient id="hglow" cx=".78" cy=".45" r=".55">
+        <stop offset="0" stop-color="#3a5a86" stop-opacity=".55" />
+        <stop offset="1" stop-color="#3a5a86" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+    <rect width="1600" height="700" fill="url(#hg)" />
+    <rect width="1600" height="700" fill="url(#hglow)" />
+    <g transform={`translate(930 -90) scale(0.95) translate(${-m.x} ${-m.y})`} fill="#ffffff" fill-opacity=".08" set:html={neurostatMarkPaths()} />
+    <g stroke="#ffffff" stroke-opacity=".05" stroke-width="1">
+      {Array.from({ length: 9 }, (_, i) => <line x1="0" x2="1600" y1={80 + i * 70} y2={80 + i * 70} />)}
+    </g>
+  </svg>)}
+</div>

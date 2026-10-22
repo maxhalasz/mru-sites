@@ -9,11 +9,30 @@ if (!dirs.length) { console.error('leak-check: no folders given'); process.exit(
 // Marker phrases come from private/markers.txt (one per line). Empty lines and # comments are ignored.
 const markersFile = 'private/markers.txt';
 const markers = existsSync(markersFile)
-  ? readFileSync(markersFile, 'utf8').split('\n').map(s => s.trim()).filter(s => s && !s.startsWith('#'))
+  ? readFileSync(markersFile, 'utf8').split('\n').map((s) => s.trim()).filter((s) => s && !s.startsWith('#'))
   : [];
 
+// Every private portal document adds its number and title as markers.
+function portalMarkers(dir) {
+  const out = [];
+  if (!existsSync(dir)) return out;
+  for (const acct of readdirSync(dir)) {
+    const d = join(dir, acct);
+    if (!statSync(d).isDirectory()) continue;
+    for (const f of readdirSync(d).filter((n) => n.endsWith('.md'))) {
+      const text = readFileSync(join(d, f), 'utf8');
+      for (const key of ['number', 'title']) {
+        const m = text.match(new RegExp('^' + key + ':\\s*"?(.+?)"?\\s*$', 'm'));
+        if (m && m[1].length >= 8) out.push(m[1]);
+      }
+    }
+  }
+  return out;
+}
+markers.push(...portalMarkers('private/portal'));
+
 const forbiddenNames = [/\.map$/i, /^credentials$/i, /PITCH\.md$/i, /NOTAS-DO-MESTRE/i, /IMAGENS\.md$/i];
-const forbiddenText = [/C:\\Users\\/i,/\/Users\/max\b/i, /\bprivate\/portal\b/i, /\bmru-sites\b/i, /\bmaxhalasz\b/i];
+const forbiddenText = [/C:\\Users\\/i, /\/Users\/max\b/i, /\bprivate\/portal\b/i, /\bmru-sites\b/i, /\bmaxhalasz\b/i];
 const textExt = new Set(['.html', '.js', '.mjs', '.css', '.json', '.txt', '.xml', '.svg', '.md', '.webmanifest']);
 
 const problems = [];
@@ -21,7 +40,7 @@ function walk(dir) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) { walk(p); continue; }
-    if (forbiddenNames.some(r => r.test(name))) problems.push(`${p}: forbidden file`);
+    if (forbiddenNames.some((r) => r.test(name))) problems.push(`${p}: forbidden file`);
     if (!textExt.has(extname(name).toLowerCase())) continue;
     const body = readFileSync(p, 'utf8');
     for (const m of markers) if (body.includes(m)) problems.push(`${p}: contains private marker "${m}"`);

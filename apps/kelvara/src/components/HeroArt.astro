@@ -1,0 +1,66 @@
+---
+// Home page hero artwork: Ødemark A at night in fog, drawn as a silhouette until a photograph is added.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+const photo = existsSync(join(process.cwd(), 'public', 'img', 'odemark-a-natt.jpg'));
+const glows: [number, number][] = [[1052, 296], [1388, 296], [1075, 268], [1362, 268], [1135, 247], [1322, 247], [1000 + 98, 224], [1296, 218], [1205, 330]];
+---
+<div class="hero-art" aria-hidden="true">
+  {photo ? (<><img class="hero-photo" src="/img/odemark-a-natt.jpg" alt="" /><div class="hero-shade"></div></>) : (
+  <svg viewBox="0 0 1600 640" preserveAspectRatio="xMaxYMax slice">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#07090c" />
+        <stop offset=".6" stop-color="#171b21" />
+        <stop offset="1" stop-color="#363c46" />
+      </linearGradient>
+      <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1a1f26" />
+        <stop offset="1" stop-color="#07090b" />
+      </linearGradient>
+      <linearGradient id="fog" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#8a909b" stop-opacity="0" />
+        <stop offset=".5" stop-color="#8a909b" stop-opacity=".42" />
+        <stop offset="1" stop-color="#8a909b" stop-opacity="0" />
+      </linearGradient>
+      <radialGradient id="glow">
+        <stop offset="0" stop-color="#f2a577" stop-opacity=".95" />
+        <stop offset=".35" stop-color="#d9531e" stop-opacity=".5" />
+        <stop offset="1" stop-color="#d9531e" stop-opacity="0" />
+      </radialGradient>
+      <linearGradient id="refl" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#d9531e" stop-opacity=".35" />
+        <stop offset="1" stop-color="#d9531e" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <rect width="1600" height="640" fill="url(#sky)" />
+    <rect y="432" width="1600" height="208" fill="url(#sea)" />
+    <!-- strata bars on the water: the logo motif as sea reflections -->
+    <g fill="#ffffff" fill-opacity=".045">
+      <rect x="0" y="452" width="900" height="5" /><rect x="0" y="478" width="620" height="5" /><rect x="0" y="508" width="800" height="5" />
+      <rect x="0" y="544" width="480" height="5" /><rect x="0" y="584" width="700" height="5" />
+    </g>
+    <ellipse cx="1220" cy="500" rx="190" ry="60" fill="url(#glow)" fill-opacity=".35" /><ellipse cx="1220" cy="560" rx="130" ry="34" fill="url(#glow)" fill-opacity=".18" />
+    <!-- platform silhouette -->
+    <g fill="#05070a">
+      <rect x="1090" y="338" width="40" height="96" /><rect x="1200" y="338" width="40" height="96" /><rect x="1310" y="338" width="40" height="96" />
+      <rect x="1040" y="302" width="360" height="36" />
+      <rect x="1068" y="272" width="304" height="30" />
+      <rect x="1128" y="248" width="196" height="24" />
+      <rect x="1288" y="212" width="12" height="36" />
+      <path d="M1058 302 V232 L1130 252" fill="none" stroke="#05070a" stroke-width="7" />
+      <path d="M1210 248 V196 L1146 214" fill="none" stroke="#05070a" stroke-width="7" />
+      <path d="M1358 272 V214 L1424 232" fill="none" stroke="#05070a" stroke-width="7" />
+      <rect x="1160" y="226" width="40" height="22" /><rect x="1246" y="232" width="30" height="16" />
+    </g>
+    <!-- lights -->
+    {glows.map(([x, y]) => (
+      <g>
+        <circle cx={x} cy={y} r="22" fill="url(#glow)" />
+        <circle cx={x} cy={y} r="2.6" fill="#ffd9bd" />
+      </g>
+    ))}
+    <rect x="0" y="392" width="1600" height="72" fill="url(#fog)" />
+    <rect x="0" y="0" width="1600" height="640" fill="#000" fill-opacity=".18" />
+  </svg>)}
+</div>

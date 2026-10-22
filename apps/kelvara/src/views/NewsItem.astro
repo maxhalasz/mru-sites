@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { paths, label, ui, dateFmt, type Lang } from '../i18n';
 
 interface Props { lang: Lang; item: any }
@@ -7,6 +9,8 @@ const { lang, item } = Astro.props;
 const d = item.data;
 const title = lang === 'no' ? d.title_no : d.title_en;
 const body = (lang === 'no' ? d.body_no : d.body_en).split(/\n\s*\n/);
+const img = `news-${item.id}.jpg`;
+const hasImg = existsSync(join(process.cwd(), "public", "img", img));
 const alt = `${paths[lang === 'no' ? 'en' : 'no'].news}${item.id}/`;
 ---
 <Base lang={lang} page="news" title={title} description={lang === 'no' ? d.summary_no : d.summary_en} altPath={alt}>
@@ -19,6 +23,7 @@ const alt = `${paths[lang === 'no' ? 'en' : 'no'].news}${item.id}/`;
   </div>
   <section class="band">
     <div class="wrap prose">
+      {hasImg && <img class="ph-real" src={`/img/${img}`} alt="" style="aspect-ratio:16/9;margin-bottom:1.5rem" />}
       {body.map((p: string) => <p>{p}</p>)}
       <p style="margin-top:2rem"><a href={paths[lang].news}>{ui[lang].back}</a></p>
     </div>

@@ -1,8 +1,33 @@
 ---
-// Stand-in for a photo that is still to come. The file name is the final name to use.
+// Stand-in for a photograph that is still to come. Shows brand artwork on the published site
+// and the final file name only while developing (the name is also in data-placeholder).
+import { NEUROSTAT_MARK, neurostatMarkPaths } from '@mru/brand/mark';
+
 interface Props { file: string; ratio?: string; label?: string; class?: string }
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
 const { file, ratio = '16 / 9', label, class: cls = '' } = Astro.props;
+const real = existsSync(join(process.cwd(), "public", "img", file));
+const kind = file.startsWith('portrait') ? 'portrait' : file.startsWith('product') ? 'product' : 'photo';
+const m = NEUROSTAT_MARK;
 ---
-<div class={`ph ${cls}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={label ?? 'Image'} data-placeholder={file}>
-  <span>{file}</span>
+{real ? (
+  <img class={`ph-real ${cls}`} src={`/img/${file}`} alt={label ?? ""} loading="lazy" style={`aspect-ratio:${ratio}`} data-placeholder={file} />
+) : (
+<div class={`ph ph-${kind} ${cls}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={label ?? 'Image'} data-placeholder={file}>
+  {kind === 'photo' && (
+    <svg class="ph-art" viewBox={`${m.x - 300} ${m.y - 200} ${m.width + 600} ${m.height + 400}`} preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
+      <g fill="#ffffff" fill-opacity=".07" set:html={neurostatMarkPaths()} />
+    </svg>
+  )}
+  {kind === 'portrait' && (
+    <svg class="ph-art" viewBox="0 0 100 125" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <circle cx="50" cy="46" r="19" fill="#b4c0cf" />
+      <path d="M12 125 C12 92 30 78 50 78 C70 78 88 92 88 125 Z" fill="#b4c0cf" />
+    </svg>
+  )}
+  {kind === 'product' && <span class="ph-name">{label?.replace(/^Product image: /, '') ?? ''}</span>}
+  {import.meta.env.DEV && <small class="ph-file">{file}</small>}
 </div>
+)}

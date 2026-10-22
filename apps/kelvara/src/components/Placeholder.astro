@@ -1,8 +1,38 @@
 ---
-// Stand-in for a photo that is still to come. The file name is the final name to use.
+// Stand-in for a photograph that is still to come. Shows brand artwork on the published site
+// and the final file name only while developing (the name is also in data-placeholder).
 interface Props { file: string; ratio?: string; label?: string; class?: string }
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
 const { file, ratio = '16 / 9', label, class: cls = '' } = Astro.props;
+const real = existsSync(join(process.cwd(), "public", "img", file));
+const kind = file.startsWith('portrett') ? 'portrait' : 'photo';
 ---
-<div class={`ph ${cls}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={label ?? 'Image'} data-placeholder={file}>
-  <span>{file}</span>
+{real ? (
+  <img class={`ph-real ${cls}`} src={`/img/${file}`} alt={label ?? ""} loading="lazy" style={`aspect-ratio:${ratio}`} data-placeholder={file} />
+) : (
+<div class={`ph ph-${kind} ${cls}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={label ?? 'Image'} data-placeholder={file}>
+  {kind === 'photo' && (
+    <svg class="ph-art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g class="bars">
+        <rect x="0" y="40" width="150" height="14" /><rect x="170" y="40" width="190" height="14" />
+        <rect x="0" y="80" width="150" height="14" /><rect x="170" y="80" width="120" height="14" />
+        <rect x="0" y="120" width="150" height="14" class="o" /><rect x="170" y="120" width="170" height="14" class="o" />
+        <rect x="0" y="160" width="150" height="14" /><rect x="170" y="160" width="90" height="14" />
+        <rect x="0" y="200" width="150" height="14" /><rect x="170" y="200" width="150" height="14" />
+        <rect x="0" y="240" width="150" height="14" /><rect x="170" y="240" width="200" height="14" />
+        <rect x="153" y="0" width="12" height="262" />
+        <circle cx="159" cy="272" r="14" />
+      </g>
+    </svg>
+  )}
+  {kind === 'portrait' && (
+    <svg class="ph-art" viewBox="0 0 100 125" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <circle cx="50" cy="46" r="19" fill="#8f8c82" />
+      <path d="M12 125 C12 92 30 78 50 78 C70 78 88 92 88 125 Z" fill="#8f8c82" />
+    </svg>
+  )}
+  {import.meta.env.DEV && <small class="ph-file">{file}</small>}
 </div>
+)}

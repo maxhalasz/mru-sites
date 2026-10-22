@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
+import HeroArt from '../components/HeroArt.astro';
 import { published, longDate } from '../data/util';
 import { last, change, changePct } from '../data/stock';
 
@@ -17,7 +18,7 @@ const up = change >= 0;
 ---
 <Base title="NeuroStat" current="/">
   <section class="hero">
-    <Placeholder file="home-hero.jpg" ratio="21 / 9" label="Photograph: a physician checking a colleague's alertness on a remote night shift" />
+    <HeroArt />
     <div class="wrap">
       <p class="eyebrow" style="color:#9fb2c8">NeuroStat Holding AG</p>
       <h1>Our hope lies in the questions neuroscience has not yet answered.</h1>

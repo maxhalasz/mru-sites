@@ -1,0 +1,329 @@
+# Pages CMS configuration. Open https://app.pagescms.org, sign in with GitHub and pick the repository.
+# Every item has "published" (turn it off to hide it from the site) and a date where it makes sense.
+
+media:
+  - name: ns-docs
+    label: NeuroStat PDFs
+    input: apps/neurostat/public/docs
+    output: /docs
+    extensions: [pdf]
+    rename: safe
+  - name: ns-images
+    label: NeuroStat images (use the exact file name from IMAGENS.md)
+    input: apps/neurostat/public/img
+    output: /img
+    categories: [image]
+    rename: false
+  - name: kv-docs
+    label: Kelvara PDFs
+    input: apps/kelvara/public/docs
+    output: /docs
+    extensions: [pdf]
+    rename: safe
+  - name: kv-images
+    label: Kelvara images (use the exact file name from IMAGENS.md)
+    input: apps/kelvara/public/img
+    output: /img
+    categories: [image]
+    rename: false
+  - name: portal-gunnar
+    label: Portal, Gunnar (PDF or image)
+    input: private/portal/gunnar/files
+    output: files
+    extensions: [pdf, png, jpg, jpeg, webp]
+    rename: safe
+  - name: portal-callum
+    label: Portal, Callum (PDF or image)
+    input: private/portal/callum/files
+    output: files
+    extensions: [pdf, png, jpg, jpeg, webp]
+    rename: safe
+  - name: portal-fossum
+    label: Portal, Fossum (PDF or image)
+    input: private/portal/fossum/files
+    output: files
+    extensions: [pdf, png, jpg, jpeg, webp]
+    rename: safe
+
+content:
+  # ------------------------------------------------------------------ NeuroStat
+  - name: ns-news
+    label: NeuroStat · Newsroom
+    type: collection
+    path: apps/neurostat/src/content/news
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, date, category, published]
+      primary: title
+      sort: [date]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: date, label: Date (nothing after 19 Oct 2028), type: date, required: true }
+      - name: category
+        label: Category
+        type: select
+        options: { values: [Corporate, Clinical, Products, Investors, Science] }
+      - { name: summary, label: Summary, type: text, required: true }
+      - { name: published, label: Published, type: boolean, default: true }
+      - { name: body, label: Text, type: rich-text }
+
+  - name: ns-products
+    label: NeuroStat · Products
+    type: collection
+    path: apps/neurostat/src/content/products
+    view: { fields: [name, generic, kind, approved, published], primary: name }
+    fields:
+      - { name: name, label: Brand name, type: string, required: true }
+      - { name: generic, label: Generic name, type: string }
+      - { name: drugClass, label: Class, type: string }
+      - { name: indication, label: Indication, type: string }
+      - { name: approved, label: Year approved, type: number }
+      - name: kind
+        label: Kind
+        type: select
+        options: { values: [Medicine, Medical device, Digital platform] }
+      - { name: order, label: Order on the page, type: number }
+      - { name: tagline, label: Tagline, type: string }
+      - { name: how, label: How it works, type: text }
+      - { name: safety, label: Safety information (one item per line), type: string, list: true }
+      - { name: clinical, label: Clinical information, type: string, list: true }
+      - { name: leaflet, label: Leaflet PDF (leave empty for the default), type: file, options: { media: ns-docs } }
+      - { name: published, label: Published, type: boolean, default: true }
+
+  - name: ns-pipeline
+    label: NeuroStat · Pipeline
+    type: collection
+    path: apps/neurostat/src/content/pipeline
+    view: { fields: [code, generic, phase, published], primary: code }
+    fields:
+      - { name: code, label: Code (NS-xxx), type: string, required: true }
+      - { name: generic, label: Generic name (INN), type: string }
+      - name: area
+        label: Area
+        type: select
+        options: { values: ["Sleep & Circadian Health", "Memory & Cognition", Neurodiagnostics] }
+      - name: phase
+        label: Phase
+        type: select
+        options: { values: [I, II, III, Registration, Discontinued] }
+      - { name: order, label: Order, type: number }
+      - { name: summary, label: Summary, type: text }
+      - { name: note, label: Note, type: string }
+      - { name: published, label: Published, type: boolean, default: true }
+
+  - name: ns-trials
+    label: NeuroStat · Clinical trials
+    type: collection
+    path: apps/neurostat/src/content/trials
+    view: { fields: [id, title, status, published], primary: id }
+    fields:
+      - { name: id, label: Study ID, type: string, required: true }
+      - { name: title, label: Title, type: string, required: true }
+      - { name: phase, label: Phase, type: string }
+      - name: status
+        label: Status
+        type: select
+        options: { values: [Recruiting, "Active, not recruiting", By invitation, Completed] }
+      - { name: site, label: Study site, type: string }
+      - { name: order, label: Order, type: number }
+      - { name: summary, label: Summary, type: text }
+      - { name: published, label: Published, type: boolean, default: true }
+
+  - name: ns-leadership
+    label: NeuroStat · Leadership
+    type: collection
+    path: apps/neurostat/src/content/leadership
+    view: { fields: [name, role, group, published], primary: name }
+    fields:
+      - { name: name, label: Name, type: string, required: true }
+      - { name: role, label: Role, type: string }
+      - name: group
+        label: Group
+        type: select
+        options: { values: [executive, board, extended] }
+      - { name: order, label: Order, type: number }
+      - { name: published, label: Published, type: boolean, default: true }
+
+  - name: ns-jobs
+    label: NeuroStat · Jobs
+    type: collection
+    path: apps/neurostat/src/content/jobs
+    view: { fields: [title, location, date, published], primary: title }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: reference, label: Reference, type: string }
+      - { name: team, label: Team, type: string }
+      - { name: location, label: Location, type: string }
+      - { name: date, label: Posted, type: date }
+      - { name: published, label: Published, type: boolean, default: true }
+
+  - name: ns-reports
+    label: NeuroStat · Investor reports
+    type: collection
+    path: apps/neurostat/src/content/reports
+    view: { fields: [title, kind, date, published], primary: title }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - name: kind
+        label: Type
+        type: select
+        options: { values: [Annual report, Half-year report, Presentation, Governance] }
+      - { name: date, label: Date, type: date }
+      - { name: file, label: PDF, type: file, options: { media: ns-docs } }
+      - { name: published, label: Published, type: boolean, default: true }
+
+  - name: ns-publications
+    label: NeuroStat · Publications and posters
+    type: collection
+    path: apps/neurostat/src/content/publications
+    view: { fields: [title, kind, year, published], primary: title }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: authors, label: Authors, type: string }
+      - { name: venue, label: Venue, type: string }
+      - { name: year, label: Year, type: number }
+      - name: kind
+        label: Type
+        type: select
+        options: { values: [Paper, Poster] }
+      - { name: file, label: PDF, type: file, options: { media: ns-docs } }
+      - { name: published, label: Published, type: boolean, default: true }
+
+  # ------------------------------------------------------------------ Kelvara (Norwegian and English side by side)
+  - name: kv-news
+    label: Kelvara · News (NO + EN)
+    type: collection
+    path: apps/kelvara/src/content/news
+    format: yaml
+    filename: "{year}-{month}-{day}-{primary}.yml"
+    view:
+      fields: [title_no, title_en, date, published]
+      primary: title_no
+      default: { sort: date, order: desc }
+    fields:
+      - { name: date, label: Date (nothing after 19 Oct 2028), type: date, required: true }
+      - { name: published, label: Published, type: boolean, default: true }
+      - { name: title_no, label: Title (Norwegian), type: string, required: true }
+      - { name: title_en, label: Title (English), type: string, required: true }
+      - { name: summary_no, label: Summary (Norwegian), type: text }
+      - { name: summary_en, label: Summary (English), type: text }
+      - { name: body_no, label: Text (Norwegian; blank line = new paragraph), type: text }
+      - { name: body_en, label: Text (English; blank line = new paragraph), type: text }
+
+  - name: kv-testimonials
+    label: Kelvara · Testimonials (NO + EN)
+    type: collection
+    path: apps/kelvara/src/content/testimonials
+    format: yaml
+    view: { fields: [name, order, published], primary: name }
+    fields:
+      - { name: name, label: Name, type: string, required: true }
+      - { name: order, label: Order, type: number }
+      - { name: published, label: Published, type: boolean, default: true }
+      - { name: role_no, label: Role (Norwegian), type: string }
+      - { name: role_en, label: Role (English), type: string }
+      - { name: quote_no, label: Quote (Norwegian), type: text }
+      - { name: quote_en, label: Quote (English), type: text }
+
+  - name: kv-jobs
+    label: Kelvara · Jobs (NO + EN)
+    type: collection
+    path: apps/kelvara/src/content/jobs
+    format: yaml
+    view: { fields: [title_no, title_en, location, published], primary: title_no }
+    fields:
+      - { name: reference, label: Reference, type: string }
+      - { name: date, label: Posted, type: date }
+      - { name: location, label: Location, type: string }
+      - { name: published, label: Published, type: boolean, default: true }
+      - { name: title_no, label: Title (Norwegian), type: string, required: true }
+      - { name: title_en, label: Title (English), type: string, required: true }
+      - { name: summary_no, label: Summary (Norwegian), type: text }
+      - { name: summary_en, label: Summary (English), type: text }
+
+  - name: kv-leadership
+    label: Kelvara · Management and board (NO + EN)
+    type: collection
+    path: apps/kelvara/src/content/leadership
+    format: yaml
+    view: { fields: [name, group, role_no, published], primary: name }
+    fields:
+      - { name: name, label: Name, type: string, required: true }
+      - name: group
+        label: Group
+        type: select
+        options: { values: [management, board] }
+      - { name: order, label: Order, type: number }
+      - { name: published, label: Published, type: boolean, default: true }
+      - { name: role_no, label: Role (Norwegian), type: string }
+      - { name: role_en, label: Role (English), type: string }
+
+  - name: kv-documents
+    label: Kelvara · Documents (NO + EN)
+    type: collection
+    path: apps/kelvara/src/content/documents
+    format: yaml
+    view: { fields: [title_no, title_en, date, published], primary: title_no }
+    fields:
+      - { name: date, label: Date, type: date }
+      - { name: published, label: Published, type: boolean, default: true }
+      - { name: title_no, label: Title (Norwegian), type: string, required: true }
+      - { name: title_en, label: Title (English), type: string, required: true }
+      - { name: file_no, label: PDF (Norwegian), type: file, options: { media: kv-docs } }
+      - { name: file_en, label: PDF (English), type: file, options: { media: kv-docs } }
+
+  # ------------------------------------------------------------------ Partner portal (private, encrypted at build)
+  - name: portal-gunnar
+    label: Portal · Gunnar MacKenzie
+    type: collection
+    path: private/portal/gunnar
+    exclude: [account.yml]
+    view: { fields: [title, number, date, published], primary: title }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: number, label: Document number, type: string, required: true }
+      - { name: date, label: Date, type: date, required: true }
+      - { name: classification, label: Classification (shown in the list), type: string, required: true }
+      - { name: stamp, label: Stamp text (the line under the rule; leave empty to use the classification), type: string }
+      - { name: description, label: Short description, type: text }
+      - { name: file, label: File (PDF or image), type: file, options: { media: portal-gunnar } }
+      - { name: published, label: Published, type: boolean, default: true }
+
+  - name: portal-callum
+    label: Portal · Callum Reid
+    type: collection
+    path: private/portal/callum
+    exclude: [account.yml]
+    view: { fields: [title, number, date, published], primary: title }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: number, label: Document number, type: string, required: true }
+      - { name: date, label: Date, type: date, required: true }
+      - { name: classification, label: Classification (shown in the list), type: string, required: true }
+      - { name: stamp, label: Stamp text (the line under the rule; leave empty to use the classification), type: string }
+      - { name: description, label: Short description, type: text }
+      - { name: file, label: File (PDF or image), type: file, options: { media: portal-callum } }
+      - { name: published, label: Published, type: boolean, default: true }
+
+  - name: portal-fossum
+    label: Portal · Dr. Nils Fossum
+    type: collection
+    path: private/portal/fossum
+    exclude: [account.yml]
+    view: { fields: [title, folder, date, published], primary: title }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: number, label: Document number, type: string, required: true }
+      - { name: date, label: Date, type: date, required: true }
+      - name: folder
+        label: Folder
+        type: select
+        options: { values: [Study documents, Correspondence, Monthly assessments] }
+      - { name: classification, label: Classification (shown in the list), type: string, required: true }
+      - { name: stamp, label: Stamp text (the line under the rule; leave empty to use the classification), type: string }
+      - { name: description, label: Short description, type: text }
+      - { name: file, label: File (PDF or image), type: file, options: { media: portal-fossum } }
+      - { name: published, label: Published, type: boolean, default: true }

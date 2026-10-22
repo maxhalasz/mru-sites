@@ -1,5 +1,5 @@
 ---
-import { paths, label, ui, type Lang } from '../i18n';
+import { paths, label, ui, SITE_DATE, type Lang } from '../i18n';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = ui[lang];
@@ -32,7 +32,7 @@ const t = ui[lang];
       </div>
     </div>
     <div class="legal">
-      <div>© 2028 Kelvara Petrochemicals AS. {t.rights}</div>
+      <div>© {SITE_DATE.getUTCFullYear()} Kelvara Petrochemicals AS. {t.rights}</div>
       <ul style="display:flex;gap:1.2rem;flex-wrap:wrap">
         <li><a href={paths[lang].privacy}>{label[lang].privacy}</a></li>
         <li><a href={paths[lang].cookies}>{label[lang].cookies}</a></li>

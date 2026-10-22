@@ -1,1 +1,10 @@
-{ "name": "@mru/portal", "private": true, "version": "0.1.0", "type": "module" }
+{
+  "name": "@mru/portal",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "@mru/brand": "*",
+    "yaml": "2.8.1"
+  }
+}

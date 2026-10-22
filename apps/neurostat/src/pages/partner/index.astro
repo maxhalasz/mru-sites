@@ -2,12 +2,25 @@
 import Base from '../../layouts/Base.astro';
 ---
 <Base title="Partner Access" noindex search={false}>
-  <section class="band">
-    <div class="wrap prose" style="padding:2rem 0">
-      <p class="eyebrow">NeuroStat Org.</p>
-      <h1>Partner Access</h1>
-      <p>Sign in to access documents shared with you.</p>
-      <p class="muted">The partner portal is being set up.</p>
+  <section class="band" style="padding-top:2.5rem">
+    <div class="wrap">
+      <div id="login-view">
+        <div class="login-box">
+          <p class="eyebrow">NeuroStat Org.</p>
+          <h1 style="font-size:1.9rem">Partner Access</h1>
+          <p class="muted">Sign in with the credentials issued to you. Access is logged.</p>
+          <form id="login-form" autocomplete="off">
+            <div class="field"><label for="username">Username</label><input id="username" name="username" type="text" autocapitalize="none" spellcheck="false" required /></div>
+            <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" required /></div>
+            <p id="login-error" role="alert" style="color:#9a2a2a;font-weight:600" hidden></p>
+            <p><button class="btn" id="login-btn" type="submit">Sign in</button></p>
+            <p class="small"><a href="/partner/forgot/">Forgot password?</a></p>
+          </form>
+          <noscript><p class="muted">JavaScript is required to sign in.</p></noscript>
+        </div>
+      </div>
+      <div id="portal-view" hidden></div>
     </div>
   </section>
+  <script is:inline src="/partner/portal.js"></script>
 </Base>

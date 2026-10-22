@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
+import HeroArt from '../components/HeroArt.astro';
 import { getCollection } from 'astro:content';
 import { paths, label, ui, dateFmt, SITE_DATE, type Lang } from '../i18n';
 
@@ -19,7 +20,7 @@ const facts: [string, string][] = [
 ---
 <Base lang={lang} page="home" title={t('Forside', 'Home')}>
   <section class="hero">
-    <Placeholder file="odemark-a-natt.jpg" ratio="21 / 9" label={t('Ødemark A om natten i tåke, med lys fra kranene', 'Ødemark A at night in fog, lit by the cranes')} />
+    <HeroArt />
     <div class="wrap">
       <p class="eyebrow">Kelvara Petrochemicals AS</p>
       <h1>{t('Trygg drift i nordlige Nordsjøen', 'Safe operations in the northern North Sea')}</h1>
