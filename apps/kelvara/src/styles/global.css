@@ -113,7 +113,7 @@ th { font: 400 .65rem var(--font-head); letter-spacing: .14em; text-transform: u
 .hero p { max-width: 54ch; font-size: 1.15rem; color: #d8d8da; }
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0; border-top: 5px solid var(--orange); }
 .fact { padding: 1.4rem 1rem 1.4rem 0; border-bottom: 1px solid #3a3a3e; }
-.fact b { display: block; font: 400 1.7rem var(--font-head); color: #fff; letter-spacing: .02em; }
+.fact b { display: block; font: 400 clamp(1.15rem, 5.2vw, 1.7rem) var(--font-head); color: #fff; letter-spacing: .02em; }
 .fact span { font-size: .9rem; color: #bdbdc2; }
 .quote { background: #fff; border: 1px solid var(--line); border-left: 6px solid var(--orange); padding: 1.6rem; }
 .quote blockquote { margin: 0 0 1rem; font-size: 1.05rem; }

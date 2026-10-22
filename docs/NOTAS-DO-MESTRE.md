@@ -56,7 +56,7 @@ Documentos que já estão lá (dê uma olhada, são todos corporativos e secos):
 
 - Gunnar: resumo de recuperações do Q3 (com o Elias), diretriz de inverno, aviso do BOREAS-2, escala de standby (Verdugo e Cardume).
 - Callum: plano de integração pós-compra, revisão de pessoal do inverno, metas e corte de custo (com a ordem de manter a produção), alocação do programa Legacy Sites (NOETIC e Cinza).
-- Fossum: sinopse do protocolo, termo de consentimento, registro de dispensação (só C.V.), troca de mensagens com a Dra. A. Fenn, relatório de adesão ao Baseline, e a pasta "Monthly assessments" vazia para você preencher.
+- Fossum: sinopse do protocolo, termo de consentimento, registro de dispensação (só C.V.), troca de mensagens com o Dr. A. Fenn, relatório de adesão ao Baseline, e a pasta "Monthly assessments" vazia para você preencher.
 
 ## O que eu inventei (pode trocar)
 
