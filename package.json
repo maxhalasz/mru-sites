@@ -3,12 +3,18 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "workspaces": ["apps/*", "packages/*"],
-  "engines": { "node": ">=22.23.4" },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
     "dev:neurostat": "npm run dev -w @mru/neurostat",
     "dev:kelvara": "npm run dev -w @mru/kelvara",
     "build": "npm run build -w @mru/neurostat && npm run build -w @mru/kelvara",
-    "check": "npm run check -w @mru/neurostat && npm run check -w @mru/kelvara"
+    "check": "npm run check -w @mru/neurostat && npm run check -w @mru/kelvara",
+    "stamp": "node packages/brand/bin/stamp.mjs"
   }
 }
