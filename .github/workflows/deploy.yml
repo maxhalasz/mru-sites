@@ -38,6 +38,12 @@ jobs:
           user_email: web@neurostat.example
           commit_message: Site update
 
+      - name: Reset ssh-agent
+        run: |
+          pkill ssh-agent || true
+          rm -f /tmp/ssh-auth.sock
+          unset SSH_AUTH_SOCK SSH_AGENT_PID
+
       - name: Publish Kelvara
         uses: peaceiris/actions-gh-pages@v4
         with:
