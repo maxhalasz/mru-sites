@@ -1,0 +1,51 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Leak check
+        run: node scripts/leak-check.mjs apps/neurostat/dist apps/kelvara/dist
+
+      - name: Publish NeuroStat
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          deploy_key: ${{ secrets.NEUROSTAT_DEPLOY_KEY }}
+          external_repository: neurostat-group/neurostat-group.github.io
+          publish_branch: gh-pages
+          publish_dir: apps/neurostat/dist
+          force_orphan: true
+          user_name: NeuroStat Web Team
+          user_email: web@neurostat.example
+          commit_message: Site update
+
+      - name: Publish Kelvara
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          deploy_key: ${{ secrets.KELVARA_DEPLOY_KEY }}
+          external_repository: kelvarapetro/kelvarapetro.github.io
+          publish_branch: gh-pages
+          publish_dir: apps/kelvara/dist
+          force_orphan: true
+          user_name: Kelvara Web Team
+          user_email: web@kelvara.example
+          commit_message: Site update

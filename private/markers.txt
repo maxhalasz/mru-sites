@@ -1,0 +1,5 @@
+# One phrase per line that must never appear in a published folder.
+# Add a distinctive sentence from each private portal document here.
+Trollsjo_1987
+Fl4reStack!27
+Hjertevik.Poli9
