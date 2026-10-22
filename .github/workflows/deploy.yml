@@ -36,7 +36,7 @@ jobs:
           force_orphan: true
           user_name: NeuroStat Web Team
           user_email: web@neurostat.example
-          commit_message: Site update
+          full_commit_message: Site update
 
       - name: Reset ssh-agent
         run: |
@@ -54,4 +54,4 @@ jobs:
           force_orphan: true
           user_name: Kelvara Web Team
           user_email: web@kelvara.example
-          commit_message: Site update
+          full_commit_message: Site update
