@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import { paths, label, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = (no: string, en: string) => (lang === 'no' ? no : en);
+const numbers: [string, string, string][] = [
+  ['3,1', 'TRIF 2027', t('skader per million arbeidstimer', 'recordable injuries per million hours worked')],
+  ['0,8', t('Fraværsskader 2027', 'Lost-time injuries 2027'), t('per million arbeidstimer', 'per million hours worked')],
+  ['412', t('Rapporterte observasjoner 2027', 'Reported observations 2027'), t('inkludert nestenulykker', 'including near misses')],
+  ['100 %', t('Gjennomført sikkerhetsopplæring', 'Safety training completed'), t('av alle som reiste offshore i 2027', 'of everyone who travelled offshore in 2027')],
+];
+const principles: [string, string, string, string][] = [
+  ['Stopp arbeidet', 'Stop work', 'Alle på Ødemark A har rett og plikt til å stanse arbeid de mener er utrygt. Ingen møter reaksjoner for å bruke den retten.', 'Everyone on Ødemark A has the right and the duty to stop work they believe is unsafe. No one meets repercussions for using that right.'],
+  ['Risikovurdering før arbeid', 'Risk assessment before work', 'Alt arbeid går gjennom en felles vurdering av risiko, tillatelser og beredskap før det starter.', 'All work goes through a joint assessment of risk, permits and emergency response before it starts.'],
+  ['Enkel tripulasjon, tydelige roller', 'Lean crew, clear roles', 'Et lite mannskap betyr at hver og en må kunne sin rolle og andres. Vi øver på det jevnlig.', 'A small crew means everyone must know their own role and the roles of others. We drill on it regularly.'],
+  ['Beredskap', 'Emergency preparedness', 'Vi øver brann, evakuering og man-over-bord. Redningsskøyta RS «Sotrabuen» og helikopterberedskapen er en del av planen.', 'We drill fire, evacuation and man overboard. The rescue vessel RS «Sotrabuen» and helicopter readiness are part of the plan.'],
+];
+---
+<Base lang={lang} page="hse" title={label[lang].hse}>
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href={paths[lang].home}>{label[lang].home}</a> / {label[lang].hse}</div>
+      <h1>{t('Helse, miljø og sikkerhet', 'Health, safety and environment')}</h1>
+      <p>{t('Alle skal komme hjem etter rotasjonen på samme måte som de reiste ut.', 'Everyone goes home at the end of the rotation the same way they came out.')}</p>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="wrap">
+      <h2>{t('Slik arbeider vi', 'How we work')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="grid c2">
+        {principles.map(([nt, et, nd, ed]) => <div class="card"><h3>{t(nt, et)}</h3><p>{t(nd, ed)}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="band dark">
+    <div class="wrap">
+      <h2>{t('Sikkerhetstall', 'Safety figures')}</h2>
+      <div class="facts" style="margin-top:1.2rem">
+        {numbers.map(([n, l, d]) => <div class="fact"><b>{n}</b><span><strong style="color:#fff">{l}</strong><br />{d}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap prose">
+      <h2>{t('Kultur for rapportering', 'Reporting culture')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p>{t('Vi vil vite om alt som kunne ha gått galt, ikke bare det som gikk galt. Derfor er det enkelt å melde fra, og vi gir alltid tilbakemelding til den som rapporterte. Hver rapport blir behandlet som en gave: den gir oss en mulighet til å rette noe før noen kommer til skade.', 'We want to know about everything that could have gone wrong, not just what did. That is why it is easy to report, and why we always give feedback to the person who reported. Every report is treated as a gift: it gives us a chance to fix something before anyone is hurt.')}</p>
+      <p>{t('Mannskapet på Ødemark A har tilgang til legetjeneste døgnet rundt, og vi følger opp både fysisk og psykisk helse gjennom hele rotasjonen.', 'The crew on Ødemark A has access to medical care around the clock, and we follow up both physical and mental health throughout the rotation.')}</p>
+      <p>{t('Varsling: ansatte og andre kan varsle om kritikkverdige forhold gjennom vår uavhengige varslingskanal. Du kan varsle anonymt.', 'Whistleblowing: employees and others can report matters of concern through our independent reporting channel. You can report anonymously.')}</p>
+    </div>
+  </section>
+</Base>

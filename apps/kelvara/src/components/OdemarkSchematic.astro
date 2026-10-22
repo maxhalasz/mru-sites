@@ -1,0 +1,52 @@
+---
+import type { Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const no = lang === 'no';
+const L = {
+  title: no ? 'Skjematisk snitt av Ødemark A (ikke i målestokk)' : 'Schematic section of Ødemark A (not to scale)',
+  topside: no ? 'Topside 114 × 55 m, tre nivåer' : 'Topside 114 × 55 m, three levels',
+  depth: no ? 'Vanndybde 303 m' : 'Water depth 303 m',
+  base: no ? 'Betongunderstell, gravitasjonsbasert (Condeep)' : 'Gravity-base concrete substructure (Condeep)',
+  sea: no ? 'Havflate' : 'Sea level',
+  floor: no ? 'Havbunn' : 'Seabed',
+};
+---
+<figure class="schematic" style="margin:0">
+  <svg viewBox="0 0 800 440" role="img" aria-labelledby="odm-title" style="width:100%;height:auto">
+    <title id="odm-title">{L.title}</title>
+    <rect width="800" height="440" fill="#fff" />
+    <!-- sea -->
+    <rect x="0" y="150" width="800" height="250" fill="#e9eef0" />
+    <path d="M0 150 q 12 -8 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0 t 25 0" fill="none" stroke="#161616" stroke-width="2" />
+    <!-- seabed -->
+    <rect x="0" y="400" width="800" height="40" fill="#cfc9b8" />
+    <line x1="0" y1="400" x2="800" y2="400" stroke="#161616" stroke-width="3" />
+    <!-- caisson base with cells -->
+    <rect x="215" y="340" width="370" height="60" fill="#8a8a8e" stroke="#161616" stroke-width="3" />
+    {[245, 290, 335, 380, 425, 470, 515, 560].map((x) => <circle cx={x} cy="370" r="15" fill="#fff" stroke="#161616" stroke-width="2" />)}
+    <!-- three shafts -->
+    <rect x="270" y="150" width="46" height="190" fill="#a3a3a7" stroke="#161616" stroke-width="3" />
+    <rect x="377" y="150" width="46" height="190" fill="#a3a3a7" stroke="#161616" stroke-width="3" />
+    <rect x="484" y="150" width="46" height="190" fill="#a3a3a7" stroke="#161616" stroke-width="3" />
+    <!-- topside, three levels -->
+    <rect x="190" y="120" width="420" height="30" fill="#161616" />
+    <rect x="215" y="92" width="370" height="28" fill="#2b2b2e" />
+    <rect x="260" y="66" width="280" height="26" fill="#161616" />
+    <rect x="215" y="86" width="370" height="6" fill="#d9531e" />
+    <!-- cranes -->
+    <path d="M230 66 v-36 l60 12" fill="none" stroke="#161616" stroke-width="4" />
+    <path d="M400 66 v-44 l-64 18" fill="none" stroke="#161616" stroke-width="4" />
+    <path d="M520 66 v-36 l60 14" fill="none" stroke="#161616" stroke-width="4" />
+    <!-- dimension: depth -->
+    <line x1="690" y1="150" x2="690" y2="400" stroke="#161616" stroke-width="2" />
+    <path d="M684 160 l6 -10 l6 10 M684 390 l6 10 l6 -10" fill="none" stroke="#161616" stroke-width="2" />
+    <text x="702" y="282" font-size="15" fill="#161616" font-family="Arial, sans-serif">{L.depth}</text>
+    <!-- labels -->
+    <text x="20" y="104" font-size="15" fill="#161616" font-family="Arial, sans-serif">{L.topside}</text>
+    <text x="20" y="144" font-size="13" fill="#55555a" font-family="Arial, sans-serif">{L.sea}</text>
+    <text x="20" y="372" font-size="15" fill="#161616" font-family="Arial, sans-serif">{L.base}</text>
+    <text x="20" y="428" font-size="13" fill="#55555a" font-family="Arial, sans-serif">{L.floor}</text>
+  </svg>
+  <figcaption class="small muted" style="margin-top:.5rem">{L.title}</figcaption>
+</figure>

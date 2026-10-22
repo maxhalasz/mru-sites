@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { paths, label, dateFmt, SITE_DATE, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = (no: string, en: string) => (lang === 'no' ? no : en);
+const news = (await getCollection('news', (n) => n.data.published && n.data.date <= SITE_DATE)).sort((a, b) => +b.data.date - +a.data.date);
+---
+<Base lang={lang} page="news" title={label[lang].news}>
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href={paths[lang].home}>{label[lang].home}</a> / {label[lang].news}</div>
+      <h1>{label[lang].news}</h1>
+      <p>{t('Nyheter fra Kelvara, nyeste først.', 'News from Kelvara, newest first.')}</p>
+    </div>
+  </div>
+  <section class="band">
+    <div class="wrap prose" style="max-width:860px">
+      <ul class="list-plain">
+        {news.map((n) => (
+          <li>
+            <p class="muted small" style="margin:0 0 .4rem">{dateFmt(n.data.date, lang)}</p>
+            <h3 style="margin:0 0 .4rem"><a href={`${paths[lang].news}${n.id}/`} style="text-decoration:none;color:inherit">{lang === 'no' ? n.data.title_no : n.data.title_en}</a></h3>
+            <p class="muted" style="margin:0">{lang === 'no' ? n.data.summary_no : n.data.summary_en}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>

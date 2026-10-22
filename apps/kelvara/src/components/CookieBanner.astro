@@ -1,0 +1,16 @@
+---
+import { paths, ui, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = ui[lang];
+---
+<div class="cookie" id="cookie-banner" role="region" aria-label={lang === 'no' ? 'Informasjonskapsler' : 'Cookie notice'} hidden>
+  <div class="wrap">
+    <p>{t.cookieText} <a href={paths[lang].cookies}>{lang === 'no' ? 'Les mer' : 'Read more'}</a>.</p>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-consent="essential">{t.essential}</button>
+      <button class="btn" type="button" data-consent="all">{t.acceptAll}</button>
+    </div>
+  </div>
+</div>
+<script is:inline src="/js/cookie-banner.js"></script>

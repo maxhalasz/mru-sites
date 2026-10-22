@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { paths, label, ui, dateFmt, SITE_DATE, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = (no: string, en: string) => (lang === 'no' ? no : en);
+const docs = (await getCollection('documents', (d) => d.data.published && d.data.date <= SITE_DATE)).sort((a, b) => +b.data.date - +a.data.date);
+---
+<Base lang={lang} page="sustainability" title={label[lang].sustainability}>
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href={paths[lang].home}>{label[lang].home}</a> / {label[lang].sustainability}</div>
+      <h1>{label[lang].sustainability}</h1>
+      <p>{t('Utslipp, lokalsamfunn og ansvarlige leverandørkjeder.', 'Emissions, local communities and responsible supply chains.')}</p>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="wrap prose">
+      <h2>{t('Utslipp', 'Emissions')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p>{t('Ødemark A drives med kraft fra gassturbiner og et lite mannskap, og utslippene er lave sammenlignet med større installasjoner. I 2027 var utslippene av CO₂ 6,9 kilo per fat oljeekvivalent, mot 7,6 kilo i 2024.', 'Ødemark A is powered by gas turbines and operated by a small crew, and emissions are low compared with larger installations. In 2027, CO₂ emissions were 6.9 kilograms per barrel of oil equivalent, against 7.6 kilograms in 2024.')}</p>
+      <p>{t('Vi arbeider videre med varmegjenvinning på turbinene og med bedre planlegging av forsyningsturer for å kutte drivstofforbruket.', 'We are continuing work on heat recovery on the turbines and on better planning of supply runs to cut fuel use.')}</p>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap prose">
+      <h2>{t('Lokalsamfunn og sponsing', 'Community and sponsorship')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p>{t('Kelvara er hovedsponsor for redningsskøyta RS 138 «Sotrabuen», som drives av Redningsselskapet med frivillig mannskap. Vi deltar også på karrieremesser ved videregående skoler i regionen og tar inn lærlinger hvert år.', 'Kelvara is main sponsor of the rescue vessel RS 138 «Sotrabuen», operated by the Norwegian Society for Sea Rescue with a volunteer crew. We also take part in careers fairs at upper secondary schools in the region and take on apprentices every year.')}</p>
+      <p><a href={`${paths[lang].news}2028-08-18-hovedsponsor-sotrabuen/`}>{t('Les om sponsoravtalen', 'Read about the sponsorship agreement')}</a></p>
+    </div>
+  </section>
+
+  <section class="band" id="apenhetsloven">
+    <div class="wrap prose">
+      <h2>{t('Åpenhetsloven', 'Transparency Act')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p>{t('Åpenhetsloven krever at vi kartlegger risiko for brudd på grunnleggende menneskerettigheter og anstendige arbeidsforhold i egen virksomhet og i leverandørkjeden. Vår redegjørelse for 2027 finnes her.', 'The Transparency Act requires us to assess the risk of violations of fundamental human rights and decent working conditions in our own business and in our supply chain. Our statement for 2027 is available here.')}</p>
+      <ul class="list-plain">
+        {docs.map((d) => (
+          <li>
+            <p style="margin:0"><b>{lang === 'no' ? d.data.title_no : d.data.title_en}</b> <span class="muted small">· {dateFmt(d.data.date, lang)}</span></p>
+            <p class="small" style="margin:.3rem 0 0"><a href={lang === 'no' ? d.data.file_no : d.data.file_en}>{ui[lang].download}</a></p>
+          </li>
+        ))}
+      </ul>
+      <p><a href={paths[lang].transparency}>{t('Be om opplysninger etter åpenhetsloven', 'Request information under the Transparency Act')}</a></p>
+    </div>
+  </section>
+</Base>

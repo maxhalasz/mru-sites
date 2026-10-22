@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { getCollection } from 'astro:content';
+import { paths, label, dateFmt, SITE_DATE, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = (no: string, en: string) => (lang === 'no' ? no : en);
+const quotes = (await getCollection('testimonials', (q) => q.data.published)).sort((a, b) => a.data.order - b.data.order);
+const jobs = (await getCollection('jobs', (j) => j.data.published && j.data.date <= SITE_DATE)).sort((a, b) => +b.data.date - +a.data.date);
+const slug = (n: string) => n.toLowerCase().replace(/[^a-z]+/g, '-');
+---
+<Base lang={lang} page="careers" title={label[lang].careers}>
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href={paths[lang].home}>{label[lang].home}</a> / {label[lang].careers}</div>
+      <h1>{label[lang].careers}</h1>
+      <p>{t('Jobb på Ødemark A, på Ågotnes og i Stavanger.', 'Work on Ødemark A, at Ågotnes and in Stavanger.')}</p>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="wrap grid c2" style="gap:3rem;align-items:center">
+      <div>
+        <h2>{t('Hvorfor Kelvara', 'Why Kelvara')}</h2>
+        <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p>{t('Hos oss er du del av et lite mannskap der alle betyr noe. Du får ansvar tidlig, du lærer av erfarne folk, og du blir hørt. Vi har kort vei fra beslutning til handling, og ingen er for viktige til å stanse en jobb som er utrygg.', 'With us you are part of a small crew where everyone matters. You get responsibility early, you learn from experienced people, and you are listened to. We have a short path from decision to action, and nobody is too important to stop an unsafe job.')}</p>
+      </div>
+      <Placeholder file="mannskap-odemark-a.jpg" ratio="4 / 3" label={t('Mannskap i oransje kjeledress på Ødemark A', 'Crew in orange overalls on Ødemark A')} />
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap prose">
+      <h2>{t('Slik fungerer rotasjonen', 'How the rotation works')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p>{t('I vanlig drift jobber du to uker offshore og har fire uker fri. Fra 1. november går Ødemark A over til vinterplan, og mannskapet signerer på for hele sesongen frem til våren. Du får da lengre sammenhengende fri etter sesongen.', 'In normal operation you work two weeks offshore and have four weeks off. From 1 November, Ødemark A moves to its winter schedule, and the crew sign on for the full season until spring. You then have a longer continuous period off after the season.')}</p>
+      <p>{t('Forsyning og transport går fra Ågotnes. Offshore har du eget lugar, tre måltider om dagen og tilgang til legetjeneste døgnet rundt.', 'Supplies and transport go from Ågotnes. Offshore you have your own cabin, three meals a day and access to medical care around the clock.')}</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <h2>{t('Møt mannskapet', 'Meet the crew')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="grid c3" style="align-items:start">
+        {quotes.map((q) => (
+          <div class="quote">
+            <Placeholder file={`portrett-${slug(q.data.name)}.jpg`} ratio="1 / 1" label={t(`Portrett av ${q.data.name}`, `Portrait of ${q.data.name}`)} class="light" />
+            <blockquote style="margin-top:1rem">{lang === "no" ? "«" : "“"}{lang === "no" ? q.data.quote_no : q.data.quote_en}{lang === "no" ? "»" : "”"}</blockquote>
+            <div class="who">{q.data.name}</div>
+            <div class="role">{lang === 'no' ? q.data.role_no : q.data.role_en}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="stillinger">
+    <div class="wrap">
+      <h2>{t('Ledige stillinger', 'Open positions')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="notice"><p style="margin:0"><b>{t('Offshorestillinger for vinteren 2028/29 er besatt.', 'Offshore positions for the 2028/29 winter are filled.')}</b> {t('Stillingene under gjelder land og base.', 'The positions below are onshore and at the base.')}</p></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>{t('Stilling', 'Position')}</th><th>{t('Sted', 'Location')}</th><th>{t('Publisert', 'Posted')}</th></tr></thead>
+          <tbody>
+            {jobs.map((j) => (
+              <tr>
+                <td><b>{lang === 'no' ? j.data.title_no : j.data.title_en}</b><br /><span class="doc-no">{j.data.reference}</span><br /><span class="muted small">{lang === 'no' ? j.data.summary_no : j.data.summary_en}</span></td>
+                <td>{j.data.location}</td>
+                <td>{dateFmt(j.data.date, lang)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted" style="margin-top:1rem">{t('Søknader sendes gjennom vårt rekrutteringsverktøy. Verktøyet er stengt for stillingene over mens utvelgelsen pågår.', 'Applications are made through our recruitment tool. The tool is closed for the positions above while selection is under way.')}</p>
+    </div>
+  </section>
+</Base>

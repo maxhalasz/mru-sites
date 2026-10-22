@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { getCollection } from 'astro:content';
+import { paths, label, ui, dateFmt, SITE_DATE, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = (no: string, en: string) => (lang === 'no' ? no : en);
+const news = (await getCollection('news', (n) => n.data.published && n.data.date <= SITE_DATE))
+  .sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+const newsPath = (id: string) => `${paths[lang].news}${id}/`;
+const facts: [string, string][] = [
+  ['303 m', t('vanndybde', 'water depth')],
+  ['114 × 55 m', t('topside, tre nivåer', 'topside, three levels')],
+  ['196', t('personer, dimensjonert kapasitet', 'persons, design capacity')],
+  ['2011', t('operatør siden', 'operator since')],
+];
+---
+<Base lang={lang} page="home" title={t('Forside', 'Home')}>
+  <section class="hero">
+    <Placeholder file="odemark-a-natt.jpg" ratio="21 / 9" label={t('Ødemark A om natten i tåke, med lys fra kranene', 'Ødemark A at night in fog, lit by the cranes')} />
+    <div class="wrap">
+      <p class="eyebrow">Kelvara Petrochemicals AS</p>
+      <h1>{t('Trygg drift i nordlige Nordsjøen', 'Safe operations in the northern North Sea')}</h1>
+      <p>{t('Vi driver plattformen Ødemark A med et lite, erfarent mannskap, og forsyner den fra basen på Ågotnes.', 'We operate the Ødemark A platform with a small, experienced crew and supply it from our base at Ågotnes.')}</p>
+      <p><a class="btn" href={paths[lang].operations}>{t('Om virksomheten', 'About our operations')}</a></p>
+    </div>
+  </section>
+
+  <section class="band dark">
+    <div class="wrap">
+      <div class="facts">
+        {facts.map(([n, d]) => <div class="fact"><b>{n}</b><span>{d}</span></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap grid c2" style="gap:3rem;align-items:center">
+      <div>
+        <p class="eyebrow">{label[lang].about}</p>
+        <h2>{t('Et selskap bygget rundt én plattform', 'A company built around one platform')}</h2>
+        <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p>{t('Kelvara ble stiftet i 2011 for å kjøpe og reaktivere Ødemark A. I dag driver vi plattformen, forsyningsbasen og væskeanlegget på Ågotnes. Fra 24. september 2028 er Kelvara heleid av NeuroStat Holding AG.', 'Kelvara was founded in 2011 to buy and reactivate Ødemark A. Today we operate the platform, the supply base and the fluids plant at Ågotnes. Since 24 September 2028, Kelvara has been wholly owned by NeuroStat Holding AG.')}</p>
+        <p><a href={paths[lang].about}>{ui[lang].readMore}</a></p>
+      </div>
+      <Placeholder file="agotnes-base.jpg" ratio="4 / 3" class="light" label={t('Forsyningsbasen på Ågotnes', 'The supply base at Ågotnes')} />
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:1rem">
+        <div><p class="eyebrow">{label[lang].news}</p><h2>{t('Siste nytt', 'Latest news')}</h2></div>
+        <a href={paths[lang].news}>{ui[lang].allNews}</a>
+      </div>
+      <div class="grid c3">
+        {news.map((n) => (
+          <a class="card" href={newsPath(n.id)} style="text-decoration:none;color:inherit">
+            <p class="muted small" style="margin-bottom:.6rem">{dateFmt(n.data.date, lang)}</p>
+            <h3>{lang === 'no' ? n.data.title_no : n.data.title_en}</h3>
+            <p class="muted small">{lang === 'no' ? n.data.summary_no : n.data.summary_en}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band dark">
+    <div class="wrap grid c2" style="gap:3rem;align-items:center">
+      <div>
+        <p class="eyebrow">{label[lang].careers}</p>
+        <h2>{t('Jobb med oss', 'Work with us')}</h2>
+        <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p>{t('Vi trenger folk som er gode i faget sitt og som passer på hverandre. Se ledige stillinger på land og på basen.', 'We need people who are good at their trade and who look out for each other. See open positions onshore and at the base.')}</p>
+      </div>
+      <p><a class="btn" href={paths[lang].careers}>{t('Se ledige stillinger', 'See open positions')}</a></p>
+    </div>
+  </section>
+</Base>

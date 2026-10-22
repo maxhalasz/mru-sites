@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { getCollection } from 'astro:content';
+import { paths, label, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = (no: string, en: string) => (lang === 'no' ? no : en);
+const people = (await getCollection('leadership', (p) => p.data.published)).sort((a, b) => a.data.order - b.data.order);
+const mgmt = people.filter((p) => p.data.group === 'management');
+const board = people.filter((p) => p.data.group === 'board');
+const slug = (n: string) => n.toLowerCase().replace(/ø/g, 'o').replace(/å/g, 'a').replace(/æ/g, 'ae').replace(/[^a-z]+/g, '-');
+const history: [string, string, string][] = [
+  ['2011', 'Sundvor Partners AS stifter Kelvara for å kjøpe og reaktivere Ødemark A. Selskapet kjøper plattformen samme år.', 'Sundvor Partners AS founds Kelvara to buy and reactivate Ødemark A. The company buys the platform the same year.'],
+  ['2012', 'Produksjonen gjenopptas etter oppgradering av topside.', 'Production resumes after the topside has been upgraded.'],
+  ['2014', 'Ågotnes Væskeanlegg åpner ved forsyningsbasen.', 'Ågotnes Væskeanlegg opens at the supply base.'],
+  ['2027', 'Ødemark A blir studiested i NeuroStats forskning på helse og kognitiv ytelse i offshorearbeid på høy breddegrad.', 'Ødemark A becomes a study site in NeuroStat\'s research on health and cognitive performance in high-latitude offshore work.'],
+  ['2028', 'Havtil samtykker til forlenget levetid for Ødemark A til og med 2038. NeuroStat Holding AG kjøper Kelvara 24. september.', 'Havtil consents to a life extension for Ødemark A through 2038. NeuroStat Holding AG acquires Kelvara on 24 September.'],
+];
+const values: [string, string, string, string][] = [
+  ['Sikkerhet først', 'Safety first', 'Ingen jobb er så viktig eller så hastig at den ikke kan stanses.', 'No job is so important or so urgent that it cannot be stopped.'],
+  ['Ansvar', 'Responsibility', 'Vi gjør det vi sier, og vi sier fra når noe ikke stemmer.', 'We do what we say, and we speak up when something is not right.'],
+  ['Respekt', 'Respect', 'Vi lytter til dem som kjenner anlegget best, uansett stilling.', 'We listen to those who know the installation best, whatever their position.'],
+  ['Åpenhet', 'Openness', 'Vi rapporterer det som skjer, også det som ikke er behagelig.', 'We report what happens, including what is uncomfortable.'],
+];
+---
+<Base lang={lang} page="about" title={label[lang].about}>
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href={paths[lang].home}>{label[lang].home}</a> / {label[lang].about}</div>
+      <h1>{label[lang].about}</h1>
+      <p>{t('Kelvara Petrochemicals AS er et norsk olje- og gasselskap med hovedkontor i Stavanger.', 'Kelvara Petrochemicals AS is a Norwegian oil and gas company headquartered in Stavanger.')}</p>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="wrap prose">
+      <h2>{t('Hvem vi er', 'Who we are')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p>{t('Kelvara driver installasjonen Ødemark A i nordlige Nordsjøen og et væskeanlegg for borevæsker på Ågotnes. Vi er om lag 190 ansatte offshore og onshore, og vi arbeider i små team der alle kjenner hverandre.', 'Kelvara operates the Ødemark A installation in the northern North Sea and a drilling fluids plant at Ågotnes. We are about 190 employees offshore and onshore, and we work in small teams where everyone knows each other.')}</p>
+      <p>{t('Hovedkontoret ligger i Stavanger. Forsyningsbasen og væskeanlegget ligger på Ågotnes.', 'Our head office is in Stavanger. The supply base and the fluids plant are at Ågotnes.')}</p>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <h2>{t('Historie', 'History')}</h2>
+      <ul class="timeline">
+        {history.map(([y, no, en]) => <li><span class="yr">{y}</span>{t(no, en)}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band" id="eierskap">
+    <div class="wrap prose">
+      <h2>{t('Eierskap', 'Ownership')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p>{t('Siden 24. september 2028 er Kelvara Petrochemicals AS heleid av NeuroStat Holding AG (SIX: NEUS), Zürich. Fra 2011 til 2028 var Sundvor Partners AS eier.', 'Since 24 September 2028, Kelvara Petrochemicals AS has been wholly owned by NeuroStat Holding AG (SIX: NEUS), Zürich. From 2011 to 2028 the owner was Sundvor Partners AS.')}</p>
+      <p>{t('Kelvara fortsetter som selvstendig operatør under eget navn. Ledelsen og organisasjonen er uendret.', 'Kelvara continues as an independent operator under its own name. Management and the organisation are unchanged.')}</p>
+      <p><a href={`${paths[lang].news}2028-09-24-neurostat-kjoper-kelvara/`}>{t('Les kunngjøringen', 'Read the announcement')}</a></p>
+    </div>
+  </section>
+
+  <section class="band alt" id="ledelse">
+    <div class="wrap">
+      <h2>{t('Ledelse', 'Management')}</h2>
+      <div class="grid c4" style="margin-top:1.2rem">
+        {mgmt.map((p) => (
+          <div class="person">
+            <Placeholder file={`portrett-${slug(p.data.name)}.jpg`} ratio="4 / 5" label={t(`Portrett av ${p.data.name}`, `Portrait of ${p.data.name}`)} />
+            <h3>{p.data.name}</h3>
+            <p class="muted">{lang === 'no' ? p.data.role_no : p.data.role_en}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <h2>{t('Styret', 'Board of Directors')}</h2>
+      <div class="grid c4" style="margin-top:1.2rem">
+        {board.map((p) => (
+          <div class="person">
+            <Placeholder file={`portrett-${slug(p.data.name)}.jpg`} ratio="4 / 5" label={t(`Portrett av ${p.data.name}`, `Portrait of ${p.data.name}`)} />
+            <h3>{p.data.name}</h3>
+            <p class="muted">{lang === 'no' ? p.data.role_no : p.data.role_en}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band dark">
+    <div class="wrap">
+      <h2>{t('Verdier', 'Values')}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="grid c4">
+        {values.map(([nt, et, nd, ed]) => <div><h3>{t(nt, et)}</h3><p>{t(nd, ed)}</p></div>)}
+      </div>
+    </div>
+  </section>
+</Base>

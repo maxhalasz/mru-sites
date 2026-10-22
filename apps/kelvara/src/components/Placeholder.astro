@@ -1,0 +1,8 @@
+---
+// Stand-in for a photo that is still to come. The file name is the final name to use.
+interface Props { file: string; ratio?: string; label?: string; class?: string }
+const { file, ratio = '16 / 9', label, class: cls = '' } = Astro.props;
+---
+<div class={`ph ${cls}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={label ?? 'Image'} data-placeholder={file}>
+  <span>{file}</span>
+</div>

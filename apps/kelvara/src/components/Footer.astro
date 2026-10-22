@@ -1,0 +1,44 @@
+---
+import { paths, label, ui, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = ui[lang];
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <img src="/img/kelvara-horizontal-light.svg" alt="Kelvara Petrochemicals AS" width="170" height="50" style="height:50px;width:auto;margin-bottom:1rem" />
+        <p>Kelvara Petrochemicals AS<br />{t.orgnr} 921 447 306 MVA</p>
+      </div>
+      <div>
+        <h4>{t.postal}</h4>
+        <p>Postboks 2217 Sentrum<br />N-4001 Stavanger</p>
+        <h4>{t.visit}</h4>
+        <p>Strandkaien 41<br />4005 Stavanger</p>
+      </div>
+      <div>
+        <h4>{t.base}</h4>
+        <p>Kollsnesveien 8<br />5363 Ågotnes</p>
+      </div>
+      <div>
+        <h4>{lang === 'no' ? 'Snarveier' : 'Links'}</h4>
+        <ul>
+          <li><a href={paths[lang].about}>{label[lang].about}</a></li>
+          <li><a href={paths[lang].careers}>{label[lang].careers}</a></li>
+          <li><a href={paths[lang].news}>{label[lang].news}</a></li>
+          <li><a href={paths[lang].contact}>{label[lang].contact}</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <div>© 2028 Kelvara Petrochemicals AS. {t.rights}</div>
+      <ul style="display:flex;gap:1.2rem;flex-wrap:wrap">
+        <li><a href={paths[lang].privacy}>{label[lang].privacy}</a></li>
+        <li><a href={paths[lang].cookies}>{label[lang].cookies}</a></li>
+        <li><a href={paths[lang].transparency}>{label[lang].transparency}</a></li>
+        <li><a href="#cookie-settings" id="cookie-settings">{t.cookieSettings}</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

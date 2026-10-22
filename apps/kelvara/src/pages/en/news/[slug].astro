@@ -1,0 +1,12 @@
+---
+import NewsItem from '../../../views/NewsItem.astro';
+import { getCollection } from 'astro:content';
+import { SITE_DATE } from '../../../i18n';
+
+export async function getStaticPaths() {
+  const news = await getCollection('news', (n) => n.data.published && n.data.date <= SITE_DATE);
+  return news.map((n) => ({ params: { slug: n.id }, props: { item: n } }));
+}
+const { item } = Astro.props;
+---
+<NewsItem lang="en" item={item} />

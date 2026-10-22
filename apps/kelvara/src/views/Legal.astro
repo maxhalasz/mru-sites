@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import { paths, label, type Lang, type PageKey } from '../i18n';
+
+interface Props { lang: Lang; kind: 'privacy' | 'cookies' | 'transparency' }
+const { lang, kind } = Astro.props;
+const t = (no: string, en: string) => (lang === 'no' ? no : en);
+const page: PageKey = kind;
+---
+<Base lang={lang} page={page} title={label[lang][kind]}>
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href={paths[lang].home}>{label[lang].home}</a> / {label[lang][kind]}</div>
+      <h1>{kind === 'transparency' ? t('Åpenhetsloven: be om opplysninger', 'Transparency Act: request information') : label[lang][kind]}</h1>
+      <p>{t('Sist oppdatert 1. september 2028', 'Last updated 1 September 2028')}</p>
+    </div>
+  </div>
+  <section class="band">
+    <div class="wrap prose">
+      {kind === 'privacy' && (<>
+        <h2>{t('1. Behandlingsansvarlig', '1. Controller')}</h2>
+        <p>{t('Kelvara Petrochemicals AS, org.nr. 921 447 306 MVA, Postboks 2217 Sentrum, N-4001 Stavanger, er behandlingsansvarlig for personopplysninger på dette nettstedet. Du kan kontakte oss på personvern@kelvara.example.', 'Kelvara Petrochemicals AS, org. no. 921 447 306 MVA, Postboks 2217 Sentrum, N-4001 Stavanger, is the controller for personal data on this website. You can contact us at personvern@kelvara.example.')}</p>
+        <h2>{t('2. Hva vi behandler', '2. What we process')}</h2>
+        <p>{t('Når du besøker nettstedet, registrerer vår driftsleverandør tekniske data som IP-adresse, tidspunkt og hvilken side du ba om. Vi bruker dem til å levere og sikre nettstedet. Når du sender oss en melding, behandler vi opplysningene du oppgir for å svare deg.', 'When you visit the site, our hosting provider records technical data such as IP address, time and the page requested. We use it to deliver and secure the site. When you send us a message, we process the details you provide in order to reply.')}</p>
+        <h2>{t('3. Rettslig grunnlag og lagring', '3. Legal basis and retention')}</h2>
+        <p>{t('Behandlingen skjer etter personvernforordningen (GDPR) og personopplysningsloven. Vi lagrer opplysninger bare så lenge det er nødvendig for formålet eller loven krever det.', 'Processing takes place under the General Data Protection Regulation (GDPR) and the Norwegian Personal Data Act. We keep data only as long as needed for the purpose or as the law requires.')}</p>
+        <h2>{t('4. Dine rettigheter', '4. Your rights')}</h2>
+        <p>{t('Du har rett til innsyn, retting, sletting og begrensning, og til å protestere mot behandlingen. Du kan klage til Datatilsynet.', 'You have the right of access, correction, deletion and restriction, and the right to object to processing. You can complain to the Norwegian Data Protection Authority (Datatilsynet).')}</p>
+      </>)}
+      {kind === 'cookies' && (<>
+        <h2>{t('Hva vi bruker', 'What we use')}</h2>
+        <p>{t('Nettstedet bruker nødvendige informasjonskapsler og nettleserlagring for å huske valget ditt om informasjonskapsler. Disse er nødvendige for at nettstedet skal fungere. Med ditt samtykke bruker vi også valgfrie informasjonskapsler for å forstå hvordan nettstedet brukes.', 'The site uses essential cookies and browser storage to remember your cookie choice. These are needed for the site to work. With your consent we also use optional cookies to understand how the site is used.')}</p>
+        <h2>{t('Slik endrer du valget', 'How to change your choice')}</h2>
+        <p>{t('Bruk «Innstillinger for informasjonskapsler» nederst på siden. Du kan også slette informasjonskapsler og lagrede data i nettleseren din.', 'Use “Cookie settings” at the bottom of the page. You can also delete cookies and stored data in your browser.')}</p>
+      </>)}
+      {kind === 'transparency' && (<>
+        <p>{t('Etter åpenhetsloven har enhver rett til å be om opplysninger om hvordan Kelvara håndterer faktiske og potensielle negative konsekvenser for grunnleggende menneskerettigheter og anstendige arbeidsforhold. Vi svarer skriftlig og i rimelig tid, senest innen tre uker.', 'Under the Norwegian Transparency Act, anyone has the right to request information on how Kelvara handles actual and potential adverse impacts on fundamental human rights and decent working conditions. We reply in writing and within a reasonable time, no later than three weeks.')}</p>
+        <p>{t('Send forespørselen til ', 'Send your request to ')}<a href="mailto:apenhet@kelvara.example">apenhet@kelvara.example</a>{t(', og oppgi hvilken informasjon du ønsker.', ', stating which information you want.')}</p>
+        <p><a href={paths[lang].sustainability + '#apenhetsloven'}>{t('Se vår redegjørelse', 'See our statement')}</a></p>
+      </>)}
+    </div>
+  </section>
+</Base>

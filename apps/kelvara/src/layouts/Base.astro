@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
+import { paths, ui, type Lang, type PageKey } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description?: string;
+  page?: PageKey;
+  /** Path of the same page in the other language, when it is not a plain page key (news items). */
+  altPath?: string;
+  noindex?: boolean;
+  search?: boolean;
+}
+const { lang, title, description, page, altPath, noindex = false, search = true } = Astro.props;
+const other: Lang = lang === 'no' ? 'en' : 'no';
+const alt = altPath ?? (page ? paths[other][page] : paths[other].home);
+const self = Astro.url.pathname;
+const site = 'Kelvara Petrochemicals AS';
+const desc = description ?? (lang === 'no'
+  ? 'Kelvara Petrochemicals AS er et norsk olje- og gasselskap med hovedkontor i Stavanger. Vi driver plattformen Ødemark A i nordlige Nordsjøen.'
+  : 'Kelvara Petrochemicals AS is a Norwegian oil and gas company headquartered in Stavanger. We operate the Ødemark A platform in the northern North Sea.');
+const fullTitle = page === 'home' ? site : `${title} | ${site}`;
+---
+<!doctype html>
+<html lang={lang === 'no' ? 'nb' : 'en'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={new URL(self, Astro.site)} />
+    <link rel="alternate" hreflang={lang === 'no' ? 'nb' : 'en'} href={new URL(self, Astro.site)} />
+    <link rel="alternate" hreflang={other === 'no' ? 'nb' : 'en'} href={new URL(alt, Astro.site)} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#161616" />
+  </head>
+  <body>
+    <a class="skip" href="#main">{ui[lang].skip}</a>
+    <Header lang={lang} page={page} alt={alt} />
+    <main id="main" data-pagefind-body={search ? '' : undefined} data-pagefind-ignore={search ? undefined : 'all'}>
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <CookieBanner lang={lang} />
+    <script is:inline src="/js/forms.js"></script>
+  </body>
+</html>

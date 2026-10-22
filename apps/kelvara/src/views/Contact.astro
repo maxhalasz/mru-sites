@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import { paths, label, ui, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = (no: string, en: string) => (lang === 'no' ? no : en);
+const contacts: [string, string, string][] = [
+  ['C. Vance', t('Logistikkoordinator', 'Logistics Coordinator'), 'logistikk@kelvara.example'],
+  ['M. Krog', 'HMS', 'hms@kelvara.example'],
+  ['Kpt. H. Sæther', t('Skipsfører, MS Nordvakt', 'Master, MS Nordvakt'), 'nordvakt@kelvara.example'],
+];
+---
+<Base lang={lang} page="contact" title={label[lang].contact}>
+  <div class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href={paths[lang].home}>{label[lang].home}</a> / {label[lang].contact}</div>
+      <h1>{label[lang].contact}</h1>
+      <p>{t('Kelvara har hovedkontor i Stavanger og forsyningsbase på Ågotnes.', 'Kelvara has its head office in Stavanger and a supply base at Ågotnes.')}</p>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="wrap grid c2" style="gap:3rem;align-items:start">
+      <div>
+        <h2>{t('Adresser', 'Addresses')}</h2>
+        <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p><b>{ui[lang].postal}</b><br />Kelvara Petrochemicals AS<br />Postboks 2217 Sentrum<br />N-4001 Stavanger</p>
+        <p><b>{ui[lang].visit}</b><br />Strandkaien 41<br />4005 Stavanger<br />+47 00 000 000</p>
+        <p><b>{t('Forsyningsbase og Ågotnes Væskeanlegg', 'Supply base and Ågotnes Væskeanlegg')}</b><br />Kollsnesveien 8<br />5363 Ågotnes</p>
+        <p class="doc-no">{ui[lang].orgnr} 921 447 306 MVA</p>
+
+        <h2 style="margin-top:2.2rem">{t('Kontaktpersoner', 'Contacts')}</h2>
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              {contacts.map(([n, r, e]) => <tr><td><b>{n}</b><br /><span class="muted small">{r}</span></td><td><a href={`mailto:${e}`}>{e}</a></td></tr>)}
+            </tbody>
+          </table>
+        </div>
+        <p class="small muted" style="margin-top:1rem">{t('Pressehenvendelser: ', 'Press enquiries: ')}<a href="mailto:presse@kelvara.example">presse@kelvara.example</a></p>
+      </div>
+
+      <div>
+        <h2>{t('Send oss en melding', 'Send us a message')}</h2>
+        <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+        <form data-confirm="contact-done" data-ref-prefix="KV-HK">
+          <div class="field"><label for="c-name">{t('Navn', 'Name')}</label><input id="c-name" type="text" required autocomplete="name" /></div>
+          <div class="field"><label for="c-email">{t('E-postadresse', 'Email address')}</label><input id="c-email" type="email" required autocomplete="email" /></div>
+          <div class="field">
+            <label for="c-topic">{t('Emne', 'Topic')}</label>
+            <select id="c-topic" required>
+              <option value="">{t('Velg', 'Select')}</option>
+              <option>{t('Generell henvendelse', 'General enquiry')}</option>
+              <option>{t('Karriere', 'Careers')}</option>
+              <option>{t('Leverandør', 'Supplier')}</option>
+              <option>{t('Presse', 'Press')}</option>
+              <option>{t('Pårørende til mannskap', 'Relatives of crew')}</option>
+            </select>
+          </div>
+          <div class="field"><label for="c-msg">{t('Melding', 'Message')}</label><textarea id="c-msg" rows="6" required></textarea></div>
+          <button class="btn" type="submit">{t('Send', 'Send')}</button>
+        </form>
+        <div class="confirm" id="contact-done" hidden>
+          <h3>{t('Takk', 'Thank you')}</h3>
+          <p>{t('Henvendelsen din er mottatt.', 'Your enquiry has been received.')} <span class="doc-no" data-ref></span></p>
+          <p class="small muted">{t('Vi svarer vanligvis innen fem arbeidsdager.', 'We usually reply within five working days.')}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
