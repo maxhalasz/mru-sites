@@ -211,3 +211,6 @@ input[type=text], input[type=email], select, textarea { width: 100%; font: inher
 .schem a { cursor: pointer; }
 .schem a:hover rect:first-of-type { fill: #fff6f1; }
 .hero-photo { object-position: 72% 50%; }
+/* The photo is already soft-focus (made at build time), so the browser must not blur it again. */
+.hero-art.soft { inset: 0; filter: none; }
+.hero-art.soft .hero-photo { transform: none; }

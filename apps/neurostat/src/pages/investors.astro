@@ -95,9 +95,9 @@ const calendar = [
       <h2>Governance and general meeting</h2>
       <p>The 2028 Annual General Meeting was held on 20 April 2028. Our articles of association and corporate governance report are available under <a href="/about/governance/">Governance</a>.</p>
       <h2>Investor alerts</h2>
-      <form data-confirm="alert-done" data-ref-prefix="NS-IR">
+      <form data-confirm="alert-done" data-ref-prefix="NS-IR" data-log="investor-alert">
         <div class="field"><label for="ir-email">Email address</label><input id="ir-email" name="email" type="email" required autocomplete="email" /></div>
-        <div class="field"><label><input type="checkbox" required /> I agree to receive investor alerts and accept the <a href="/privacy/">privacy policy</a>.</label></div>
+        <div class="field"><label><input type="checkbox" required data-label="Consent (investor alerts)" /> I agree to receive investor alerts and accept the <a href="/privacy/">privacy policy</a>.</label></div>
         <button class="btn" type="submit">Subscribe</button>
       </form>
       <div class="confirm" id="alert-done" hidden><p>Thank you. Your subscription request has been received.</p><p class="doc-no">Reference <span data-ref></span></p></div>

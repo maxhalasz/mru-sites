@@ -65,7 +65,7 @@ Os retratos de Gunnar, Del e Sofie usam o mesmo arquivo em "Karriere" e não apa
 
 ## Fotos de banco livre (já aplicadas)
 
-Sete espaços já têm foto de banco livre, recortada e com cor ajustada (mais fria e escura). Troque por uma sua quando tiver, usando o mesmo nome de arquivo. A plataforma do herói da Kelvara é uma sonda genérica, não a Condeep de três gruas; vale uma imagem sua. O herói da Kelvara aparece desfocado atrás do título.
+Sete espaços já têm foto de banco livre, recortada e com cor ajustada (mais fria e escura). Troque por uma sua quando tiver, usando o mesmo nome de arquivo. A plataforma do herói da Kelvara é uma sonda genérica, não a Condeep de três gruas; vale uma imagem sua. O herói da Kelvara aparece desfocado atrás do título: a versão desfocada é gerada sozinha, a cada build, a partir de `odemark-a-natt.jpg`. Para trocar a foto, substitua só esse arquivo (use a maior resolução que tiver, de preferência acima de 2400 px de largura).
 
 Use só Unsplash ou Pexels, com licença que permita uso comercial sem atribuição, e nunca imagem achada por busca no Google. Registre cada uma aqui:
 

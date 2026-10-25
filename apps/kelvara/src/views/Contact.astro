@@ -44,7 +44,7 @@ const contacts: [string, string, string][] = [
       <div>
         <h2>{t('Send oss en melding', 'Send us a message')}</h2>
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-        <form data-confirm="contact-done" data-ref-prefix="KV-HK">
+        <form data-confirm="contact-done" data-ref-prefix="KV-HK" data-log="contact">
           <div class="field"><label for="c-name">{t('Navn', 'Name')}</label><input id="c-name" type="text" required autocomplete="name" /></div>
           <div class="field"><label for="c-email">{t('E-postadresse', 'Email address')}</label><input id="c-email" type="email" required autocomplete="email" /></div>
           <div class="field">

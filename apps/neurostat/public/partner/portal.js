@@ -29,6 +29,10 @@
     errBox.hidden = false;
   }
   function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  // Saved to the game master's sheet when a log address is set. Passwords are never sent.
+  function logEvent(kind, fields) {
+    if (window.siteLog) window.siteLog.send(kind, '', fields);
+  }
   function hex(buf) {
     return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
   }
@@ -68,11 +72,14 @@
     ev.preventDefault();
     errBox.hidden = true;
     var s = state();
-    if (s.until && s.until > Date.now()) { showError(lockedMessage(s.until)); return; }
-    if (s.until && s.until <= Date.now()) { s = { n: 0, until: 0 }; save(s); }
-
     var user = form.elements.username.value.trim().toLowerCase();
     var pass = form.elements.password.value;
+    if (s.until && s.until > Date.now()) {
+      logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Blocked (locked out)' }]);
+      showError(lockedMessage(s.until));
+      return;
+    }
+    if (s.until && s.until <= Date.now()) { s = { n: 0, until: 0 }; save(s); }
     if (!user || !pass) { showError('The username or password is incorrect.'); return; }
 
     btn.disabled = true;
@@ -87,6 +94,7 @@
 
     if (!bundle) {
       s.n = (s.n || 0) + 1;
+      logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Wrong username or password' }, { label: 'Failed attempts in a row', value: String(s.n) }]);
       if (s.n >= MAX_TRIES) {
         s.until = Date.now() + LOCK_MS;
         s.n = 0;
@@ -99,6 +107,7 @@
       return;
     }
     save({ n: 0, until: 0 });
+    logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Signed in' }, { label: 'Account', value: bundle.name }]);
     form.reset();
     render(bundle, user);
   });
@@ -145,6 +154,7 @@
   function open(d, user) {
     urls.forEach(function (u) { URL.revokeObjectURL(u); });
     urls = [];
+    logEvent('portal-open', [{ label: 'Username', value: user }, { label: 'Document', value: d.number + ' ' + d.title }]);
     var v = document.getElementById('viewer');
     var wm = 'CONFIDENTIAL — ' + user;
     var html = '<div class="doc-meta"><div><h2>' + esc(d.title) + '</h2><p class="doc-no">' + esc(d.number) + ' · ' + esc(d.date) + '</p>' +

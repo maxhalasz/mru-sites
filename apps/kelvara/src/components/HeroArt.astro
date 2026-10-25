@@ -2,11 +2,14 @@
 // Home page hero artwork: Ødemark A at night in fog, drawn as a silhouette until a photograph is added.
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-const photo = existsSync(join(process.cwd(), 'public', 'img', 'odemark-a-natt.jpg'));
+// The soft-focus version is made at build time from odemark-a-natt.jpg (see scripts/blur-hero.mjs).
+const soft = existsSync(join(process.cwd(), 'public', 'img', 'generated', 'odemark-a-natt.jpg'));
+const photo = soft || existsSync(join(process.cwd(), 'public', 'img', 'odemark-a-natt.jpg'));
+const src = soft ? '/img/generated/odemark-a-natt.jpg' : '/img/odemark-a-natt.jpg';
 const glows: [number, number][] = [[1052, 296], [1388, 296], [1075, 268], [1362, 268], [1135, 247], [1322, 247], [1000 + 98, 224], [1296, 218], [1205, 330]];
 ---
-<div class="hero-art" aria-hidden="true">
-  {photo ? (<><img class="hero-photo" src="/img/odemark-a-natt.jpg" alt="" /><div class="hero-shade"></div></>) : (
+<div class={soft ? 'hero-art soft' : 'hero-art'} aria-hidden="true">
+  {photo ? (<><img class="hero-photo" src={src} alt="" /><div class="hero-shade"></div></>) : (
   <svg viewBox="0 0 1600 640" preserveAspectRatio="xMaxYMax slice">
     <defs>
       <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">

@@ -1,5 +1,5 @@
-/* Form handling for the public site. Nothing is sent anywhere: each form shows an
-   on-page confirmation with a reference number. */
+/* Form handling for the public site. Each form shows an on-page confirmation with a reference number.
+   When a log address is set (log-config.js), the answers are also saved to the game master's sheet. */
 (function () {
   'use strict';
 
@@ -16,14 +16,18 @@
       form.reportValidity();
       return;
     }
+    var bot = form.querySelector('[data-hp]');
+    if (bot && bot.value) return;
     var box = document.getElementById(form.getAttribute('data-confirm'));
     var out = box && box.querySelector('[data-ref]');
+    var outcome = '';
     if (form.hasAttribute('data-eligibility') && box) {
       var ok = true;
       form.querySelectorAll('select[data-ok]').forEach(function (s) {
         if (s.value !== s.getAttribute('data-ok')) ok = false;
       });
       var msg = box.querySelector('[data-outcome]');
+      outcome = ok ? 'May be eligible' : 'May not be eligible';
       if (msg) {
         msg.textContent = ok
           ? 'Based on your answers you may be eligible to take part in BOREAS-2.'
@@ -31,7 +35,13 @@
       }
     }
     var prefix = form.getAttribute('data-ref-prefix') || 'NS';
-    if (out) out.textContent = ref(prefix);
+    var code = ref(prefix);
+    if (out) out.textContent = code;
+    if (window.siteLog && form.hasAttribute('data-log')) {
+      var fields = window.siteLog.collect(form);
+      if (outcome) fields.push({ label: 'Outcome', value: outcome });
+      window.siteLog.send(form.getAttribute('data-log'), code, fields);
+    }
     if (box) {
       box.hidden = false;
       box.setAttribute('tabindex', '-1');

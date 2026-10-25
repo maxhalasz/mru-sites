@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "astro dev --port 4322",
-    "build": "astro build",
+    "dev": "node ../../scripts/blur-hero.mjs . odemark-a-natt.jpg && astro dev --port 4322",
+    "build": "node ../../scripts/blur-hero.mjs . odemark-a-natt.jpg && astro build",
     "preview": "astro preview",
     "check": "astro check"
   },

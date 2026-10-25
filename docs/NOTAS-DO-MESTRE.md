@@ -51,6 +51,10 @@ Bônus: a busca do site por "Kelvara" devolve essas páginas, e os documentos do
 
 NeuroStat: lista de empresas do grupo (About), logística do estudo (página do BOREAS-2 e comunicado de 14/09), nota em Investors (relatório sob "Other"), Careers (vagas de segurança e logística) e pôster do NS-760. Kelvara: MS Nordvakt "operado pela Aegis Corporation" (Operations e Contact). Portal: escala de standby do Gunnar (contrato Cardume, operado pela Aegis). O link da NeuroStat vai para aegiscorp.net, que não existe.
 
+## Vagas e registro
+
+As três vagas da Kelvara (Roughneck, Driller, Subsea Operator) têm início em **28 de outubro de 2028**; a rotação de inverno da plataforma começa em 1º de novembro. As candidaturas e tudo o que os jogadores mandam (inclusive quem tenta entrar no portal e quais documentos abre) vão para a planilha descrita em `REGISTRO.md`.
+
 ## Pistas no código-fonte
 
 - `js/cookie-banner.js` (NeuroStat): nota do dev "jb" sobre o AnchorPoint, 30/09/2028. A Action confere que ela sobrevive ao build. O site só cita o nome, sem link nem domínio.
@@ -78,7 +82,7 @@ Documentos que já estão lá (dê uma olhada, são todos corporativos e secos):
 
 Tudo isto está fora do pitch e é substituível:
 
-- Vagas da Kelvara: Roughneck, Driller e Subsea Operator (KV-2841 a KV-2843, início 1/11/2028, temporada inteira). Os requisitos (BOSIET, IWCF/IADC WellSharp etc.) são genéricos do setor.
+- Vagas da Kelvara: Roughneck, Driller e Subsea Operator (KV-2841 a KV-2843, início 28/10/2028, temporada inteira). Os requisitos (BOSIET, IWCF/IADC WellSharp etc.) são genéricos do setor.
 - Maiores acionistas da NeuroStat: Sundvor Partners AS 9,8% e Rotbuche Capital AG 5,2% (inventado).
 - Anos de abertura dos escritórios: Basel 2008, Boston 2014, Londres 2018. Funcionários: cerca de 1.100 (NeuroStat) e cerca de 190 (Kelvara).
 - Números financeiros da NeuroStat (receita, lucro, dividendo, ações) e a série de cotação, que cai de CHF 116 para 74 em 12/03/2026 e fecha em CHF 84,35 em 19/10/2028. ISIN `CH0471833928` (dígito verificador válido) e UID `CHE-115.372.646` (idem). Podem coincidir com uma empresa real que eu não consigo verificar.

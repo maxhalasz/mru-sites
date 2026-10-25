@@ -53,10 +53,10 @@ const lines = (s: string) => s.split('\n').filter(Boolean);
         <h2>{t('Send søknad', 'Apply')}</h2>
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
         <p>{t('Fyll ut skjemaet, så tar vi kontakt innen to arbeidsdager. Ta med sertifikatene dine til samtalen. Vi trenger gyldige sikkerhetskurs og helseattest før avreise fra Ågotnes.', 'Fill in the form and we will contact you within two working days. Bring your certificates to the interview. We need valid safety certificates and a medical certificate before departure from Ågotnes.')}</p>
-        <p class="small muted">{t('Søknader behandles fortløpende. Oppstart er 1. november 2028.', 'Applications are reviewed on a rolling basis. Start date is 1 November 2028.')}</p>
+        <p class="small muted">{t('Søknader behandles fortløpende. Oppstart er 28. oktober 2028.', 'Applications are reviewed on a rolling basis. Start date is 28 October 2028.')}</p>
       </div>
       <div>
-        <form data-confirm="apply-done" data-ref-prefix="KV-SØ">
+        <form data-confirm="apply-done" data-ref-prefix="KV-SØ" data-log="application">
           <div class="field">
             <label for="a-job">{t('Stilling', 'Position')}</label>
             <select id="a-job" required>
@@ -67,7 +67,7 @@ const lines = (s: string) => s.split('\n').filter(Boolean);
           <div class="field"><label for="a-name">{t('Navn', 'Name')}</label><input id="a-name" type="text" required autocomplete="name" /></div>
           <div class="field"><label for="a-email">{t('E-postadresse', 'Email address')}</label><input id="a-email" type="email" required autocomplete="email" /></div>
           <div class="field"><label for="a-exp">{t('Erfaring offshore (år)', 'Offshore experience (years)')}</label><input id="a-exp" type="text" required /></div>
-          <div class="field"><label><input type="checkbox" required /> {t('Jeg har eller kan få gyldige sikkerhetskurs og helseattest før 1. november.', 'I hold, or can obtain, valid safety certificates and a medical certificate before 1 November.')}</label></div>
+          <div class="field"><label><input type="checkbox" required data-label="Certificates confirmed" /> {t('Jeg har eller kan få gyldige sikkerhetskurs og helseattest før 28. oktober.', 'I hold, or can obtain, valid safety certificates and a medical certificate before 28 October.')}</label></div>
           <div class="field"><label for="a-msg">{t('Melding (valgfritt)', 'Message (optional)')}</label><textarea id="a-msg" rows="4"></textarea></div>
           <button class="btn" type="submit">{t('Send søknad', 'Send application')}</button>
         </form>

@@ -117,6 +117,10 @@ No dia do lançamento:
 
 Depois do lançamento, qualquer jogador pode ver os arquivos e o histórico dos repositórios publicados. Por isso a Action roda a checagem de vazamento antes de publicar, e cada publicação recria o histórico com uma única mensagem neutra.
 
+## 12. Ver o que os jogadores enviam
+
+Candidaturas da Kelvara, formulários de contato, respostas do BOREAS-2, inscrições e tentativas de entrar no portal vão para uma planilha do Google que só você vê. A configuração (5 minutos) e o que cada aba guarda estão em [`REGISTRO.md`](REGISTRO.md). Sem essa configuração, nada é salvo.
+
 ## Plano B (sem o Pages CMS)
 
 Tudo que o CMS faz dá para fazer pelo site do GitHub: abra o arquivo na pasta certa, clique no lápis e salve, ou use **Add file → Upload files**.
