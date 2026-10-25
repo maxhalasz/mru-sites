@@ -2,6 +2,7 @@
 // Encrypts the private portal documents into one package per account.
 // Usage: node packages/portal/build.mjs <dist folder of the NeuroStat site>
 //        node packages/portal/build.mjs --gm <output folder>   (local only: builds the game master package)
+//        add --creds <file> to either form to read the logins from another file
 //
 // The game master login (private/credentials.gm) and the activity-log private key (private/log-keys.json)
 // never leave this computer. Only the encrypted game master package is committed, and it is built here.
@@ -21,7 +22,10 @@ const MIME = { '.pdf': 'application/pdf', '.png': 'image/png', '.jpg': 'image/jp
 
 const args = process.argv.slice(2);
 const gmMode = args.includes('--gm');
-const dist = args.find((a) => !a.startsWith('--'));
+// --creds <file>: read the logins from another file (used for throwaway test accounts kept outside the repository).
+const credsIdx = args.indexOf('--creds');
+const credsFile = credsIdx >= 0 ? args[credsIdx + 1] : null;
+const dist = args.find((a, i) => !a.startsWith('--') && (credsIdx < 0 || i !== credsIdx + 1));
 if (!dist) { console.error('portal: no output folder given'); process.exit(2); }
 const root = new URL('../../', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const priv = join(root, 'private');
@@ -29,8 +33,8 @@ const priv = join(root, 'private');
 function fail(msg) { console.error('portal: ' + msg); process.exit(1); }
 
 function readCredentials() {
-  const file = join(priv, gmMode ? 'credentials.gm' : 'credentials');
-  if (!existsSync(file)) fail(`private/${gmMode ? 'credentials.gm' : 'credentials'} not found`);
+  const file = credsFile || join(priv, gmMode ? 'credentials.gm' : 'credentials');
+  if (!existsSync(file)) fail(`${credsFile || 'private/' + (gmMode ? 'credentials.gm' : 'credentials')} not found`);
   const out = [];
   for (const raw of readFileSync(file, 'utf8').split(/\r?\n/)) {
     const line = raw.trim();
