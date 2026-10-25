@@ -1,5 +1,0 @@
-User-agent: *
-Disallow: /partner/
-Disallow: /search/
-
-Sitemap: https://neurostat-group.github.io/sitemap-index.xml

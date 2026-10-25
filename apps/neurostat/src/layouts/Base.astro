@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CookieBanner from '../components/CookieBanner.astro';
+import { PUBLIC_LAUNCH } from '../data/launch';
 
 interface Props {
   title: string;
@@ -27,7 +28,7 @@ const fullTitle = title === 'NeuroStat' ? 'NeuroStat Holding AG' : `${title} | N
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {(noindex || !PUBLIC_LAUNCH) && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <meta property="og:title" content={fullTitle} />
