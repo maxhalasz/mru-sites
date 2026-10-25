@@ -53,11 +53,11 @@ p { margin: 0 0 1em; }
 .site-header { background: rgba(253, 253, 251, .97); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); box-shadow: 0 1px 0 rgba(20, 36, 58, .04), 0 6px 18px rgba(20, 36, 58, .05); position: sticky; top: 0; z-index: 50; }
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 76px; }
 .brand img { height: 52px; width: auto; }
-.nav { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-.nav a { font: 500 1rem var(--font-head); letter-spacing: .06em; text-transform: uppercase; color: var(--navy); text-decoration: none; padding: .4rem 0; border-bottom: 2px solid transparent; }
+.nav { display: flex; gap: 1.2rem; flex-wrap: nowrap; align-items: center; }
+.nav a { font: 500 .95rem var(--font-head); letter-spacing: .05em; white-space: nowrap; text-transform: uppercase; color: var(--navy); text-decoration: none; padding: .4rem 0; border-bottom: 2px solid transparent; }
 .nav a:hover, .nav a[aria-current='page'] { border-bottom-color: var(--navy); }
 .menu-btn { display: none; background: none; border: 1px solid var(--line); padding: .5rem .8rem; font: 500 .9rem var(--font-head); text-transform: uppercase; letter-spacing: .1em; color: var(--navy); cursor: pointer; }
-@media (max-width: 980px) {
+@media (max-width: 1240px) {
   .menu-btn { display: block; }
   .nav { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--paper); border-bottom: 1px solid var(--line); flex-direction: column; gap: 0; padding: .5rem var(--gutter) 1rem; }
   .nav.open { display: flex; }
@@ -209,4 +209,4 @@ input[type=text], input[type=email], input[type=number], select, textarea { widt
 /* Partner login: easy to find, as on most corporate sites */
 .nav .nav-login { display: inline-flex; align-items: center; gap: .5rem; border: 1.5px solid var(--navy); padding: .45rem .95rem; color: var(--navy); background: transparent; }
 .nav .nav-login:hover, .nav .nav-login[aria-current='page'] { background: var(--navy); color: #fff; border-bottom-color: var(--navy); }
-@media (max-width: 980px) { .nav .nav-login { margin-top: .6rem; align-self: flex-start; } }
+@media (max-width: 1240px) { .nav .nav-login { margin-top: .6rem; align-self: flex-start; } }
