@@ -101,11 +101,19 @@ npm run build            # gera tudo e roda as checagens de segurança
 
 Para ver o portal funcionando localmente depois do `npm run build`, rode `npx -w @mru/neurostat astro preview`. O portal só existe no site já buildado.
 
-## 11. Lançamento
+## 11. Endereços no ar e lançamento
 
-1. `neurostat-group/neurostat-group.github.io` e `kelvarapetro/kelvarapetro.github.io`: Settings → General → Change visibility → **Public**.
-2. Em cada um: Settings → Pages → **Deploy from a branch** → `gh-pages` / `/ (root)`.
-3. Abra os dois endereços e confira.
+Os dois sites já estão no ar, abertos de qualquer computador, em:
+
+- https://neurostat-group.github.io
+- https://kelvarapetro.github.io
+
+Enquanto não for o lançamento de verdade, os dois pedem ao Google para **não listar** as páginas (`noindex`, e o `robots.txt` bloqueia tudo). Quem tem o link abre, mas a busca não mostra.
+
+No dia do lançamento:
+
+1. Em `apps/neurostat/src/data/launch.ts` e `apps/kelvara/src/launch.ts`, troque `PUBLIC_LAUNCH = false` por `true`. Isso tira o `noindex` e abre o `robots.txt` (bloqueando só `/partner/` e a busca na NeuroStat).
+2. Salve. Em alguns minutos o deploy refaz os dois sites.
 
 Depois do lançamento, qualquer jogador pode ver os arquivos e o histórico dos repositórios publicados. Por isso a Action roda a checagem de vazamento antes de publicar, e cada publicação recria o histórico com uma única mensagem neutra.
 
