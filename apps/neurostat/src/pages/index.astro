@@ -11,9 +11,9 @@ const pipeline = await published('pipeline');
 const active = pipeline.filter((p) => p.data.phase !== 'Discontinued');
 const count = (ph: string) => active.filter((p) => p.data.phase === ph).length;
 const areas = [
-  ['Sleep & Circadian Health', 'Treatments for insomnia, shift work disorder and disrupted body clocks.', '/science/#sleep'],
-  ['Memory & Cognition', 'Research into how memory is stored, lost and retrieved, and how performance holds up under strain.', '/science/#memory'],
-  ['Neurodiagnostics', 'Wearable and digital tools that measure sleep, fatigue and cognition outside the laboratory.', '/science/#neurodiagnostics'],
+  ['Sleep & Circadian Health', 'Medicines for insomnia, and for people whose body clock no longer fits their working hours.', '/science/#sleep'],
+  ['Memory & Cognition', 'How memories are stored, lost and found again, and how attention holds up after weeks of bad sleep.', '/science/#memory'],
+  ['Neurodiagnostics', 'Wearable and digital tools that measure sleep and alertness at the workplace, not in a laboratory.', '/science/#neurodiagnostics'],
 ];
 const up = change >= 0;
 ---
@@ -23,7 +23,7 @@ const up = change >= 0;
     <div class="wrap">
       <p class="eyebrow" style="color:#9fb2c8">NeuroStat Holding AG</p>
       <h1>Our hope lies in the questions neuroscience has not yet answered.</h1>
-      <p>We develop medicines and tools for sleep, memory and cognition, and we test them with the people who work where it is hardest to stay well.</p>
+      <p>We develop medicines and monitoring tools for sleep, memory and cognition. Many of our studies take place where staying well is hardest, on offshore installations and on night shifts.</p>
       <p><a class="btn" href="/science/" style="background:#fff;color:#14243a">Our science</a></p>
     </div>
   </section>
@@ -31,7 +31,7 @@ const up = change >= 0;
   <section class="band">
     <div class="wrap">
       <p class="eyebrow">Therapeutic areas</p>
-      <h2>Three areas, one question: how does the brain keep working?</h2>
+      <h2>Where we work</h2>
       <div class="grid c3" style="margin-top:1.5rem">
         {areas.map(([t, d, h]) => (
           <a class="card" href={h} style="text-decoration:none;color:inherit">
@@ -49,9 +49,9 @@ const up = change >= 0;
       <Placeholder file="home-extreme-environment.jpg" ratio="4 / 3" label="Photograph: a clinic room on a remote installation at night" />
       <div>
         <p class="eyebrow">Medicine at the edge</p>
-        <h2>Where help is far away, preparation counts</h2>
-        <p>On polar stations, offshore installations and military bases, people work long rotations in the cold and the dark, with the nearest hospital a long way off. Our Baseline and Halo platforms give occupational physicians a clear picture of sleep, fatigue and cognition before problems become incidents.</p>
-        <p>Since 2027 we have worked with the crew of Ødemark A, an installation in the northern North Sea operated by <ExtLink href="https://kelvarapetro.github.io/en/operations/">Kelvara Petrochemicals AS</ExtLink>, to learn how long winter rotations affect sleep and cognition.</p>
+        <h2>Medicine far from a hospital</h2>
+        <p>On polar stations, offshore installations and military bases people work long rotations in the cold and dark, a long way from the nearest hospital. Baseline and Halo let the occupational physician see how a crew is sleeping and thinking before something goes wrong.</p>
+        <p>Since 2027 we have worked with the crew of Ødemark A, an installation in the northern North Sea operated by <ExtLink href="https://kelvarapetro.github.io/en/operations/">Kelvara Petrochemicals AS</ExtLink>, on how long winter rotations affect sleep and cognition.</p>
         <p><a href="/products/baseline/">About NeuroStat Baseline</a></p>
       </div>
     </div>
@@ -80,7 +80,7 @@ const up = change >= 0;
       <div>
         <p class="eyebrow" style="color:#9fb2c8">Pipeline</p>
         <h2>{active.length} programmes in development</h2>
-        <p>From early studies to registration, across sleep, memory and neurodiagnostics.</p>
+        <p>From first studies in people to products waiting for regulatory approval.</p>
         <p><a class="btn" href="/pipeline/" style="background:#fff;color:#14243a">View pipeline</a></p>
       </div>
       <div class="grid c4" style="gap:1rem">

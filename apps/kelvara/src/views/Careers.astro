@@ -26,7 +26,7 @@ const lines = (s: string) => s.split('\n').filter(Boolean);
       <p class="eyebrow">{t('Ledige stillinger', 'Open positions')}</p>
       <h2>{t(`${jobs.length} stillinger til vintersesongen`, `${jobs.length} positions for the winter season`)}</h2>
       <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-      <p class="lead">{t('Besetningen for vinteren 2028/29 er nesten fullført. Disse tre er de siste ledige stillingene på Ødemark A. Vi går gjennom søknadene fortløpende og kaller inn til samtale så snart de kommer inn.', 'The crew for winter 2028/29 is almost complete. These three are the last open positions on Ødemark A. We review applications as they arrive and call applicants in for interview straight away.')}</p>
+      <p class="lead">{t('Bemanningen for vinteren 2028/29 er nesten komplett. Disse tre er de siste ledige stillingene på Ødemark A. Vi leser søknadene etter hvert som de kommer og kaller inn til intervju med en gang.', 'The crew for winter 2028/29 is almost complete. These three are the last open positions on Ødemark A. We read applications as they come in and call people in for interviews straight away.')}</p>
       <div class="grid c3 jobs">
         {jobs.map((j) => (
           <article class="job" id={j.data.reference.toLowerCase()}>
@@ -52,8 +52,8 @@ const lines = (s: string) => s.split('\n').filter(Boolean);
       <div>
         <h2>{t('Send søknad', 'Apply')}</h2>
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-        <p>{t('Fyll ut skjemaet, så tar vi kontakt innen to arbeidsdager. Ta med sertifikatene dine til samtalen. Vi trenger gyldige sikkerhetskurs og helseattest før avreise fra Ågotnes.', 'Fill in the form and we will contact you within two working days. Bring your certificates to the interview. We need valid safety certificates and a medical certificate before departure from Ågotnes.')}</p>
-        <p class="small muted">{t('Søknader behandles fortløpende. Oppstart er 28. oktober 2028.', 'Applications are reviewed on a rolling basis. Start date is 28 October 2028.')}</p>
+        <p>{t('Fyll ut skjemaet, så kontakter vi deg innen to arbeidsdager. Ta med sertifikatene dine til intervjuet. Før du reiser fra Ågotnes må du ha gyldige sikkerhetskurs og helseattest.', 'Fill in the form and we will contact you within two working days. Bring your certificates to the interview. Before you leave Ågotnes you need valid safety certificates and a medical certificate.')}</p>
+        <p class="small muted">{t('Vi leser søknadene fortløpende. Oppstart er 28. oktober 2028.', 'We read applications as they arrive. Start date is 28 October 2028.')}</p>
       </div>
       <div>
         <form data-confirm="apply-done" data-ref-prefix="KV-SØ" data-log="application">
@@ -85,9 +85,9 @@ const lines = (s: string) => s.split('\n').filter(Boolean);
       <div>
         <h2>{t('Hvorfor Kelvara', 'Why Kelvara')}</h2>
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-        <p>{t('Hos oss er du del av et lite mannskap der alle betyr noe. Du får ansvar tidlig, du lærer av erfarne folk, og du blir hørt. Vi har kort vei fra beslutning til handling, og ingen er for viktige til å stanse en jobb som er utrygg.', 'With us you are part of a small crew where everyone matters. You get responsibility early, you learn from experienced people, and you are listened to. We have a short path from decision to action, and nobody is too important to stop an unsafe job.')}</p>
+        <p>{t('Hos oss er du med i et lite mannskap der alle teller. Du får ansvar tidlig, du lærer av folk med erfaring, og du blir hørt. Det er kort vei fra beslutning til handling, og ingen er for viktige til å stoppe en jobb som er utrygg.', 'You join a small crew where everyone counts. You get responsibility early, you learn from people with experience, and you are listened to. The path from decision to action is short, and nobody is too important to stop an unsafe job.')}</p>
         <h3 style="margin-top:1.6rem">{t('Slik fungerer rotasjonen', 'How the rotation works')}</h3>
-        <p>{t('I vanlig drift jobber du to uker offshore og har fire uker fri. Fra 1. november går Ødemark A over til vinterplan, og mannskapet signerer på for hele sesongen frem til våren. Du får da lengre sammenhengende fri etter sesongen. Forsyning og transport går fra Ågotnes. Offshore har du eget lugar, tre måltider om dagen og tilgang til legetjeneste døgnet rundt.', 'In normal operation you work two weeks offshore and have four weeks off. From 1 November, Ødemark A moves to its winter schedule, and the crew sign on for the full season until spring. You then have a longer continuous period off after the season. Supplies and transport go from Ågotnes. Offshore you have your own cabin, three meals a day and access to medical care around the clock.')}</p>
+        <p>{t('Til vanlig jobber du to uker offshore og har fire uker fri. Fra 1. november går Ødemark A over til vinterplan, og mannskapet signerer på for hele sesongen frem til våren. Etter sesongen får du lengre sammenhengende fri. Forsyninger og transport går fra Ågotnes. Offshore har du egen lugar, tre måltider om dagen og lege tilgjengelig hele døgnet.', 'Normally you work two weeks offshore and have four weeks off. From 1 November Ødemark A moves to its winter schedule, and the crew sign on for the whole season until spring. After the season you get a longer stretch off. Supplies and transport go from Ågotnes. Offshore you have your own cabin, three meals a day and a medic available around the clock.')}</p>
       </div>
       <Placeholder file="mannskap-odemark-a.jpg" ratio="4 / 3" label={t('Mannskap i oransje kjeledress på Ødemark A', 'Crew in orange overalls on Ødemark A')} />
     </div>

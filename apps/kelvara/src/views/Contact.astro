@@ -7,8 +7,8 @@ const { lang } = Astro.props;
 const t = (no: string, en: string) => (lang === 'no' ? no : en);
 const contacts: [string, string, string][] = [
   ['C. Vance', t('Logistikkoordinator', 'Logistics Coordinator'), 'logistikk@kelvara.example'],
-  ['M. Krog', 'HMS', 'hms@kelvara.example'],
-  ['Kpt. H. Sæther', t('Skipsfører, MS Nordvakt (Aegis Corporation)', 'Master, MS Nordvakt (Aegis Corporation)'), 'nordvakt@kelvara.example'],
+  ['M. Krog', t('HMS', 'HSE'), 'hms@kelvara.example'],
+  [t('Kpt. H. Sæther', 'Capt. H. Sæther'), t('Skipsfører, MS Nordvakt (Aegis Corporation)', 'Master, MS Nordvakt (Aegis Corporation)'), 'nordvakt@kelvara.example'],
 ];
 ---
 <Base lang={lang} page="contact" title={label[lang].contact}>

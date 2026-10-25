@@ -14,7 +14,7 @@ const reports = (await published('reports')).filter((r) => r.data.kind === 'Gove
   <section class="band">
     <div class="wrap prose">
       <h2>Board of Directors</h2>
-      <p>The Board of Directors has overall responsibility for the strategy, supervision and organisation of the company. It is elected by the shareholders at the Annual General Meeting for a term of one year. The Chair is Thomas Eggenberger.</p>
+      <p>The Board of Directors is responsible for strategy, supervision and organisation of the company. Shareholders elect it every year at the Annual General Meeting. Thomas Eggenberger is Chair.</p>
       <h2>Committees</h2>
       <ul>
         <li><b>Audit and Risk Committee</b>: oversees financial reporting, internal control and risk management.</li>
@@ -22,13 +22,13 @@ const reports = (await published('reports')).filter((r) => r.data.kind === 'Gove
         <li><b>Science and Safety Committee</b>: reviews the research strategy, clinical programmes and the safety of marketed products.</li>
       </ul>
       <h2>Executive Committee</h2>
-      <p>The Executive Committee, led by the Chief Executive Officer, is responsible for the operational management of the group.</p>
+      <p>The Executive Committee, led by the Chief Executive Officer, runs the group day to day.</p>
       <h2>Documents</h2>
       <ul>
         {reports.map((r) => <li>{r.data.title} <span class="muted small">({shortDate(r.data.date)})</span></li>)}
       </ul>
       <h2>Reporting a concern</h2>
-      <p>Employees and third parties can report a suspected breach of law or company policy in confidence through our independent reporting channel. Details are in the Code of Conduct.</p>
+      <p>Employees and outsiders can report a suspected breach of law or company policy in confidence through an independent channel. Details are in the Code of Conduct.</p>
     </div>
   </section>
 </Base>

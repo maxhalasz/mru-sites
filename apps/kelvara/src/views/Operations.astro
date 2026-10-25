@@ -12,7 +12,7 @@ const facts: [string, string][] = [
   [t('Vanndybde', 'Water depth'), '303 m'],
   [t('Topside', 'Topside'), t('114 × 55 m, tre nivåer', '114 × 55 m, three levels')],
   [t('Kapasitet', 'Capacity'), t('Dimensjonert for 196 personer', 'Designed for 196 persons')],
-  [t('Bemanning', 'Staffing'), t('Drives med enkel tripulasjon', 'Operated with a lean crew')],
+  [t('Bemanning', 'Staffing'), t('Drives med lav bemanning', 'Operated with a lean crew')],
   [t('Område', 'Area'), t('Nordlige Nordsjøen', 'Northern North Sea')],
   [t('Operatør', 'Operator'), t('Kelvara Petrochemicals AS, siden 2011', 'Kelvara Petrochemicals AS, since 2011')],
 ];
@@ -32,8 +32,8 @@ const facts: [string, string][] = [
         <p class="eyebrow">Ødemark A</p>
         <h2>{t('Plattformen', 'The platform')}</h2>
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-        <p>{t('Ødemark A er en Condeep-plattform: et understell av betong som står på havbunnen og holdes på plass av egen vekt. Betongen rommer lagerceller og tre sjakter som bærer topsiden over havflaten.', 'Ødemark A is a Condeep platform: a concrete substructure that rests on the seabed and is held in place by its own weight. The concrete holds storage cells and three shafts that carry the topside above the sea.')}</p>
-        <p>{t('Topsiden måler 114 × 55 meter og er bygget i tre nivåer. Plattformen er dimensjonert for 196 personer og drives med en enkel tripulasjon, det vil si et lite mannskap som dekker flere funksjoner hver.', 'The topside measures 114 × 55 metres and has three levels. The platform is designed for 196 people and operated with a lean crew, meaning a small crew in which each person covers several functions.')}</p>
+        <p>{t('Ødemark A er en Condeep-plattform. Understellet er av betong, står på havbunnen og holdes på plass av sin egen vekt. Det rommer lagerceller og tre skaft som bærer topsiden over havflaten.', 'Ødemark A is a Condeep platform. The substructure is concrete, rests on the seabed and is held in place by its own weight. It contains storage cells and three shafts that carry the topside above the sea.')}</p>
+        <p>{t('Topsiden måler 114 × 55 meter og har tre nivåer. Plattformen er bygget for 196 personer, men drives med lav bemanning: et lite mannskap der hver person dekker flere funksjoner.', 'The topside measures 114 × 55 metres and has three levels. The platform is designed for 196 people but runs on a lean crew, a small group in which each person covers several functions.')}</p>
       </div>
       <div class="table-wrap" style="align-self:center">
         <table><tbody>{facts.map(([k, v]) => <tr><th scope="row" style="width:34%">{k}</th><td>{v}</td></tr>)}</tbody></table>
@@ -54,7 +54,7 @@ const facts: [string, string][] = [
         <p class="eyebrow">Ågotnes</p>
         <h2>{t('Forsyningsbase og væskeanlegg', 'Supply base and fluids plant')}</h2>
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-        <p>{t('Basen på Ågotnes er Kelvaras forsyningsledd til Ødemark A. Herfra går forsyningsbåten MS Nordvakt, som drives av Aegis Corporation, og her lagres utstyr og forbruksvarer.', 'The base at Ågotnes is Kelvara\'s supply link to Ødemark A. The supply vessel MS Nordvakt, operated by Aegis Corporation, sails from here, and equipment and consumables are stored here.')}</p>
+        <p>{t('Basen på Ågotnes er Kelvaras forsyningsledd til Ødemark A. Forsyningsbåten MS Nordvakt, som drives av Aegis Corporation, går herfra, og her lagres utstyr og forbruksvarer.', 'The base at Ågotnes is Kelvara\'s supply link to Ødemark A. The supply vessel MS Nordvakt, operated by Aegis Corporation, sails from here, and equipment and consumables are stored here.')}</p>
         <p>{t('Ågotnes Væskeanlegg ligger ved siden av basen. Anlegget blander og lagrer borevæsker og leverer til Ødemark A og til andre operatører. Det åpnet i 2014.', 'Ågotnes Væskeanlegg lies next to the base. The plant mixes and stores drilling fluids and supplies Ødemark A and other operators. It opened in 2014.')}</p>
       </div>
     </div>
@@ -65,8 +65,8 @@ const facts: [string, string][] = [
       <p class="eyebrow">{t('Vinterdrift', 'Winter operations')}</p>
       <h2>{t('Lang rotasjon om vinteren', 'Long rotation in winter')}</h2>
       <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-      <p>{t('Fra 1. november går Ødemark A over til vinterplan. Mannskapet signerer på for hele sesongen frem til våren, fordi været i nordlige Nordsjøen gjør regelmessige mannskapsbytter og forsyningsturer usikre.', 'From 1 November, Ødemark A moves to its winter schedule. Crew sign on for the full season until spring, since weather in the northern North Sea makes regular crew changes and supply runs uncertain.')}</p>
-      <p>{t('Gjennom de mørkeste ukene følger installasjonen Kelvaras Mørketid-rutiner: faste tider for dagslyslamper, jevnlig kontakt med familie på land og tett oppfølging fra installasjonens lege.', 'Through the darkest weeks the installation follows Kelvara\'s Mørketid routines: fixed daylight-lamp schedules, regular contact with families onshore and close follow-up from the installation medic.')}</p>
+      <p>{t('Fra 1. november går Ødemark A over til vinterplan. Mannskapet signerer på for hele sesongen frem til våren, fordi været i nordlige Nordsjøen gjør vanlige mannskapsbytter og forsyningsturer usikre.', 'From 1 November, Ødemark A moves to its winter schedule. The crew sign on for the whole season until spring, because the weather in the northern North Sea makes ordinary crew changes and supply runs unreliable.')}</p>
+      <p>{t('I de mørkeste ukene følger installasjonen Kelvaras Mørketid-rutiner: faste tider for dagslyslamper, jevnlig kontakt med familien på land og tett oppfølging fra legen om bord.', 'In the darkest weeks the installation follows Kelvara\'s Mørketid routines: set times for the daylight lamps, regular contact with family onshore and close follow-up from the medic on board.')}</p>
       <p><a href={`${paths[lang].news}2028-09-05-vinterdrift-2028-29/`}>{t('Les mer om vinterdriften 2028/29', 'Read more about winter operations 2028/29')}</a></p>
     </div>
   </section>
