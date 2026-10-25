@@ -99,6 +99,7 @@ function loadAccount(account) {
     folders,
     docs,
     admin: meta.admin ? adminConfig() : undefined,
+    app: meta.admin && existsSync(join(dir, 'console.js')) ? readFileSync(join(dir, 'console.js'), 'utf8') : undefined,
   };
 }
 

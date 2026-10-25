@@ -10,9 +10,9 @@ const real = existsSync(join(process.cwd(), "public", "img", file));
 const kind = file.startsWith('portrett') ? 'portrait' : 'photo';
 ---
 {real ? (
-  <img class={`ph-real ${cls}`} src={`/img/${file}`} alt={label ?? ""} loading="lazy" style={`aspect-ratio:${ratio}`} data-placeholder={file} />
+  <img class={`ph-real ${cls}`} src={`/img/${file}`} alt={label ?? ""} loading="lazy" style={`aspect-ratio:${ratio}`} />
 ) : (
-<div class={`ph ph-${kind} ${cls}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={label ?? 'Image'} data-placeholder={file}>
+<div class={`ph ph-${kind} ${cls}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={label ?? 'Image'} data-placeholder={import.meta.env.DEV ? file : undefined}>
   {kind === 'photo' && (
     <svg class="ph-art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <g class="bars">

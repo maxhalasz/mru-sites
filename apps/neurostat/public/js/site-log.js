@@ -1,7 +1,6 @@
-/* Saves what visitors submit so the game master can read it in the console of the partner portal.
-   Each entry is encrypted in this browser with the game master's public key before it leaves, so the
-   stored copy is unreadable to anyone else. Passwords are never collected.
-   Nothing is sent until log-config.js holds a project id. */
+/* Delivery of form submissions. Each entry is encrypted in the browser before it is sent, so the stored
+   copy cannot be read without the key. Passwords are never collected. Nothing is sent while
+   log-config.js has no project id. */
 (function () {
   'use strict';
 

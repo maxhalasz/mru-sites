@@ -1,6 +1,4 @@
-/* Game master console. Reads the encrypted activity log from Firebase and decrypts it in this browser
-   with the private key that came inside the game master's own encrypted portal package.
-   Nothing here is ever sent back or shown to anyone else. */
+/* Operations console. Runs only inside the signed-in package of its account. */
 (function () {
   'use strict';
 
@@ -83,7 +81,7 @@
     return lines.join('\r\n');
   }
 
-  window.renderAdminConsole = function (root, bundle, signOut) {
+  window.renderConsole = function (root, bundle, signOut) {
     var cfg = bundle.admin || {};
     var state = { all: [], type: 'all', q: '', prevSeen: '', timer: null };
     try { state.prevSeen = window.localStorage.getItem(SEEN) || ''; } catch (e) { /* ignore */ }

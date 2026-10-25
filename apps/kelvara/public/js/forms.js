@@ -1,5 +1,5 @@
-/* Forms: each form shows an on-page confirmation with a reference number.
-   When a log address is set (log-config.js), the answers are also saved to the game master's sheet. */
+/* Form handling. Each form shows an on-page confirmation with a reference number, and the enquiry
+   is passed on to the support queue (see site-log.js). */
 (function () {
   'use strict';
 

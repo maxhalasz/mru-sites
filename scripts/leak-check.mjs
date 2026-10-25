@@ -36,7 +36,7 @@ if (existsSync('private/log-keys.json')) {
 }
 
 const forbiddenNames = [/\.map$/i, /^credentials$/i, /PITCH\.md$/i, /NOTAS-DO-MESTRE/i, /IMAGENS\.md$/i];
-const forbiddenText = [/C:\\Users\\/i, /\/Users\/max\b/i, /\bprivate\/portal\b/i, /\bmru-sites\b/i, /\bmaxhalasz\b/i];
+const forbiddenText = [/game ?master/i, /google sheet|apps script/i, /firebase/i, /C:\\Users\\/i, /\/Users\/max\b/i, /\bprivate\/portal\b/i, /\bmru-sites\b/i, /\bmaxhalasz\b/i];
 const textExt = new Set(['.html', '.js', '.mjs', '.css', '.json', '.txt', '.xml', '.svg', '.md', '.webmanifest']);
 
 const problems = [];

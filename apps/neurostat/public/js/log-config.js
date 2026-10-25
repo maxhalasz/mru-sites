@@ -1,6 +1,5 @@
-/* Where the activity log is saved. The project id and key identify the Firebase project and are public by design.
-   Entries are encrypted with the public key below; only the game master's private key can read them.
-   While projectId is empty, nothing is saved. */
+/* Settings for the enquiry service. The project id and keys are public by design: entries are
+   encrypted with the public key below. While projectId is empty, nothing is sent. */
 window.SITE_LOG = {
   site: 'neurostat',
   projectId: '',

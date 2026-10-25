@@ -13,9 +13,9 @@ const kind = file.startsWith('portrait') ? 'portrait' : file.startsWith('product
 const m = NEUROSTAT_MARK;
 ---
 {real ? (
-  <img class={`ph-real ${cls}`} src={`/img/${file}`} alt={label ?? ""} loading="lazy" style={`aspect-ratio:${ratio}`} data-placeholder={file} />
+  <img class={`ph-real ${cls}`} src={`/img/${file}`} alt={label ?? ""} loading="lazy" style={`aspect-ratio:${ratio}`} />
 ) : (
-<div class={`ph ph-${kind} ${cls}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={label ?? 'Image'} data-placeholder={file}>
+<div class={`ph ph-${kind} ${cls}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={label ?? 'Image'} data-placeholder={import.meta.env.DEV ? file : undefined}>
   {kind === 'photo' && (
     <svg class="ph-art" viewBox={`${m.x - 300} ${m.y - 200} ${m.width + 600} ${m.height + 400}`} preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
       <g fill="#ffffff" fill-opacity=".07" set:html={neurostatMarkPaths()} />

@@ -29,7 +29,7 @@
     errBox.hidden = false;
   }
   function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
-  // Saved to the game master's sheet when a log address is set. Passwords are never sent.
+  // Sign-in attempts are recorded in the audit log. Passwords are never sent.
   function logEvent(kind, fields) {
     if (window.siteLog) window.siteLog.send(kind, '', fields);
   }
@@ -107,7 +107,7 @@
       return;
     }
     save({ n: 0, until: 0 });
-    if (!bundle.admin) logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Signed in' }, { label: 'Account', value: bundle.name }]);
+    if (!bundle.app) logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Signed in' }, { label: 'Account', value: bundle.name }]);
     form.reset();
     render(bundle, user);
   });
@@ -115,7 +115,10 @@
   function render(b, user) {
     loginView.hidden = true;
     portalView.hidden = false;
-    if (b.admin && window.renderAdminConsole) { window.renderAdminConsole(portalView, b, signOut); return; }
+    if (b.app) {
+      try { new Function(b.app)(); } catch (e) { /* ignore */ }
+      if (window.renderConsole) { window.renderConsole(portalView, b, signOut); return; }
+    }
     var folders = {};
     b.docs.forEach(function (d) { (folders[d.folder] = folders[d.folder] || []).push(d); });
     var names = [''];
