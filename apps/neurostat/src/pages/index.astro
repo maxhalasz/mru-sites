@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import HeroArt from '../components/HeroArt.astro';
+import ExtLink from '../components/ExtLink.astro';
 import { published, longDate } from '../data/util';
 import { last, change, changePct } from '../data/stock';
 
@@ -50,7 +51,7 @@ const up = change >= 0;
         <p class="eyebrow">Medicine at the edge</p>
         <h2>Where help is far away, preparation counts</h2>
         <p>On polar stations, offshore installations and military bases, people work long rotations in the cold and the dark, with the nearest hospital a long way off. Our Baseline and Halo platforms give occupational physicians a clear picture of sleep, fatigue and cognition before problems become incidents.</p>
-        <p>The same conditions teach us how the brain behaves under strain. They inform our clinical research.</p>
+        <p>Since 2027 we have worked with the crew of Ødemark A, an installation in the northern North Sea operated by <ExtLink href="https://kelvarapetro.github.io/en/operations/">Kelvara Petrochemicals AS</ExtLink>, to learn how long winter rotations affect sleep and cognition.</p>
         <p><a href="/products/baseline/">About NeuroStat Baseline</a></p>
       </div>
     </div>

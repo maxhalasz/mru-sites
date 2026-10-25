@@ -11,3 +11,5 @@ NeuroStat today announced that recruitment has begun in BOREAS-2, a Phase II, ra
 The study enrols adults who work extended winter rotations on offshore installations at high latitude. It will assess the safety and tolerability of NS-760 and its effect on cognitive performance during isolation, sleep restriction and a disrupted circadian rhythm.
 
 Participation is voluntary. Eligible employees at participating installations can ask the installation medic about the study. Information is available on the Clinical Trials page.
+
+Study supplies and site logistics are handled by the group's service company, Aegis Corporation.

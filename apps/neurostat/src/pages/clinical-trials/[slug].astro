@@ -30,6 +30,7 @@ const isBoreas = t.id === 'boreas-2';
           {isBoreas
             ? <tr><th scope="row">Study site</th><td>Ødemark A, Norwegian North Sea, operated by <ExtLink href="https://kelvarapetro.github.io/en/">Kelvara Petrochemicals AS</ExtLink></td></tr>
             : d.site && <tr><th scope="row">Study site</th><td>{d.site}</td></tr>}
+          {isBoreas && <tr><th scope="row">Study logistics</th><td><ExtLink href="http://aegiscorp.net">Aegis Corporation</ExtLink>, group company</td></tr>}
         </tbody>
       </table>
 

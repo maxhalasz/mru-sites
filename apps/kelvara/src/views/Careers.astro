@@ -8,8 +8,9 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = (no: string, en: string) => (lang === 'no' ? no : en);
 const quotes = (await getCollection('testimonials', (q) => q.data.published)).sort((a, b) => a.data.order - b.data.order);
-const jobs = (await getCollection('jobs', (j) => j.data.published && j.data.date <= SITE_DATE)).sort((a, b) => +b.data.date - +a.data.date);
+const jobs = (await getCollection('jobs', (j) => j.data.published && j.data.date <= SITE_DATE)).sort((a, b) => a.data.order - b.data.order);
 const slug = (n: string) => n.toLowerCase().replace(/[^a-z]+/g, '-');
+const lines = (s: string) => s.split('\n').filter(Boolean);
 ---
 <Base lang={lang} page="careers" title={label[lang].careers}>
   <div class="page-head">
@@ -20,27 +21,79 @@ const slug = (n: string) => n.toLowerCase().replace(/[^a-z]+/g, '-');
     </div>
   </div>
 
+  <section class="band vacancies" id="stillinger">
+    <div class="wrap">
+      <p class="eyebrow">{t('Ledige stillinger', 'Open positions')}</p>
+      <h2>{t(`${jobs.length} stillinger til vintersesongen`, `${jobs.length} positions for the winter season`)}</h2>
+      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="lead">{t('Besetningen for vinteren 2028/29 er nesten fullført. Disse tre er de siste ledige stillingene på Ødemark A. Vi går gjennom søknadene fortløpende og kaller inn til samtale så snart de kommer inn.', 'The crew for winter 2028/29 is almost complete. These three are the last open positions on Ødemark A. We review applications as they arrive and call applicants in for interview straight away.')}</p>
+      <div class="grid c3 jobs">
+        {jobs.map((j) => (
+          <article class="job" id={j.data.reference.toLowerCase()}>
+            <span class="tag new">{t('Ledig', 'Open')}</span>
+            <h3>{lang === 'no' ? j.data.title_no : j.data.title_en}</h3>
+            <p class="sub">{lang === 'no' ? j.data.subtitle_no : j.data.subtitle_en}</p>
+            <p class="meta"><span>{j.data.location}</span><span>{lang === 'no' ? j.data.rotation_no : j.data.rotation_en}</span></p>
+            <p>{lang === 'no' ? j.data.summary_no : j.data.summary_en}</p>
+            <details>
+              <summary>{t('Kvalifikasjoner', 'Requirements')}</summary>
+              <ul>{lines(lang === 'no' ? j.data.requirements_no : j.data.requirements_en).map((r) => <li>{r}</li>)}</ul>
+            </details>
+            <p class="foot"><span class="doc-no">{j.data.reference} · {dateFmt(j.data.date, lang)}</span>
+              <a class="btn" href="#soknad" data-apply={j.data.reference}>{t('Søk på stillingen', 'Apply now')}</a></p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="soknad">
+    <div class="wrap grid c2" style="gap:3rem;align-items:start">
+      <div>
+        <h2>{t('Send søknad', 'Apply')}</h2>
+        <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p>{t('Fyll ut skjemaet, så tar vi kontakt innen to arbeidsdager. Ta med sertifikatene dine til samtalen. Vi trenger gyldige sikkerhetskurs og helseattest før avreise fra Ågotnes.', 'Fill in the form and we will contact you within two working days. Bring your certificates to the interview. We need valid safety certificates and a medical certificate before departure from Ågotnes.')}</p>
+        <p class="small muted">{t('Søknader behandles fortløpende. Oppstart er 1. november 2028.', 'Applications are reviewed on a rolling basis. Start date is 1 November 2028.')}</p>
+      </div>
+      <div>
+        <form data-confirm="apply-done" data-ref-prefix="KV-SØ">
+          <div class="field">
+            <label for="a-job">{t('Stilling', 'Position')}</label>
+            <select id="a-job" required>
+              <option value="">{t('Velg stilling', 'Select position')}</option>
+              {jobs.map((j) => <option value={j.data.reference}>{lang === 'no' ? j.data.title_no : j.data.title_en} ({j.data.reference})</option>)}
+            </select>
+          </div>
+          <div class="field"><label for="a-name">{t('Navn', 'Name')}</label><input id="a-name" type="text" required autocomplete="name" /></div>
+          <div class="field"><label for="a-email">{t('E-postadresse', 'Email address')}</label><input id="a-email" type="email" required autocomplete="email" /></div>
+          <div class="field"><label for="a-exp">{t('Erfaring offshore (år)', 'Offshore experience (years)')}</label><input id="a-exp" type="text" required /></div>
+          <div class="field"><label><input type="checkbox" required /> {t('Jeg har eller kan få gyldige sikkerhetskurs og helseattest før 1. november.', 'I hold, or can obtain, valid safety certificates and a medical certificate before 1 November.')}</label></div>
+          <div class="field"><label for="a-msg">{t('Melding (valgfritt)', 'Message (optional)')}</label><textarea id="a-msg" rows="4"></textarea></div>
+          <button class="btn" type="submit">{t('Send søknad', 'Send application')}</button>
+        </form>
+        <div class="confirm" id="apply-done" hidden>
+          <h3>{t('Takk for søknaden', 'Thank you for applying')}</h3>
+          <p>{t('Søknaden din er mottatt.', 'Your application has been received.')} <span class="doc-no" data-ref></span></p>
+          <p class="small muted">{t('Vi tar kontakt innen to arbeidsdager.', 'We will contact you within two working days.')}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="band">
     <div class="wrap grid c2" style="gap:3rem;align-items:center">
       <div>
         <h2>{t('Hvorfor Kelvara', 'Why Kelvara')}</h2>
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
         <p>{t('Hos oss er du del av et lite mannskap der alle betyr noe. Du får ansvar tidlig, du lærer av erfarne folk, og du blir hørt. Vi har kort vei fra beslutning til handling, og ingen er for viktige til å stanse en jobb som er utrygg.', 'With us you are part of a small crew where everyone matters. You get responsibility early, you learn from experienced people, and you are listened to. We have a short path from decision to action, and nobody is too important to stop an unsafe job.')}</p>
+        <h3 style="margin-top:1.6rem">{t('Slik fungerer rotasjonen', 'How the rotation works')}</h3>
+        <p>{t('I vanlig drift jobber du to uker offshore og har fire uker fri. Fra 1. november går Ødemark A over til vinterplan, og mannskapet signerer på for hele sesongen frem til våren. Du får da lengre sammenhengende fri etter sesongen. Forsyning og transport går fra Ågotnes. Offshore har du eget lugar, tre måltider om dagen og tilgang til legetjeneste døgnet rundt.', 'In normal operation you work two weeks offshore and have four weeks off. From 1 November, Ødemark A moves to its winter schedule, and the crew sign on for the full season until spring. You then have a longer continuous period off after the season. Supplies and transport go from Ågotnes. Offshore you have your own cabin, three meals a day and access to medical care around the clock.')}</p>
       </div>
       <Placeholder file="mannskap-odemark-a.jpg" ratio="4 / 3" label={t('Mannskap i oransje kjeledress på Ødemark A', 'Crew in orange overalls on Ødemark A')} />
     </div>
   </section>
 
   <section class="band alt">
-    <div class="wrap prose">
-      <h2>{t('Slik fungerer rotasjonen', 'How the rotation works')}</h2>
-      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-      <p>{t('I vanlig drift jobber du to uker offshore og har fire uker fri. Fra 1. november går Ødemark A over til vinterplan, og mannskapet signerer på for hele sesongen frem til våren. Du får da lengre sammenhengende fri etter sesongen.', 'In normal operation you work two weeks offshore and have four weeks off. From 1 November, Ødemark A moves to its winter schedule, and the crew sign on for the full season until spring. You then have a longer continuous period off after the season.')}</p>
-      <p>{t('Forsyning og transport går fra Ågotnes. Offshore har du eget lugar, tre måltider om dagen og tilgang til legetjeneste døgnet rundt.', 'Supplies and transport go from Ågotnes. Offshore you have your own cabin, three meals a day and access to medical care around the clock.')}</p>
-    </div>
-  </section>
-
-  <section class="band">
     <div class="wrap">
       <h2>{t('Møt mannskapet', 'Meet the crew')}</h2>
       <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -54,29 +107,6 @@ const slug = (n: string) => n.toLowerCase().replace(/[^a-z]+/g, '-');
           </div>
         ))}
       </div>
-    </div>
-  </section>
-
-  <section class="band alt" id="stillinger">
-    <div class="wrap">
-      <h2>{t('Ledige stillinger', 'Open positions')}</h2>
-      <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-      <div class="notice"><p style="margin:0"><b>{t('Offshorestillinger for vinteren 2028/29 er besatt.', 'Offshore positions for the 2028/29 winter are filled.')}</b> {t('Stillingene under gjelder land og base.', 'The positions below are onshore and at the base.')}</p></div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>{t('Stilling', 'Position')}</th><th>{t('Sted', 'Location')}</th><th>{t('Publisert', 'Posted')}</th></tr></thead>
-          <tbody>
-            {jobs.map((j) => (
-              <tr>
-                <td><b>{lang === 'no' ? j.data.title_no : j.data.title_en}</b><br /><span class="doc-no">{j.data.reference}</span><br /><span class="muted small">{lang === 'no' ? j.data.summary_no : j.data.summary_en}</span></td>
-                <td>{j.data.location}</td>
-                <td>{dateFmt(j.data.date, lang)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p class="small muted" style="margin-top:1rem">{t('Søknader sendes gjennom vårt rekrutteringsverktøy. Verktøyet er stengt for stillingene over mens utvelgelsen pågår.', 'Applications are made through our recruitment tool. The tool is closed for the positions above while selection is under way.')}</p>
     </div>
   </section>
 </Base>

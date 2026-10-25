@@ -35,6 +35,22 @@ As outras instalações listadas no relatório usam códigos opacos: FAL-01, RMM
 1. **Biologia, retrevamide (NS-091).** A página Science diz que a molécula reativa "engramas silenciosos" só no conjunto de neurônios daquela memória, por "uma assinatura molecular persistente". A pesquisa real exigiu marcação genética no momento da formação da memória e ativação por optogenética. Uma pílula não sabe quais neurônios guardam uma memória. As três referências citadas foram conferidas no Crossref (Nature 484, Science 348, Nature 531).
 2. **Química, adravacetam (NS-760).** O sufixo "-racetam" sugere molécula pequena (140 a 220 Da), mas o pôster `ns-760-profile-poster.pdf` mostra C51H80N10O17, 1105,3 g/mol (confere com a fórmula), 9 doadores e 23 aceptores de H-ligação, TPSA 352 Å², cLogP −2,1, biodisponibilidade oral de 74% em rato e Kp,uu de 0,92, sem efluxo por P-gp. Nada disso é possível para uma molécula assim. O pôster é linkado pela página BOREAS-2.
 
+## Cinco pistas da NeuroStat para a Kelvara
+
+Todas no site público da NeuroStat, de fácil a difícil:
+
+1. Clinical Trials, BOREAS-2: local do estudo "Ødemark A, operada pela Kelvara", com link.
+2. Careers, "Field positions with our partners": a vaga e o link para a página da Kelvara.
+3. Home, "Medicine at the edge": a tripulação da Ødemark A desde 2027, com link para a Kelvara.
+4. Pôster do NS-760 (PDF): agradecimento "study site support from Kelvara Petrochemicals AS (Ødemark A)".
+5. Investors: a Sundvor Partners AS aparece como maior acionista (9,8%), e o relatório anual 2027 (PDF) diz que a Sundvor também é dona da Kelvara. Esta é a que liga as duas empresas antes de 2028.
+
+Bônus: a busca do site por "Kelvara" devolve essas páginas, e os documentos do portal citam a Ødemark A.
+
+## Menções à Aegis Corporation
+
+NeuroStat: lista de empresas do grupo (About), logística do estudo (página do BOREAS-2 e comunicado de 14/09), nota em Investors (relatório sob "Other"), Careers (vagas de segurança e logística) e pôster do NS-760. Kelvara: MS Nordvakt "operado pela Aegis Corporation" (Operations e Contact). Portal: escala de standby do Gunnar (contrato Cardume, operado pela Aegis). O link da NeuroStat vai para aegiscorp.net, que não existe.
+
 ## Pistas no código-fonte
 
 - `js/cookie-banner.js` (NeuroStat): nota do dev "jb" sobre o AnchorPoint, 30/09/2028. A Action confere que ela sobrevive ao build. O site só cita o nome, sem link nem domínio.
@@ -62,6 +78,8 @@ Documentos que já estão lá (dê uma olhada, são todos corporativos e secos):
 
 Tudo isto está fora do pitch e é substituível:
 
+- Vagas da Kelvara: Roughneck, Driller e Subsea Operator (KV-2841 a KV-2843, início 1/11/2028, temporada inteira). Os requisitos (BOSIET, IWCF/IADC WellSharp etc.) são genéricos do setor.
+- Maiores acionistas da NeuroStat: Sundvor Partners AS 9,8% e Rotbuche Capital AG 5,2% (inventado).
 - Anos de abertura dos escritórios: Basel 2008, Boston 2014, Londres 2018. Funcionários: cerca de 1.100 (NeuroStat) e cerca de 190 (Kelvara).
 - Números financeiros da NeuroStat (receita, lucro, dividendo, ações) e a série de cotação, que cai de CHF 116 para 74 em 12/03/2026 e fecha em CHF 84,35 em 19/10/2028. ISIN `CH0471833928` (dígito verificador válido) e UID `CHE-115.372.646` (idem). Podem coincidir com uma empresa real que eu não consigo verificar.
 - Itens de enchimento do pipeline: NS-455 (ressincronização circadiana), NS-318 (inércia do sono), NS-529 (delirium pós-operatório), NS-D2 (Halo de nova geração) e os descontinuados NS-204 e NS-266.

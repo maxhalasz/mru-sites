@@ -34,10 +34,15 @@ const facts: [string, string][] = [
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
         <p>{t('Ødemark A er en Condeep-plattform: et understell av betong som står på havbunnen og holdes på plass av egen vekt. Betongen rommer lagerceller og tre sjakter som bærer topsiden over havflaten.', 'Ødemark A is a Condeep platform: a concrete substructure that rests on the seabed and is held in place by its own weight. The concrete holds storage cells and three shafts that carry the topside above the sea.')}</p>
         <p>{t('Topsiden måler 114 × 55 meter og er bygget i tre nivåer. Plattformen er dimensjonert for 196 personer og drives med en enkel tripulasjon, det vil si et lite mannskap som dekker flere funksjoner hver.', 'The topside measures 114 × 55 metres and has three levels. The platform is designed for 196 people and operated with a lean crew, meaning a small crew in which each person covers several functions.')}</p>
-        <div class="table-wrap">
-          <table><tbody>{facts.map(([k, v]) => <tr><th scope="row" style="width:34%">{k}</th><td>{v}</td></tr>)}</tbody></table>
-        </div>
       </div>
+      <div class="table-wrap" style="align-self:center">
+        <table><tbody>{facts.map(([k, v]) => <tr><th scope="row" style="width:34%">{k}</th><td>{v}</td></tr>)}</tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="tegning">
+    <div class="wrap">
       <OdemarkSchematic lang={lang} />
     </div>
   </section>
@@ -49,7 +54,7 @@ const facts: [string, string][] = [
         <p class="eyebrow">Ågotnes</p>
         <h2>{t('Forsyningsbase og væskeanlegg', 'Supply base and fluids plant')}</h2>
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-        <p>{t('Basen på Ågotnes er Kelvaras forsyningsledd til Ødemark A. Herfra går forsyningsbåten, og her lagres utstyr og forbruksvarer.', 'The base at Ågotnes is Kelvara\'s supply link to Ødemark A. The supply vessel sails from here, and equipment and consumables are stored here.')}</p>
+        <p>{t('Basen på Ågotnes er Kelvaras forsyningsledd til Ødemark A. Herfra går forsyningsbåten MS Nordvakt, som drives av Aegis Corporation, og her lagres utstyr og forbruksvarer.', 'The base at Ågotnes is Kelvara\'s supply link to Ødemark A. The supply vessel MS Nordvakt, operated by Aegis Corporation, sails from here, and equipment and consumables are stored here.')}</p>
         <p>{t('Ågotnes Væskeanlegg ligger ved siden av basen. Anlegget blander og lagrer borevæsker og leverer til Ødemark A og til andre operatører. Det åpnet i 2014.', 'Ågotnes Væskeanlegg lies next to the base. The plant mixes and stores drilling fluids and supplies Ødemark A and other operators. It opened in 2014.')}</p>
       </div>
     </div>

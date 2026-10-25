@@ -237,12 +237,19 @@ content:
     fields:
       - { name: reference, label: Reference, type: string }
       - { name: date, label: Posted, type: date }
+      - { name: order, label: Order, type: number }
       - { name: location, label: Location, type: string }
       - { name: published, label: Published, type: boolean, default: true }
       - { name: title_no, label: Title (Norwegian), type: string, required: true }
       - { name: title_en, label: Title (English), type: string, required: true }
+      - { name: subtitle_no, label: Subtitle (Norwegian), type: string }
+      - { name: subtitle_en, label: Subtitle (English), type: string }
       - { name: summary_no, label: Summary (Norwegian), type: text }
       - { name: summary_en, label: Summary (English), type: text }
+      - { name: rotation_no, label: Start and rotation (Norwegian), type: string }
+      - { name: rotation_en, label: Start and rotation (English), type: string }
+      - { name: requirements_no, label: Requirements (Norwegian, one per line), type: text }
+      - { name: requirements_en, label: Requirements (English, one per line), type: text }
 
   - name: kv-leadership
     label: Kelvara · Management and board (NO + EN)

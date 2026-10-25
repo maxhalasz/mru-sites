@@ -63,10 +63,18 @@ Visual: industrial noturno e convidativo. Neblina, luz laranja das gruas, gente 
 
 Os retratos de Gunnar, Del e Sofie usam o mesmo arquivo em "Karriere" e não aparecem em "Om oss".
 
-## Fotos de banco livre
+## Fotos de banco livre (já aplicadas)
+
+Sete espaços já têm foto de banco livre, recortada e com cor ajustada (mais fria e escura). Troque por uma sua quando tiver, usando o mesmo nome de arquivo. A plataforma do herói da Kelvara é uma sonda genérica, não a Condeep de três gruas; vale uma imagem sua. O herói da Kelvara aparece desfocado atrás do título.
 
 Use só Unsplash ou Pexels, com licença que permita uso comercial sem atribuição, e nunca imagem achada por busca no Google. Registre cada uma aqui:
 
 | Arquivo | Fonte (link) | Autor | Licença | Data |
 | --- | --- | --- | --- | --- |
-| (nenhuma até agora) | | | | |
+| `neurostat: home-hero.jpg` | https://www.pexels.com/photo/lone-figure-in-snowy-winter-landscape-30510442/ | ver a página | Licença Pexels | 2026-10-25 |
+| `neurostat: home-extreme-environment.jpg` | https://www.pexels.com/photo/empty-doctors-office-12454146/ | ver a página | Licença Pexels | 2026-10-25 |
+| `neurostat: careers-team.jpg` | https://www.pexels.com/photo/two-scientists-working-inside-the-laboratory-4031688/ | ver a página | Licença Pexels | 2026-10-25 |
+| `kelvara: odemark-a-natt.jpg` | https://www.pexels.com/photo/illuminated-offshore-oil-rig-at-night-30475898/ | ver a página | Licença Pexels | 2026-10-25 |
+| `kelvara: agotnes-base.jpg` | https://www.pexels.com/photo/industrial-cargo-port-with-crane-at-sunset-36060469/ | ver a página | Licença Pexels | 2026-10-25 |
+| `kelvara: agotnes-vaeskeanlegg.jpg` | https://www.pexels.com/photo/large-industrial-storage-tanks-at-sunset-38672257/ | ver a página | Licença Pexels | 2026-10-25 |
+| `kelvara: mannskap-odemark-a.jpg` | https://www.pexels.com/photo/two-men-in-orange-safety-gear-stand-on-the-deck-of-a-ship-28247164/ | ver a página | Licença Pexels | 2026-10-25 |

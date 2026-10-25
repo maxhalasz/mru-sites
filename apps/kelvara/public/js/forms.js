@@ -2,6 +2,14 @@
 (function () {
   'use strict';
 
+  // "Apply now" on a vacancy preselects that position in the application form.
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest('[data-apply]');
+    if (!a) return;
+    var sel = document.getElementById('a-job');
+    if (sel) sel.value = a.getAttribute('data-apply');
+  });
+
   document.addEventListener('submit', function (ev) {
     var form = ev.target;
     if (!form || !form.hasAttribute('data-confirm')) return;

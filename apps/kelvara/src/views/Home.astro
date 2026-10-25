@@ -10,6 +10,7 @@ const { lang } = Astro.props;
 const t = (no: string, en: string) => (lang === 'no' ? no : en);
 const news = (await getCollection('news', (n) => n.data.published && n.data.date <= SITE_DATE))
   .sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+const jobs = (await getCollection('jobs', (j) => j.data.published && j.data.date <= SITE_DATE)).sort((a, b) => a.data.order - b.data.order);
 const newsPath = (id: string) => `${paths[lang].news}${id}/`;
 const facts: [string, string][] = [
   ['303 m', t('vanndybde', 'water depth')],
@@ -25,7 +26,28 @@ const facts: [string, string][] = [
       <p class="eyebrow">Kelvara Petrochemicals AS</p>
       <h1>{t('Trygg drift i nordlige Nordsjøen', 'Safe operations in the northern North Sea')}</h1>
       <p>{t('Vi driver plattformen Ødemark A med et lite, erfarent mannskap, og forsyner den fra basen på Ågotnes.', 'We operate the Ødemark A platform with a small, experienced crew and supply it from our base at Ågotnes.')}</p>
-      <p><a class="btn" href={paths[lang].operations}>{t('Om virksomheten', 'About our operations')}</a></p>
+      <p class="btns">
+        <a class="btn" href={`${paths[lang].careers}#stillinger`}>{t('Se ledige stillinger', 'See open positions')}</a>
+        <a class="btn ghost" href={paths[lang].operations}>{t('Om virksomheten', 'About our operations')}</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="band vacancy-band" aria-label={t('Ledige stillinger', 'Open positions')}>
+    <div class="wrap">
+      <div class="vb">
+        <div>
+          <p class="eyebrow">{t('Vi trenger deg', 'We need you')}</p>
+          <h2>{t('Tre ledige stillinger til vintersesongen', 'Three open positions for the winter season')}</h2>
+          <p>{t('Oppstart 1. november 2028. Vi kaller inn til samtale så snart søknaden er mottatt.', 'Start 1 November 2028. We call you in for interview as soon as your application arrives.')}</p>
+        </div>
+        <ul class="chips">
+          {jobs.map((j) => (
+            <li><a href={`${paths[lang].careers}#${j.data.reference.toLowerCase()}`}><b>{lang === 'no' ? j.data.title_no : j.data.title_en}</b><span>{lang === 'no' ? j.data.subtitle_no : j.data.subtitle_en}</span></a></li>
+          ))}
+        </ul>
+        <p class="go"><a class="btn" href={`${paths[lang].careers}#stillinger`}>{t('Se stillingene og søk', 'See the positions and apply')}</a></p>
+      </div>
     </div>
   </section>
 
