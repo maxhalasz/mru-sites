@@ -32,6 +32,9 @@ Visual: gente em lugar extremo (estação polar, plataforma offshore, base milit
 | `portrait-eva-tanner.jpg` | Max | 4:5, 800 × 1000 px | Conselho | |
 | `portrait-lukas-bachmann.jpg` | Max | 4:5, 800 × 1000 px | Conselho | |
 | `portrait-marcus-holt.jpg` | Max | 4:5, 800 × 1000 px | Head of Clinical Field Operations. Pessoa de campo, não de escritório | |
+| `portrait-oliver-zeller.jpg` | Max | 4:5, 800 × 1000 px | Head of Regulatory Affairs | |
+| `portrait-adrian-fankhauser.jpg` | Max | 4:5, 800 × 1000 px | Head of Digital | |
+| `portrait-tobias-rutz.jpg` | Max | 4:5, 800 × 1000 px | Head of Medical Affairs | |
 
 Dr. Adriond Fisher não tem foto nem biografia em nenhum lugar. É de propósito.
 

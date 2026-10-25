@@ -30,7 +30,9 @@ jobs:
         run: node scripts/link-check.mjs apps/neurostat/dist apps/kelvara/dist
 
       - name: Clue check
-        run: grep -q "AnchorPoint" apps/neurostat/dist/js/cookie-banner.js
+        run: |
+          grep -q "AnchorPoint" apps/neurostat/dist/js/cookie-banner.js
+          grep -q "Meridian" apps/neurostat/dist/newsroom/index.html
 
       - name: Publish NeuroStat
         uses: peaceiris/actions-gh-pages@v4

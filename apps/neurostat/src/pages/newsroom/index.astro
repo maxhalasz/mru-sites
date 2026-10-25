@@ -11,6 +11,7 @@ const news = (await published('news')).sort((a, b) => +b.data.date - +a.data.dat
       <p>Press releases, media resources and contacts for journalists.</p>
     </div>
   </div>
+  <Fragment set:html={`<!-- TODO (jb): press archive still runs on Meridian. Move releases from before 2024 to the new CMS, then redirect the old /meridian/ links. Ticket NS-WEB-1184. -->`} />
   <section class="band">
     <div class="wrap grid c2" style="gap:3rem;align-items:start">
       <div>

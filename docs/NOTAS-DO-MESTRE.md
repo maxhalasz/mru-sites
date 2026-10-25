@@ -38,7 +38,7 @@ As outras instalações listadas no relatório usam códigos opacos: FAL-01, RMM
 ## Pistas no código-fonte
 
 - `js/cookie-banner.js` (NeuroStat): nota do dev "jb" sobre o AnchorPoint, 30/09/2028. A Action confere que ela sobrevive ao build. O site só cita o nome, sem link nem domínio.
-- Ainda falta o comentário de TODO em HTML de uma página da Newsroom, com o nome de um sistema interno (ver perguntas abertas).
+- `/newsroom/` (HTML): TODO do mesmo dev "jb" citando o sistema interno **Meridian** (arquivo de imprensa antigo) e o ticket NS-WEB-1184. A Action confere que o comentário sobrevive ao build.
 
 ## Portal "Partner Access"
 
@@ -74,8 +74,6 @@ Tudo isto está fora do pitch e é substituível:
 ## Decisões ainda abertas
 
 - Coordenadas e licença de produção de Ødemark A (têm de bater com o puzzle do céu). Não aparecem no site enquanto você não mandar.
-- Nomes da liderança ampliada da NeuroStat, além do Holt.
-- Nome do sistema interno do TODO da Newsroom.
 - Revisão dos três depoimentos e do anúncio da compra, em inglês e em norueguês.
 
 ## Lembretes de segurança
