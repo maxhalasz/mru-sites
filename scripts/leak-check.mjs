@@ -30,6 +30,10 @@ function portalMarkers(dir) {
   return out;
 }
 markers.push(...portalMarkers('private/portal'));
+if (existsSync('private/log-keys.json')) {
+  const k = JSON.parse(readFileSync('private/log-keys.json', 'utf8')).privateJwk || {};
+  for (const part of ['d', 'p', 'q', 'dp', 'dq', 'qi']) if (k[part]) markers.push(String(k[part]).slice(0, 40));
+}
 
 const forbiddenNames = [/\.map$/i, /^credentials$/i, /PITCH\.md$/i, /NOTAS-DO-MESTRE/i, /IMAGENS\.md$/i];
 const forbiddenText = [/C:\\Users\\/i, /\/Users\/max\b/i, /\bprivate\/portal\b/i, /\bmru-sites\b/i, /\bmaxhalasz\b/i];

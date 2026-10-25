@@ -1,3 +1,9 @@
-/* Address of the Google Sheet log. Paste the Apps Script web app address between the quotes.
-   While it is empty, nothing is saved. Steps are in docs/REGISTRO.md. */
-window.SITE_LOG = { site: 'kelvara', url: '' };
+/* Where the activity log is saved. The project id and key identify the Firebase project and are public by design.
+   Entries are encrypted with the public key below; only the game master's private key can read them.
+   While projectId is empty, nothing is saved. */
+window.SITE_LOG = {
+  site: 'kelvara',
+  projectId: '',
+  apiKey: '',
+  publicKey: {"kty":"RSA","n":"4TPFjd5Ptq_H9dRGExsp1sBAUtxMyGKgE1lxDmpkfgFYISsKnqCoZg2eDJ86ks6wlqaMfzovdjnFTHjO7NdmnRr4WlaGLpwguznZ8XZffX2RgM4xd9jt18zcQSPf6d3Wlwj9qlGwYEnVtnV2XqcX-yCd_Ty8Bk84Pl1YsEg6VBGo5dYIHg6-Oq94NT5tUUOLH2pkaZFsKDdb7lerMHyrVm-eYdMuu_zok_siGDHP6I0tlfZdXwfk5Wktgc-PxpbquxMityR6raBGQfSzsKQC9CP3ZKt0gA5VSqsgZOXr4NIdsZ8FTO6isW-atag04ktN9Krq1H0nauchGevZiJsGBQ","e":"AQAB","alg":"RSA-OAEP-256","ext":true},
+};

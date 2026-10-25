@@ -107,7 +107,7 @@
       return;
     }
     save({ n: 0, until: 0 });
-    logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Signed in' }, { label: 'Account', value: bundle.name }]);
+    if (!bundle.admin) logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Signed in' }, { label: 'Account', value: bundle.name }]);
     form.reset();
     render(bundle, user);
   });
@@ -115,6 +115,7 @@
   function render(b, user) {
     loginView.hidden = true;
     portalView.hidden = false;
+    if (b.admin && window.renderAdminConsole) { window.renderAdminConsole(portalView, b, signOut); return; }
     var folders = {};
     b.docs.forEach(function (d) { (folders[d.folder] = folders[d.folder] || []).push(d); });
     var names = [''];

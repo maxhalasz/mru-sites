@@ -1,0 +1,4 @@
+name: Game master console
+role: Activity log
+admin: true
+welcome: Everything the players send is shown here, decrypted in this browser only.

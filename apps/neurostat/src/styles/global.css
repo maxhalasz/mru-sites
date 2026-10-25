@@ -188,3 +188,20 @@ input[type=text], input[type=email], input[type=number], select, textarea { widt
 .ph-real { width: 100%; height: auto; object-fit: cover; display: block; }
 .hero-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,12,20,.82) 0%, rgba(8,12,20,.45) 55%, rgba(8,12,20,.15) 100%); }
+
+/* Game master console */
+.gm-bar { display: flex; flex-wrap: wrap; gap: .6rem 1rem; align-items: center; margin: 1rem 0 .4rem; }
+.gm-tabs { display: flex; flex-wrap: wrap; gap: .4rem; flex: 1 1 100%; }
+.gm-tabs button { border: 1px solid var(--line); background: #fff; padding: .4rem .8rem; font: 500 .85rem var(--font-head); letter-spacing: .06em; cursor: pointer; color: var(--navy); }
+.gm-tabs button[aria-pressed='true'] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.gm-n { display: inline-block; min-width: 1.4em; margin-left: .3em; padding: 0 .3em; border-radius: 99px; background: rgba(20, 36, 58, .12); text-align: center; font-size: .8em; }
+.gm-tabs button[aria-pressed='true'] .gm-n { background: rgba(255, 255, 255, .25); }
+.gm-bar input[type=search] { width: auto; flex: 1 1 14rem; max-width: 22rem; }
+.gm-auto { font-weight: 400; margin: 0; display: inline-flex; gap: .4rem; align-items: center; font-size: .9rem; }
+.gm-table tbody tr[data-id] { cursor: pointer; }
+.gm-table tbody tr[data-id]:hover { background: var(--bg); }
+.gm-new td:first-child { box-shadow: inset 4px 0 0 #b8860b; }
+.gm-detail td { background: var(--bg); }
+.gm-detail dl { margin: 0; display: grid; grid-template-columns: minmax(10rem, 16rem) 1fr; gap: .3rem 1rem; font-size: .92rem; }
+.gm-detail dt { font-weight: 600; color: var(--slate); }
+.gm-detail dd { margin: 0; word-break: break-word; }

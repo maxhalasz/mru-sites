@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Visitors can only add entries. Every entry is encrypted in the visitor's browser with the game
+    // master's public key, so reading the collection reveals nothing without the private key.
+    match /submissions/{id} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['t', 'k', 'iv', 'c'])
+        && request.resource.data.t is string && request.resource.data.t.size() < 40
+        && request.resource.data.k is string && request.resource.data.k.size() < 1000
+        && request.resource.data.iv is string && request.resource.data.iv.size() < 40
+        && request.resource.data.c is string && request.resource.data.c.size() < 40000;
+      allow update, delete: if false;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

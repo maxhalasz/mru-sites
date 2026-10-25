@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 // Encrypts the private portal documents into one package per account.
 // Usage: node packages/portal/build.mjs <dist folder of the NeuroStat site>
+//        node packages/portal/build.mjs --gm <output folder>   (local only: builds the game master package)
+//
+// The game master login (private/credentials.gm) and the activity-log private key (private/log-keys.json)
+// never leave this computer. Only the encrypted game master package is committed, and it is built here.
 //
 // Package format (file name = first 32 hex chars of sha256("ns-partner:" + username)):
 //   "NSP1" | salt (16) | iv (12) | ciphertext | auth tag (16)
@@ -15,16 +19,18 @@ import { stampSvg } from '@mru/brand';
 const ROUNDS = 600000;
 const MIME = { '.pdf': 'application/pdf', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp' };
 
-const dist = process.argv[2];
-if (!dist) { console.error('portal: no dist folder given'); process.exit(2); }
+const args = process.argv.slice(2);
+const gmMode = args.includes('--gm');
+const dist = args.find((a) => !a.startsWith('--'));
+if (!dist) { console.error('portal: no output folder given'); process.exit(2); }
 const root = new URL('../../', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const priv = join(root, 'private');
 
 function fail(msg) { console.error('portal: ' + msg); process.exit(1); }
 
 function readCredentials() {
-  const file = join(priv, 'credentials');
-  if (!existsSync(file)) fail('private/credentials not found');
+  const file = join(priv, gmMode ? 'credentials.gm' : 'credentials');
+  if (!existsSync(file)) fail(`private/${gmMode ? 'credentials.gm' : 'credentials'} not found`);
   const out = [];
   for (const raw of readFileSync(file, 'utf8').split(/\r?\n/)) {
     const line = raw.trim();
@@ -41,6 +47,17 @@ function frontmatter(path) {
   const m = txt.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!m) fail(`${path}: no front matter`);
   return YAML.parse(m[1]);
+}
+
+// The game master account also carries what the console needs to read and decrypt the activity log.
+function adminConfig() {
+  const keyFile = join(priv, 'log-keys.json');
+  if (!existsSync(keyFile)) fail('private/log-keys.json not found (needed by the game master account)');
+  const keys = JSON.parse(readFileSync(keyFile, 'utf8'));
+  const fbFile = join(priv, 'firebase.json');
+  const fb = existsSync(fbFile) ? JSON.parse(readFileSync(fbFile, 'utf8')) : null;
+  if (!fb) console.warn('portal: private/firebase.json is missing, so the console has no data source yet');
+  return { projectId: fb ? fb.projectId : '', apiKey: fb ? fb.apiKey : '', privateJwk: keys.privateJwk };
 }
 
 function loadAccount(account) {
@@ -81,11 +98,12 @@ function loadAccount(account) {
     welcome: meta.welcome || '',
     folders,
     docs,
+    admin: meta.admin ? adminConfig() : undefined,
   };
 }
 
 const creds = readCredentials();
-const outDir = join(dist, 'partner', 'd');
+const outDir = gmMode ? dist : join(dist, 'partner', 'd');
 mkdirSync(outDir, { recursive: true });
 
 for (const c of creds) {

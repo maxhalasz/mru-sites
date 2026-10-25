@@ -66,7 +66,7 @@ const lines = (s: string) => s.split('\n').filter(Boolean);
           </div>
           <div class="field"><label for="a-name">{t('Navn', 'Name')}</label><input id="a-name" type="text" required autocomplete="name" /></div>
           <div class="field"><label for="a-email">{t('E-postadresse', 'Email address')}</label><input id="a-email" type="email" required autocomplete="email" /></div>
-          <div class="field"><label for="a-exp">{t('Erfaring offshore (år)', 'Offshore experience (years)')}</label><input id="a-exp" type="text" required /></div>
+          <div class="field"><label for="a-exp">{t('Erfaring offshore (år, valgfritt)', 'Offshore experience (years, optional)')}</label><input id="a-exp" type="text" /></div>
           <div class="field"><label><input type="checkbox" required data-label="Certificates confirmed" /> {t('Jeg har eller kan få gyldige sikkerhetskurs og helseattest før 28. oktober.', 'I hold, or can obtain, valid safety certificates and a medical certificate before 28 October.')}</label></div>
           <div class="field"><label for="a-msg">{t('Melding (valgfritt)', 'Message (optional)')}</label><textarea id="a-msg" rows="4"></textarea></div>
           <button class="btn" type="submit">{t('Send søknad', 'Send application')}</button>
