@@ -101,11 +101,11 @@ Rostos gerados por IA (StyleGAN2, pessoas que não existem) que o Max mandou em 
 | `kelvara: portrett-marit-fjeldstad.jpg` | Marit Fjeldstad, diretora de HMS | Loira de cabelo ondulado, sorriso caloroso, blusa vermelha |
 | `kelvara: portrett-sverre-nordtveit.jpg` | Sverre Nordtveit, presidente do conselho | Mais velho, rosto marcado pelo tempo, jaqueta simples |
 | `kelvara: portrett-rolf-hetland.jpg` | Rolf Hetland, conselho | Óculos, olhos azuis claros, sorriso discreto |
-| `kelvara: portrett-del-carbone.jpg` | Del Carbone (Karriere) | O mais próximo do canon (barbudo, rosto cheio, bigode), mas usa óculos e a barba é grisalha e aparada |
+| `kelvara: portrett-dag-helgesen.jpg` | Dag Helgesen, conselho | Barba grisalha, óculos, sorriso simpático, paletó e colarinho branco |
 
 Sem rosto de propósito: Marcus Holt e Dr. Adriond Fisher.
-Sem rosto, esperando foto do Max: Gunnar Mackenzie (ele ainda vai mandar).
-Sem rosto por falta de imagem adequada: Dr. Samuel Okonkwo, Sofie Aune (25 anos, nenhum rosto tão jovem), Lukas Bachmann, Dag Helgesen, Eli Tveit.
+Sem rosto, esperando foto do Max: Gunnar Mackenzie e Del Carbone (ele ainda vai mandar as duas).
+Sem rosto por falta de imagem adequada: Dr. Samuel Okonkwo, Sofie Aune (25 anos, nenhum rosto tão jovem), Lukas Bachmann, Eli Tveit.
 Rosto sobrando: a mulher mais velha de óculos escuros, que não serve para foto de empresa. Dá para usar numa personagem de campanha.
 
 Para trocar um rosto, mantenha o nome do arquivo.
