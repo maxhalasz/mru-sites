@@ -11,3 +11,4 @@ apps/kelvara/public/img/generated/
 private/log-keys.json
 private/credentials.gm
 private/firebase.json
+private/credentials.panel

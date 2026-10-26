@@ -1,16 +1,16 @@
 /* Painel do Mestre.
-   Entra com o login do mestre: o pacote criptografado da conta é baixado do site e aberto aqui, no
-   navegador. Dentro dele estão as chaves e a lista de logins. Cada mudança vira um aviso assinado que
-   os sites leem a cada poucos segundos. Nada além do nome de usuário fica guardado neste navegador. */
+   A página abre preta, sem nada escrito. Ao digitar a palavra certa, o pacote criptografado ao lado
+   desta página é aberto aqui, no navegador, com a palavra e um segredo longo que vem no endereço
+   (depois do #) e que o navegador lembra. Dentro do pacote estão as chaves e a lista de logins.
+   Cada mudança vira um aviso assinado que os sites leem a cada poucos segundos. */
 (function () {
   'use strict';
 
-  var LIVE_SRC = 'https://neurostat-group.github.io';
-  var LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
-  var SRC = LOCAL ? '' : LIVE_SRC;
   var ROUNDS = 600000;
-  var USER_KEY = 'painel_user';
+  var KEY_STORE = 'painel_k';
   var SEEN_KEY = 'painel_seen';
+  // Only used to skip pointless work: the typed word is checked here before the slow decryption starts.
+  var PHRASE_HASH = 'f38bee3511dcdfaf4443f2e6a274719201e1ca5b86af79f715272c4c7e611d6c';
   var enc = new TextEncoder();
 
   var S = { cfg: null, bundle: null, ctl: { v: 1, seq: 0 }, maxId: 0, priv: null, signKey: null, verifyKey: null,
@@ -68,7 +68,7 @@
 
   async function openPackage(user, pass) {
     var name = hex(await crypto.subtle.digest('SHA-256', enc.encode('ns-partner:' + user))).slice(0, 32);
-    var res = await fetch(SRC + '/partner/d/' + name + '.bin', { cache: 'no-store' });
+    var res = await fetch('p/' + name + '.bin', { cache: 'no-store' });
     if (!res.ok) return null;
     var data = new Uint8Array(await res.arrayBuffer());
     if (String.fromCharCode(data[0], data[1], data[2], data[3]) !== 'NSP1') return null;
@@ -80,25 +80,43 @@
     } catch (e) { return null; }
   }
 
-  $('login-form').addEventListener('submit', async function (ev) {
-    ev.preventDefault();
-    var err = $('login-error'), btn = $('login-btn');
-    err.hidden = true;
-    var user = $('user').value.trim().toLowerCase(), pass = $('pass').value;
-    btn.disabled = true; btn.textContent = 'Entrando…';
-    var bundle = null;
-    try { bundle = await openPackage(user, pass); } catch (e) { bundle = null; }
-    btn.disabled = false; btn.textContent = 'Entrar';
-    if (!bundle || !bundle.admin) {
-      err.textContent = bundle ? 'Esta conta não é de mestre.' : 'Usuário ou senha incorretos, ou o pacote não pôde ser baixado.';
-      err.hidden = false;
-      return;
-    }
-    try { localStorage.setItem(USER_KEY, user); } catch (e) { /* ignore */ }
-    $('pass').value = '';
-    try { await start(bundle); } catch (e) { err.textContent = 'Não foi possível iniciar o painel: ' + (e && e.message || e); err.hidden = false; }
+  // ---- the black screen -----------------------------------------------------------------------
+
+  var typed = '';
+  var unlocking = false;
+
+  function sha256hex(text) { return crypto.subtle.digest('SHA-256', enc.encode(text)).then(hex); }
+  function lockScreen(on) {
+    document.body.classList.toggle('locked', on);
+    $('stage').hidden = !on;
+    $('panel-view').hidden = on;
+    document.title = on ? 'Nova guia' : 'Painel do Mestre';
+    if (on) { var k = $('keys'); k.value = ''; k.focus(); }
+  }
+  async function check() {
+    if (unlocking || typed.length < 6) return;
+    var word = typed.slice(-6).toLowerCase();
+    if ((await sha256hex('painel:' + word)) !== PHRASE_HASH) return;
+    var secret = decodeURIComponent(location.hash.slice(1)) || '';
+    if (!secret) { try { secret = localStorage.getItem(KEY_STORE) || ''; } catch (e) { secret = ''; } }
+    if (!secret) return;
+    unlocking = true;
+    try {
+      var bundle = await openPackage(word, secret);
+      if (!bundle || !bundle.admin) return;
+      try { localStorage.setItem(KEY_STORE, secret); } catch (e) { /* ignore */ }
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      typed = '';
+      await start(bundle);
+    } catch (e) { /* stay black */ } finally { unlocking = false; }
+  }
+  $('keys').addEventListener('input', function (ev) {
+    typed = (typed + (ev.target.value || '')).slice(-32);
+    ev.target.value = '';
+    check();
   });
-  try { $('user').value = localStorage.getItem(USER_KEY) || ''; } catch (e) { /* ignore */ }
+  document.addEventListener('click', function () { if (!$('stage').hidden) $('keys').focus(); });
+  $('keys').focus();
 
   // ---- the service (Firestore REST) -----------------------------------------------------------
 
@@ -481,8 +499,7 @@
     S.priv = await crypto.subtle.importKey('jwk', cfg.privateJwk, { name: 'RSA-OAEP', hash: 'SHA-256' }, false, ['decrypt']);
     S.signKey = await crypto.subtle.importKey('jwk', cfg.signJwk, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']);
     S.verifyKey = await crypto.subtle.importKey('jwk', { kty: 'EC', crv: 'P-256', x: cfg.signJwk.x, y: cfg.signJwk.y, ext: true }, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['verify']);
-    $('login-view').hidden = true;
-    $('panel-view').hidden = false;
+    lockScreen(false);
     await loadCtl().catch(function () { /* shown below */ });
     try { await loadMessages(true); } catch (e) { toast((e && e.message) || 'Não foi possível ler as mensagens.', true); }
     if (S.newest) { try { localStorage.setItem(SEEN_KEY, S.newest); } catch (e) { /* ignore */ } }
@@ -505,6 +522,7 @@
   $('sign-out').addEventListener('click', function () {
     S.timers.forEach(clearInterval); S.timers = [];
     S.cfg = null; S.bundle = null; S.priv = null; S.signKey = null; S.entries = [];
-    $('panel-view').hidden = true; $('login-view').hidden = false;
+    typed = '';
+    lockScreen(true);
   });
 })();

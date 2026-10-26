@@ -3,9 +3,10 @@
 Uma página só sua, separada dos sites, para ver o que os jogadores mandam e para mexer nos sites durante a campanha.
 
 - **Endereço:** https://maxhalasz.github.io/mru-sites/
-- **Entrar:** o usuário e a senha do mestre, que estão em `private/credentials.gm` (primeira coluna é o usuário, segunda é a senha).
-- A página é pública, mas só abre com o seu login: o pacote com as chaves é criptografado. Nada além do nome de usuário fica guardado no navegador.
-- Os sites nunca citam esse endereço.
+- **Como abrir:** a página é uma tela preta, sem nada escrito. É só digitar `halasz` (não aparece nada na tela) e o painel abre. O botão "Trancar" volta para a tela preta.
+- **Primeira vez em cada aparelho:** abra o endereço com o segredo no fim: `https://maxhalasz.github.io/mru-sites/#SEGREDO`. O segredo é a segunda coluna de `private/credentials.panel`. O navegador lembra dele, tira da barra de endereço, e nas próximas vezes basta o endereço simples e digitar `halasz`.
+- **Por que existe o segredo:** "halasz" sozinho seria fácil de adivinhar (está até no endereço). Quem acertasse leria as mensagens dos jogadores e poderia publicar avisos. O segredo longo é o que de fato protege o pacote com as chaves.
+- A página é pública, mas sem o segredo ela fica preta para sempre. Os sites nunca citam esse endereço.
 
 ## Abas
 
@@ -67,7 +68,15 @@ A pasta `private/` existe só neste computador e não vai para o GitHub:
 
 Faça uma cópia da pasta inteira num pen drive ou na nuvem.
 
-## Mudar a senha do mestre
+## Quando refazer o pacote do painel
+
+O painel guarda dentro do pacote criptografado a lista de logins de portal, os documentos de cada um, as vagas e os sites. Sempre que mudar algum desses, rode `npm run panel-bundle` e faça o commit do arquivo `.bin` em `apps/painel/p/`.
+
+Para trocar o segredo ou a palavra, edite `private/credentials.panel` (palavra, segredo e `gm`, separados por tab). Se trocar a palavra, avise para eu atualizar a conferência dela na página.
+
+## Mudar a senha do mestre (tela de leitura do portal)
+
+O login do mestre em `https://neurostat-group.github.io/partner/` continua existindo, só para ler as mensagens.
 
 1. Edite a senha em `private/credentials.gm`.
 2. Rode `npm run gm-bundle` na pasta do projeto.

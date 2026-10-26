@@ -16,6 +16,7 @@
     "build": "npm run build -w @mru/neurostat && npm run build -w @mru/kelvara && node packages/portal/build.mjs apps/neurostat/dist",
     "check": "npm run check -w @mru/neurostat && npm run check -w @mru/kelvara",
     "stamp": "node packages/brand/bin/stamp.mjs",
-    "gm-bundle": "node packages/portal/build.mjs --gm apps/neurostat/public/partner/d"
+    "gm-bundle": "node packages/portal/build.mjs --gm apps/neurostat/public/partner/d",
+    "panel-bundle": "node packages/portal/build.mjs --gm apps/painel/p --creds private/credentials.panel"
   }
 }
