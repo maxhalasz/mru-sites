@@ -29,10 +29,10 @@ Portal documents: the stamp text comes from each document's `classification` fie
 
 ## Aegis Corporation
 
-Security and logistics operator behind NeuroStat's field work. A light, open blue on purpose, far from NeuroStat's navy.
+Security and logistics operator behind NeuroStat's field work. The logo is the one Max supplied (a raster, 1024 px); there is no other Aegis logo.
 
-- `aegis-logo`, `aegis-logo-light` (SVG and PNG), `aegis-mark`, `aegis-mark-light`
-- Colours: sky `#4da3e0` (shield), deep `#2b78b8` (word), slate `#6b7f92` (small text), pale `#e6f3fc` (shield on dark)
-- Redraw with `node packages/brand/bin/aegis-logos.mjs`
+- `aegis-logo-original.png`: the artwork exactly as supplied (black on white)
+- `aegis-logo.png` (black), `aegis-logo-blue.png` (light blue `#4da3e0`), `aegis-logo-light.png` (white, for dark backgrounds): the same artwork on a transparent background
+- Aegis materials use a light, open blue, far from NeuroStat's navy.
 
-Aegis has no website. It is never published on the sites as artwork; the logo is for handouts and props.
+Aegis has no website. The logo is for handouts and props, not for the published sites.
