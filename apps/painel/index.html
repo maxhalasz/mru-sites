@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Painel do Mestre</title>
+  <link rel="stylesheet" href="painel.css" />
+</head>
+<body>
+  <main id="app">
+    <section id="login-view" class="login">
+      <h1>Painel do Mestre</h1>
+      <p class="muted">Entre com o usuário e a senha do mestre. Nada fica gravado neste navegador, só o nome de usuário.</p>
+      <form id="login-form" autocomplete="off">
+        <label for="user">Usuário</label>
+        <input id="user" name="user" type="text" autocapitalize="none" spellcheck="false" required />
+        <label for="pass">Senha</label>
+        <input id="pass" name="pass" type="password" required />
+        <button class="btn primary" id="login-btn" type="submit">Entrar</button>
+        <p id="login-error" class="error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section id="panel-view" hidden>
+      <header class="top">
+        <div>
+          <h1>Painel do Mestre</h1>
+          <p class="muted small" id="state-line">Carregando…</p>
+        </div>
+        <div class="top-actions">
+          <button class="btn" id="reload-all" type="button" title="Faz todas as páginas abertas dos sites recarregarem agora">Recarregar todas as páginas</button>
+          <button class="btn ghost" id="sign-out" type="button">Sair</button>
+        </div>
+      </header>
+      <p id="toast" class="toast" role="status" hidden></p>
+      <nav class="tabs" id="tabs" role="tablist" aria-label="Seções"></nav>
+      <div id="tab-body"></div>
+    </section>
+  </main>
+  <script src="painel.js"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { render } from 'astro:content';
-import { published, longDate } from '../../data/util';
+import { published, longDate, isoDay } from '../../data/util';
 
 export async function getStaticPaths() {
   const news = await published('news');
@@ -11,6 +11,7 @@ const { n } = Astro.props;
 const { Content } = await render(n);
 ---
 <Base title={n.data.title} current="/newsroom/" description={n.data.summary}>
+  <div data-gate={isoDay(n.data.date)}>
   <div class="page-head">
     <div class="wrap">
       <div class="crumbs"><a href="/">Home</a> / <a href="/newsroom/">Newsroom</a></div>
@@ -26,4 +27,5 @@ const { Content } = await render(n);
       <p><a href="/newsroom/">Back to newsroom</a></p>
     </div>
   </section>
+  </div>
 </Base>

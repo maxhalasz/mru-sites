@@ -3,10 +3,11 @@ import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import HeroArt from '../components/HeroArt.astro';
 import ExtLink from '../components/ExtLink.astro';
-import { published, longDate } from '../data/util';
+import { published, longDate, isFuture, isoDay } from '../data/util';
 import { last, change, changePct } from '../data/stock';
 
-const news = (await published('news')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+const news = (await published('news')).sort((a, b) => +b.data.date - +a.data.date);
+const newsShown = news.filter((n) => !isFuture(n.data.date)).slice(0, 3).map((n) => n.id);
 const pipeline = await published('pipeline');
 const active = pipeline.filter((p) => p.data.phase !== 'Discontinued');
 const count = (ph: string) => active.filter((p) => p.data.phase === ph).length;
@@ -63,9 +64,9 @@ const up = change >= 0;
         <div><p class="eyebrow">Newsroom</p><h2>Latest news</h2></div>
         <a href="/newsroom/">All news</a>
       </div>
-      <div class="grid c3">
+      <div class="grid c3" data-limit="3">
         {news.map((n) => (
-          <a class="card" href={`/newsroom/${n.id}/`} style="text-decoration:none;color:inherit">
+          <a class="card" href={`/newsroom/${n.id}/`} style="text-decoration:none;color:inherit" data-date={isoDay(n.data.date)} hidden={!newsShown.includes(n.id)}>
             <span class="tag" style="align-self:flex-start">{n.data.category}</span>
             <h3 style="margin-top:.8rem">{n.data.title}</h3>
             <p class="muted small">{longDate(n.data.date)}</p>

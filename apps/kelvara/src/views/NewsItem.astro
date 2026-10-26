@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { paths, label, ui, dateFmt, type Lang } from '../i18n';
+import { paths, label, ui, dateFmt, isoDay, type Lang } from '../i18n';
 
 interface Props { lang: Lang; item: any }
 const { lang, item } = Astro.props;
@@ -14,6 +14,7 @@ const hasImg = existsSync(join(process.cwd(), "public", "img", img));
 const alt = `${paths[lang === 'no' ? 'en' : 'no'].news}${item.id}/`;
 ---
 <Base lang={lang} page="news" title={title} description={lang === 'no' ? d.summary_no : d.summary_en} altPath={alt}>
+  <div data-gate={isoDay(d.date)}>
   <div class="page-head">
     <div class="wrap">
       <div class="crumbs"><a href={paths[lang].home}>{label[lang].home}</a> / <a href={paths[lang].news}>{label[lang].news}</a></div>
@@ -28,4 +29,5 @@ const alt = `${paths[lang === 'no' ? 'en' : 'no'].news}${item.id}/`;
       <p style="margin-top:2rem"><a href={paths[lang].news}>{ui[lang].back}</a></p>
     </div>
   </section>
+  </div>
 </Base>

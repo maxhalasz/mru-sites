@@ -17,6 +17,7 @@
   if (!form) return;
 
   var urls = [];
+  var current = null; // the signed-in account: { b, user, sig }
 
   function state() {
     try { return JSON.parse(window.localStorage.getItem(STORE)) || { n: 0, until: 0 }; } catch (e) { return { n: 0, until: 0 }; }
@@ -86,6 +87,7 @@
     btn.textContent = 'Signing in…';
     var started = Date.now();
     var bundle = null;
+    var settingsP = window.siteControl ? window.siteControl.refresh() : Promise.resolve({});
     try { bundle = await tryOpen(user, pass); } catch (e) { bundle = null; }
     var left = 1000 - (Date.now() - started);
     if (left > 0) await wait(left);
@@ -107,12 +109,41 @@
       return;
     }
     save({ n: 0, until: 0 });
+    var settings = await Promise.race([settingsP, wait(2500).then(function () { return window.siteControl ? window.siteControl.state() : {}; })]);
+    var acct = !bundle.app && settings && settings.accounts ? settings.accounts[user] : null;
+    if (acct && acct.blocked) {
+      logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Account suspended' }]);
+      form.reset();
+      showError(acct.message || 'This account has been suspended. Contact the IT Service Desk.');
+      return;
+    }
     if (!bundle.app) logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Signed in' }, { label: 'Account', value: bundle.name }]);
     form.reset();
     render(bundle, user);
   });
 
+  function accountSettings(user) {
+    var st = window.siteControl ? window.siteControl.state() : {};
+    return (st.accounts || {})[user] || {};
+  }
+  function shownDocs(b, user) {
+    if (b.app) return b.docs;
+    var hide = accountSettings(user).hidden || [];
+    var today = window.siteControl ? window.siteControl.today() : null;
+    return b.docs.filter(function (d) {
+      if (hide.indexOf(d.id) >= 0) return false;
+      return !today || new Date(d.date + 'T00:00:00Z') <= today;
+    });
+  }
+  function signature(user) {
+    var st = window.siteControl ? window.siteControl.state() : {};
+    return JSON.stringify([accountSettings(user).hidden || [], accountSettings(user).note || '', st.today || '']);
+  }
+
   function render(b, user) {
+    watch();
+    current = { b: b, user: user, sig: signature(user) };
+    var docs = shownDocs(b, user);
     loginView.hidden = true;
     portalView.hidden = false;
     if (b.app) {
@@ -120,7 +151,7 @@
       if (window.renderConsole) { window.renderConsole(portalView, b, signOut); return; }
     }
     var folders = {};
-    b.docs.forEach(function (d) { (folders[d.folder] = folders[d.folder] || []).push(d); });
+    docs.forEach(function (d) { (folders[d.folder] = folders[d.folder] || []).push(d); });
     var names = [''];
     (b.folders || []).forEach(function (f) { if (names.indexOf(f.name) < 0) names.push(f.name); });
     Object.keys(folders).forEach(function (n) { if (names.indexOf(n) < 0) names.push(n); });
@@ -128,6 +159,8 @@
     var html = '<div class="portal-head"><div><p class="eyebrow">NeuroStat Org.</p><h1>' + esc(b.name) + '</h1><p class="muted">' + esc(b.role) + '</p></div>' +
       '<button class="btn ghost" id="signout" type="button">Sign out</button></div>';
     if (b.welcome) html += '<p class="form-note">' + esc(b.welcome) + '</p>';
+    var note = accountSettings(user).note;
+    if (note) html += '<p class="form-note"><b>Notice:</b> ' + esc(note) + '</p>';
     html += '<div class="portal-grid"><div class="portal-list">';
     names.forEach(function (n) {
       var list = folders[n] || [];
@@ -149,7 +182,7 @@
       row.addEventListener('click', function () {
         portalView.querySelectorAll('.doc-row').forEach(function (r) { r.removeAttribute('aria-current'); });
         row.setAttribute('aria-current', 'true');
-        var d = b.docs.filter(function (x) { return x.id === row.getAttribute('data-id'); })[0];
+        var d = docs.filter(function (x) { return x.id === row.getAttribute('data-id'); })[0];
         open(d, user);
       });
     });
@@ -181,11 +214,33 @@
   }
 
   function signOut() {
+    current = null;
     urls.forEach(function (u) { URL.revokeObjectURL(u); });
     urls = [];
     portalView.innerHTML = '';
     portalView.hidden = true;
     loginView.hidden = false;
     errBox.hidden = true;
+  }
+
+  // Changes made while somebody is signed in: an immediate suspension, a reload, or a changed document list.
+  var watching = false;
+  function watch() {
+    if (watching || !window.siteControl) return;
+    watching = true;
+    window.siteControl.onChange(function (st) {
+      if (!current || current.b.app) return;
+      var acct = (st.accounts || {})[current.user] || {};
+      var since = window.siteControl.loadSeq() || 0;
+      if (acct.blocked && (acct.mode === 'now' || acct.mode === 'reload') && (acct.at || 0) > since) {
+        if (acct.mode === 'reload') { window.location.reload(); return; }
+        var msg = acct.message || 'This account has been suspended. Contact the IT Service Desk.';
+        signOut();
+        showError(msg);
+        return;
+      }
+      var sig = signature(current.user);
+      if (sig !== current.sig) render(current.b, current.user);
+    });
   }
 })();

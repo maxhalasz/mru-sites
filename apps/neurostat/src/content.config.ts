@@ -13,6 +13,7 @@ export const collections = {
       date: z.coerce.date(),
       published,
       category: z.enum(['Corporate', 'Clinical', 'Products', 'Investors', 'Science']),
+      scheduled: z.boolean().optional(),
       summary: z.string(),
     }),
   }),

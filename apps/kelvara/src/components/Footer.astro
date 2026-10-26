@@ -32,7 +32,7 @@ const t = ui[lang];
       </div>
     </div>
     <div class="legal">
-      <div>© {SITE_DATE.getUTCFullYear()} Kelvara Petrochemicals AS. {t.rights}</div>
+      <div>© <span data-today="year">{SITE_DATE.getUTCFullYear()}</span> Kelvara Petrochemicals AS. {t.rights}</div>
       <ul style="display:flex;gap:1.2rem;flex-wrap:wrap">
         <li><a href={paths[lang].privacy}>{label[lang].privacy}</a></li>
         <li><a href={paths[lang].cookies}>{label[lang].cookies}</a></li>

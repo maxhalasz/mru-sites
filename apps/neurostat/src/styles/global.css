@@ -211,3 +211,12 @@ input[type=text], input[type=email], input[type=number], input[type=password], i
 .nav .nav-login { display: inline-flex; align-items: center; gap: .5rem; border: 1.5px solid var(--navy); padding: .45rem .95rem; color: var(--navy); background: transparent; }
 .nav .nav-login:hover, .nav .nav-login[aria-current='page'] { background: var(--navy); color: #fff; border-bottom-color: var(--navy); }
 @media (max-width: 1240px) { .nav .nav-login { margin-top: .6rem; align-self: flex-start; } }
+
+/* Site notice (set from the shared settings) */
+[hidden] { display: none !important; }
+.site-notice { padding: .7rem 1.2rem; text-align: center; font: 500 .95rem/1.4 var(--font-body); border-bottom: 1px solid var(--line); }
+.site-notice.tone-info { background: #e8eef6; color: var(--navy); }
+.site-notice.tone-alert { background: #fbe9e7; color: #7a1d14; border-bottom-color: #e3b3ad; }
+#site-notice-full { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--navy); color: #fff; text-align: center; }
+#site-notice-full p { max-width: 38rem; margin: 0; font: 400 1.35rem/1.5 var(--font-head); }
+html.notice-full { overflow: hidden; }

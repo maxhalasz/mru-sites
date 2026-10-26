@@ -11,6 +11,7 @@ export const collections = {
     schema: z.object({
       date: z.coerce.date(),
       published,
+      scheduled: z.boolean().optional(),
       title_no: z.string(),
       title_en: z.string(),
       summary_no: z.string(),
@@ -37,6 +38,7 @@ export const collections = {
       reference: z.string(),
       date: z.coerce.date(),
       published,
+      scheduled: z.boolean().optional(),
       order: z.number().default(0),
       location: z.string(),
       title_no: z.string(),
@@ -67,6 +69,7 @@ export const collections = {
     schema: z.object({
       date: z.coerce.date(),
       published,
+      scheduled: z.boolean().optional(),
       title_no: z.string(),
       title_en: z.string(),
       file_no: z.string(),

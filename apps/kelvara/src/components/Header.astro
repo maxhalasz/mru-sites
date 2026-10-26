@@ -1,13 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
-import { paths, label, navKeys, ui, SITE_DATE, type Lang, type PageKey } from '../i18n';
+import { paths, label, navKeys, ui, isLive, isFuture, isoDay, type Lang, type PageKey } from '../i18n';
 interface Props { lang: Lang; page?: PageKey; alt: string }
 const { lang, page, alt } = Astro.props;
-const open = (await getCollection('jobs', (j) => j.data.published && j.data.date <= SITE_DATE)).length;
+const jobsLive = await getCollection('jobs', (j) => isLive(j.data));
+const open = jobsLive.filter((j) => !isFuture(j.data.date)).length;
+const jobsAttr = jobsLive.map((j) => `${j.data.reference}:${isoDay(j.data.date)}`).join(',');
 ---
 <div class="topbar">
   <div class="wrap">
-    <a class="topjobs" href={`${paths[lang].careers}#stillinger`}>{lang === 'no' ? `${open} ledige stillinger` : `${open} open positions`}</a>
+    <a class="topjobs" href={`${paths[lang].careers}#stillinger`} data-vac="top" data-jobs={jobsAttr}>{lang === 'no' ? `${open} ledige stillinger` : `${open} open positions`}</a>
     <div class="lang" role="group" aria-label={lang === 'no' ? 'Språk' : 'Language'}>
       {lang === 'no'
         ? <><span aria-current="true">NO</span><a href={alt} hreflang="en" lang="en" aria-label="English">EN</a></>
@@ -24,7 +26,7 @@ const open = (await getCollection('jobs', (j) => j.data.published && j.data.date
     <nav class="nav" id="nav" aria-label={lang === 'no' ? 'Hovedmeny' : 'Main'}>
       {navKeys.map((k) => (
         <a href={paths[lang][k]} aria-current={page === k ? 'page' : undefined}>
-          {label[lang][k]}{k === 'careers' && open > 0 && <span class="badge" aria-label={lang === 'no' ? `${open} ledige` : `${open} open`}>{open}</span>}
+          {label[lang][k]}{k === 'careers' && <span class="badge" data-open-count data-hide-zero data-jobs={jobsAttr} hidden={open === 0}>{open}</span>}
         </a>
       ))}
     </nav>

@@ -25,7 +25,10 @@ const gmMode = args.includes('--gm');
 // --creds <file>: read the logins from another file (used for throwaway test accounts kept outside the repository).
 const credsIdx = args.indexOf('--creds');
 const credsFile = credsIdx >= 0 ? args[credsIdx + 1] : null;
-const dist = args.find((a, i) => !a.startsWith('--') && (credsIdx < 0 || i !== credsIdx + 1));
+// --props <file>: the prop logins listed in the game master package (used to test with a throwaway login).
+const propsIdx = args.indexOf('--props');
+const propsFile = propsIdx >= 0 ? args[propsIdx + 1] : null;
+const dist = args.find((a, i) => !a.startsWith('--') && (credsIdx < 0 || i !== credsIdx + 1) && (propsIdx < 0 || i !== propsIdx + 1));
 if (!dist) { console.error('portal: no output folder given'); process.exit(2); }
 const root = new URL('../../', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const priv = join(root, 'private');
@@ -53,7 +56,8 @@ function frontmatter(path) {
   return YAML.parse(m[1]);
 }
 
-// The game master account also carries what the console needs to read and decrypt the activity log.
+// The game master account also carries what the console needs: the key that reads the activity log, the
+// key that signs site settings, every prop login with its documents, the open positions and the sites.
 function adminConfig() {
   const keyFile = join(priv, 'log-keys.json');
   if (!existsSync(keyFile)) fail('private/log-keys.json not found (needed by the game master account)');
@@ -61,10 +65,33 @@ function adminConfig() {
   const fbFile = join(priv, 'firebase.json');
   const fb = existsSync(fbFile) ? JSON.parse(readFileSync(fbFile, 'utf8')) : null;
   if (!fb) console.warn('portal: private/firebase.json is missing, so the console has no data source yet');
-  return { projectId: fb ? fb.projectId : '', apiKey: fb ? fb.apiKey : '', privateJwk: keys.privateJwk };
+  if (!keys.signing) console.warn('portal: private/log-keys.json has no signing key, so site settings cannot be published');
+  const accounts = [];
+  const propLogins = propsFile || join(priv, 'credentials');
+  if (existsSync(propLogins)) {
+    for (const raw of readFileSync(propLogins, 'utf8').split(/\r?\n/)) {
+      const line = raw.trim();
+      if (!line || line.startsWith('#')) continue;
+      const [user, pass, account] = line.split('\t');
+      const b = loadAccount(account.trim(), false);
+      accounts.push({ user: user.trim().toLowerCase(), pass, account: account.trim(), name: b.name, role: b.role,
+        docs: b.docs.map((d) => ({ id: d.id, title: d.title, number: d.number, date: d.date, folder: d.folder, classification: d.classification })) });
+    }
+  }
+  const jobs = [];
+  const jobsDir = join(root, 'apps', 'kelvara', 'src', 'content', 'jobs');
+  if (existsSync(jobsDir)) {
+    for (const n of readdirSync(jobsDir).filter((x) => x.endsWith('.yml')).sort()) {
+      const j = YAML.parse(readFileSync(join(jobsDir, n), 'utf8'));
+      jobs.push({ reference: j.reference, title: j.title_en, date: j.date instanceof Date ? j.date.toISOString().slice(0, 10) : String(j.date) });
+    }
+  }
+  const sites = readdirSync(join(root, 'apps')).filter((d) => existsSync(join(root, 'apps', d, 'public', 'js', 'log-config.js')));
+  const baseDate = (readFileSync(join(root, 'apps', 'neurostat', 'public', 'js', 'log-config.js'), 'utf8').match(/baseDate:\s*'([\d-]+)'/) || [])[1] || '';
+  return { projectId: fb ? fb.projectId : '', apiKey: fb ? fb.apiKey : '', privateJwk: keys.privateJwk, signJwk: keys.signing ? keys.signing.privateJwk : null, accounts, jobs, sites, baseDate };
 }
 
-function loadAccount(account) {
+function loadAccount(account, withFiles = true) {
   const dir = join(priv, 'portal', account);
   if (!existsSync(dir)) fail(`folder private/portal/${account} not found`);
   const meta = existsSync(join(dir, 'account.yml')) ? YAML.parse(readFileSync(join(dir, 'account.yml'), 'utf8')) : {};
@@ -74,7 +101,7 @@ function loadAccount(account) {
     if (fm.published === false) continue;
     for (const k of ['title', 'number', 'date', 'classification']) if (!fm[k]) fail(`${account}/${name}: missing "${k}"`);
     let file = null;
-    if (fm.file) {
+    if (fm.file && withFiles) {
       const p = join(dir, fm.file);
       if (!existsSync(p) || !statSync(p).isFile()) fail(`${account}/${name}: file "${fm.file}" not found`);
       const ext = extname(p).toLowerCase();
@@ -90,7 +117,7 @@ function loadAccount(account) {
       date: fm.date instanceof Date ? fm.date.toISOString().slice(0, 10) : String(fm.date),
       classification: String(fm.classification),
       description: fm.description ? String(fm.description) : '',
-      stamp: stampSvg({ text: stampText }),
+      stamp: withFiles ? stampSvg({ text: stampText }) : '',
       file,
     });
   }

@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 concurrency:
   group: deploy
   cancel-in-progress: true
@@ -63,3 +66,21 @@ jobs:
           user_name: Kelvara Web Team
           user_email: web@kelvara.example
           full_commit_message: Site update
+
+      - name: Reset ssh-agent again
+        run: |
+          pkill ssh-agent || true
+          rm -f /tmp/ssh-auth.sock
+          unset SSH_AUTH_SOCK SSH_AGENT_PID
+
+      # The game master panel is a plain static page, served from this repository's own gh-pages branch.
+      - name: Publish control panel
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: apps/painel
+          force_orphan: true
+          user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          full_commit_message: Update panel

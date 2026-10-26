@@ -61,3 +61,9 @@ export function dateFmt(d: Date, lang: Lang) {
 
 // Nothing dated after 19 October 2028 is shown.
 export const SITE_DATE = new Date('2028-10-19T23:59:59Z');
+
+// An item is live when it is published and dated on or before the site date, or when it is marked
+// "scheduled". Scheduled items are on the page but stay hidden until the shared date reaches them.
+export const isLive = (d: { published: boolean; date: Date; scheduled?: boolean }) => d.published && (d.date <= SITE_DATE || !!d.scheduled);
+export const isFuture = (d: Date) => d > SITE_DATE;
+export const isoDay = (d: Date) => d.toISOString().slice(0, 10);

@@ -117,9 +117,9 @@ No dia do lançamento:
 
 Depois do lançamento, qualquer jogador pode ver os arquivos e o histórico dos repositórios publicados. Por isso a Action roda a checagem de vazamento antes de publicar, e cada publicação recria o histórico com uma única mensagem neutra.
 
-## 12. Ver o que os jogadores enviam
+## 12. Painel do Mestre
 
-Candidaturas da Kelvara, formulários de contato, respostas do BOREAS-2, inscrições e tentativas de entrar no portal aparecem numa tela só sua, dentro do login de parceiros da NeuroStat (conta do mestre). Como abrir, o que cada aba guarda e como apagar entradas de teste estão em [`REGISTRO.md`](REGISTRO.md).
+Ver o que os jogadores enviam e mexer nos sites durante a campanha (bloquear logins, esconder documentos, avisos, vagas, data compartilhada) é pelo painel em https://maxhalasz.github.io/mru-sites/. Como usar está em [`REGISTRO.md`](REGISTRO.md).
 
 ## Plano B (sem o Pages CMS)
 

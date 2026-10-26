@@ -2,13 +2,14 @@
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import { getCollection } from 'astro:content';
-import { paths, label, dateFmt, SITE_DATE, type Lang } from '../i18n';
+import { paths, label, dateFmt, isLive, isFuture, isoDay, type Lang } from '../i18n';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = (no: string, en: string) => (lang === 'no' ? no : en);
 const quotes = (await getCollection('testimonials', (q) => q.data.published)).sort((a, b) => a.data.order - b.data.order);
-const jobs = (await getCollection('jobs', (j) => j.data.published && j.data.date <= SITE_DATE)).sort((a, b) => a.data.order - b.data.order);
+const jobs = (await getCollection('jobs', (j) => isLive(j.data))).sort((a, b) => a.data.order - b.data.order);
+const jobsAttr = jobs.map((j) => `${j.data.reference}:${isoDay(j.data.date)}`).join(',');
 const slug = (n: string) => n.toLowerCase().replace(/[^a-z]+/g, '-');
 const lines = (s: string) => s.split('\n').filter(Boolean);
 ---
@@ -24,12 +25,12 @@ const lines = (s: string) => s.split('\n').filter(Boolean);
   <section class="band vacancies" id="stillinger">
     <div class="wrap">
       <p class="eyebrow">{t('Ledige stillinger', 'Open positions')}</p>
-      <h2>{t(`${jobs.length} stillinger til vintersesongen`, `${jobs.length} positions for the winter season`)}</h2>
+      <h2 data-vac="count" data-jobs={jobsAttr}>{t(`${jobs.length} stillinger til vintersesongen`, `${jobs.length} positions for the winter season`)}</h2>
       <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-      <p class="lead">{t('Bemanningen for vinteren 2028/29 er nesten komplett. Disse tre er de siste ledige stillingene på Ødemark A. Vi leser søknadene etter hvert som de kommer og kaller inn til intervju med en gang.', 'The crew for winter 2028/29 is almost complete. These three are the last open positions on Ødemark A. We read applications as they come in and call people in for interviews straight away.')}</p>
-      <div class="grid c3 jobs">
+      <p class="lead" data-vac="lead" data-jobs={jobsAttr}>{t('Bemanningen for vinteren 2028/29 er nesten komplett. Disse tre er de siste ledige stillingene på Ødemark A. Vi leser søknadene etter hvert som de kommer og kaller inn til intervju med en gang.', 'The crew for winter 2028/29 is almost complete. These three are the last open positions on Ødemark A. We read applications as they come in and call people in for interviews straight away.')}</p>
+      <div class="grid c3 jobs" data-vac-zero="hide" data-jobs={jobsAttr}>
         {jobs.map((j) => (
-          <article class="job" id={j.data.reference.toLowerCase()}>
+          <article class="job" id={j.data.reference.toLowerCase()} data-job={j.data.reference} data-date={isoDay(j.data.date)} hidden={isFuture(j.data.date)}>
             <span class="tag new">{t('Ledig', 'Open')}</span>
             <h3>{lang === 'no' ? j.data.title_no : j.data.title_en}</h3>
             <p class="sub">{lang === 'no' ? j.data.subtitle_no : j.data.subtitle_en}</p>
@@ -47,7 +48,7 @@ const lines = (s: string) => s.split('\n').filter(Boolean);
     </div>
   </section>
 
-  <section class="band alt" id="soknad">
+  <section class="band alt" id="soknad" data-vac-zero="hide" data-jobs={jobsAttr}>
     <div class="wrap grid c2" style="gap:3rem;align-items:start">
       <div>
         <h2>{t('Send søknad', 'Apply')}</h2>
@@ -61,7 +62,7 @@ const lines = (s: string) => s.split('\n').filter(Boolean);
             <label for="a-job">{t('Stilling', 'Position')}</label>
             <select id="a-job" required>
               <option value="">{t('Velg stilling', 'Select position')}</option>
-              {jobs.map((j) => <option value={j.data.reference}>{lang === 'no' ? j.data.title_no : j.data.title_en} ({j.data.reference})</option>)}
+              {jobs.map((j) => <option value={j.data.reference} data-job={j.data.reference} data-date={isoDay(j.data.date)} hidden={isFuture(j.data.date)}>{lang === 'no' ? j.data.title_no : j.data.title_en} ({j.data.reference})</option>)}
             </select>
           </div>
           <div class="field"><label for="a-name">{t('Navn', 'Name')}</label><input id="a-name" type="text" required autocomplete="name" /></div>

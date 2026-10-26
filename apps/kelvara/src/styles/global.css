@@ -214,3 +214,12 @@ input[type=text], input[type=email], select, textarea { width: 100%; font: inher
 /* The photo is already soft-focus (made at build time), so the browser must not blur it again. */
 .hero-art.soft { inset: 0; filter: none; }
 .hero-art.soft .hero-photo { transform: none; }
+
+/* Site notice (set from the shared settings) */
+[hidden] { display: none !important; }
+.site-notice { padding: .7rem 1.2rem; text-align: center; font: 700 .9rem/1.4 var(--font-body); border-bottom: 1px solid var(--line); }
+.site-notice.tone-info { background: #f1ece0; color: var(--black); }
+.site-notice.tone-alert { background: var(--orange); color: #fff; border-bottom-color: #a53a10; }
+#site-notice-full { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--black); color: #fff; text-align: center; }
+#site-notice-full p { max-width: 38rem; margin: 0; font: 400 1.2rem/1.6 var(--font-head); }
+html.notice-full { overflow: hidden; }

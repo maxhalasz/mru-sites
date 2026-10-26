@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { published, longDate } from '../../data/util';
+import { published, longDate, isFuture, isoDay } from '../../data/util';
 const news = (await published('news')).sort((a, b) => +b.data.date - +a.data.date);
 ---
 <Base title="Newsroom" current="/newsroom/" description="NeuroStat press releases, media library and press contact.">
@@ -18,7 +18,7 @@ const news = (await published('news')).sort((a, b) => +b.data.date - +a.data.dat
         <h2>Press releases</h2>
         <ul class="list-plain">
           {news.map((n) => (
-            <li>
+            <li data-date={isoDay(n.data.date)} hidden={isFuture(n.data.date)}>
               <span class="tag">{n.data.category}</span> <span class="muted small">{longDate(n.data.date)}</span>
               <h3 style="margin:.5rem 0 .2rem"><a href={`/newsroom/${n.id}/`} style="text-decoration:none">{n.data.title}</a></h3>
               <p class="muted" style="margin:0">{n.data.summary}</p>

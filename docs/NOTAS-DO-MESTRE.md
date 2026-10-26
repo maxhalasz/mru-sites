@@ -62,7 +62,7 @@ Nenhuma aparece nos sites hoje. Se aparecerem na lista de empresas do grupo (Abo
 
 ## Vagas e registro
 
-As três vagas da Kelvara (Roughneck, Driller, Subsea Operator) têm início em **28 de outubro de 2028**; a rotação de inverno da plataforma começa em 1º de novembro. As candidaturas e tudo o que os jogadores mandam (inclusive quem tenta entrar no portal e quais documentos abre) aparecem no console do mestre, dentro do portal de parceiros (veja `REGISTRO.md`).
+As três vagas da Kelvara (Roughneck, Driller, Subsea Operator) têm início em **28 de outubro de 2028**; a rotação de inverno da plataforma começa em 1º de novembro. As candidaturas e tudo o que os jogadores mandam (inclusive quem tenta entrar no portal e quais documentos abre) aparecem no Painel do Mestre (veja `REGISTRO.md`).
 
 ## Pistas no código-fonte
 

@@ -1,12 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
-import { paths, label, ui, dateFmt, SITE_DATE, type Lang } from '../i18n';
+import { paths, label, ui, dateFmt, isLive, isFuture, isoDay, type Lang } from '../i18n';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = (no: string, en: string) => (lang === 'no' ? no : en);
-const docs = (await getCollection('documents', (d) => d.data.published && d.data.date <= SITE_DATE)).sort((a, b) => +b.data.date - +a.data.date);
+const docs = (await getCollection('documents', (d) => isLive(d.data))).sort((a, b) => +b.data.date - +a.data.date);
 ---
 <Base lang={lang} page="sustainability" title={label[lang].sustainability}>
   <div class="page-head">
@@ -42,7 +42,7 @@ const docs = (await getCollection('documents', (d) => d.data.published && d.data
       <p>{t('Åpenhetsloven krever at vi kartlegger risikoen for brudd på menneskerettigheter og anstendige arbeidsforhold, både i egen virksomhet og hos leverandørene. Redegjørelsen for 2027 ligger her.', 'The Transparency Act requires us to assess the risk of human rights violations and indecent working conditions, in our own business and among our suppliers. The statement for 2027 is here.')}</p>
       <ul class="list-plain">
         {docs.map((d) => (
-          <li>
+          <li data-date={isoDay(d.data.date)} hidden={isFuture(d.data.date)}>
             <p style="margin:0"><b>{lang === 'no' ? d.data.title_no : d.data.title_en}</b> <span class="muted small">· {dateFmt(d.data.date, lang)}</span></p>
             <p class="small" style="margin:.3rem 0 0"><a href={lang === 'no' ? d.data.file_no : d.data.file_en}>{ui[lang].download}</a></p>
           </li>
