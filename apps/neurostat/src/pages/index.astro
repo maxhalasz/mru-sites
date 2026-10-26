@@ -52,7 +52,7 @@ const up = change >= 0;
         <p class="eyebrow">Medicine at the edge</p>
         <h2>Medicine far from a hospital</h2>
         <p>On polar stations, offshore installations and military bases people work long rotations in the cold and dark, a long way from the nearest hospital. Baseline and Halo let the occupational physician see how a crew is sleeping and thinking before something goes wrong. Transport, station support and security behind these placements come from our group companies <ExtLink href="http://hiemalpolar.com">Hiemal Polar Services</ExtLink> and <ExtLink href="http://aegiscorp.net">Aegis Corporation</ExtLink>.</p>
-        <p>Since 2027 we have worked with the crew of Ødemark A, an installation in the northern North Sea operated by <ExtLink href="https://kelvarapetro.github.io/en/operations/">Kelvara Petrochemicals AS</ExtLink>, on how long winter rotations affect sleep and cognition.</p>
+        <p data-date="2027-01-01">Since 2027 we have worked with the crew of Ødemark A, an installation in the northern North Sea operated by <ExtLink href="https://kelvarapetro.github.io/en/operations/">Kelvara Petrochemicals AS</ExtLink>, on how long winter rotations affect sleep and cognition.</p>
         <p><a href="/products/baseline/">About NeuroStat Baseline</a></p>
       </div>
     </div>
@@ -95,13 +95,13 @@ const up = change >= 0;
     </div>
   </section>
 
-  <section class="band">
+  <section class="band" data-stock-block>
     <div class="wrap">
       <p class="eyebrow">Investors</p>
       <div class="ticker">
-        <div><span class="muted small">SIX: NEUS</span><div class="px">CHF {last.close.toFixed(2)}</div></div>
-        <div class={`chg ${up ? 'up' : 'down'}`}>{up ? '+' : ''}{change.toFixed(2)} ({up ? '+' : ''}{changePct.toFixed(2)}%)</div>
-        <div class="muted small">Close, {longDate(new Date(last.date))}</div>
+        <div><span class="muted small">SIX: NEUS</span><div class="px" data-px>CHF {last.close.toFixed(2)}</div></div>
+        <div class={`chg ${up ? 'up' : 'down'}`} data-chg>{up ? '+' : ''}{change.toFixed(2)} ({up ? '+' : ''}{changePct.toFixed(2)}%)</div>
+        <div class="muted small" data-close-date>Close, {longDate(new Date(last.date))}</div>
       </div>
       <a href="/investors/">Investor information</a>
     </div>

@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { published, shortDate } from '../../data/util';
+import { published, shortDate, isoDay } from '../../data/util';
 const reports = (await published('reports')).filter((r) => r.data.kind === 'Governance').sort((a, b) => +b.data.date - +a.data.date);
 ---
 <Base title="Governance" current="/about/">
@@ -25,7 +25,7 @@ const reports = (await published('reports')).filter((r) => r.data.kind === 'Gove
       <p>The Executive Committee, led by the Chief Executive Officer, runs the group day to day.</p>
       <h2>Documents</h2>
       <ul>
-        {reports.map((r) => <li>{r.data.title} <span class="muted small">({shortDate(r.data.date)})</span></li>)}
+        {reports.map((r) => <li data-date={isoDay(r.data.date)}>{r.data.title} <span class="muted small">({shortDate(r.data.date)})</span></li>)}
       </ul>
       <h2>Reporting a concern</h2>
       <p>Employees and outsiders can report a suspected breach of law or company policy in confidence through an independent channel. Details are in the Code of Conduct.</p>

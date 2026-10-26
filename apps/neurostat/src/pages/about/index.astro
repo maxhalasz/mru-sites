@@ -3,18 +3,18 @@ import Base from '../../layouts/Base.astro';
 import ExtLink from '../../components/ExtLink.astro';
 
 const timeline = [
-  ['2003', 'NeuroStat is founded in Zürich by Dr. Adriond Fisher together with a group of clinicians.'],
-  ['2006', 'Vesperil (ormelteon) is approved, the first NeuroStat product.'],
-  ['2008', 'Clinical research site opens in Basel.'],
-  ['2010', 'NeuroStat lists on the SIX Swiss Exchange under the ticker NEUS.'],
-  ['2014', 'Office opens in Boston for regulatory and clinical collaboration in North America.'],
-  ['2015', 'NeuroStat Baseline, a digital cognitive assessment platform, is launched.'],
-  ['2017', 'Lunavel (corexant) is approved for insomnia.'],
-  ['2018', 'Office opens in London.'],
-  ['2019', 'NeuroStat Halo, a dry-electrode EEG headband, receives CE marking.'],
-  ['2020', 'Migrestil (tolugepant) is approved for the acute treatment of migraine.'],
-  ['2026', 'A Phase III study of tolugepant in migraine prevention does not meet its primary endpoint.'],
-  ['2028', 'BOREAS-2, a Phase II study of NS-760 in extended offshore rotations, begins recruitment.'],
+  ['2003', 'NeuroStat is founded in Zürich by Dr. Adriond Fisher together with a group of clinicians.', '2003-01-01'],
+  ['2006', 'Vesperil (ormelteon) is approved, the first NeuroStat product.', '2006-01-01'],
+  ['2008', 'Clinical research site opens in Basel.', '2008-01-01'],
+  ['2010', 'NeuroStat lists on the SIX Swiss Exchange under the ticker NEUS.', '2010-06-18'],
+  ['2014', 'Office opens in Boston for regulatory and clinical collaboration in North America.', '2014-01-01'],
+  ['2015', 'NeuroStat Baseline, a digital cognitive assessment platform, is launched.', '2015-01-01'],
+  ['2017', 'Lunavel (corexant) is approved for insomnia.', '2017-01-01'],
+  ['2018', 'Office opens in London.', '2018-01-01'],
+  ['2019', 'NeuroStat Halo, a dry-electrode EEG headband, receives CE marking.', '2019-01-01'],
+  ['2020', 'Migrestil (tolugepant) is approved for the acute treatment of migraine.', '2020-01-01'],
+  ['2026', 'A Phase III study of tolugepant in migraine prevention does not meet its primary endpoint.', '2026-03-12'],
+  ['2028', 'BOREAS-2, a Phase II study of NS-760 in extended offshore rotations, begins recruitment.', '2028-09-14'],
 ];
 const locations = [
   ['Zürich', 'Headquarters, research and corporate functions'],
@@ -45,7 +45,7 @@ const locations = [
     <div class="wrap">
       <h2>Our history</h2>
       <ul class="timeline">
-        {timeline.map(([y, t]) => <li><span class="yr">{y}</span>{t}</li>)}
+        {timeline.map(([y, t, day]) => <li data-date={day}><span class="yr">{y}</span>{t}</li>)}
       </ul>
     </div>
   </section>

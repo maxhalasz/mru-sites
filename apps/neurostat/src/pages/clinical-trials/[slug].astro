@@ -12,6 +12,7 @@ const d = t.data;
 const isBoreas = t.id === 'boreas-2';
 ---
 <Base title={d.id} current="/clinical-trials/" description={d.summary}>
+  <div data-gate={d.start}>
   <div class="page-head">
     <div class="wrap">
       <div class="crumbs"><a href="/">Home</a> / <a href="/clinical-trials/">Clinical Trials</a> / {d.id}</div>
@@ -81,4 +82,5 @@ const isBoreas = t.id === 'boreas-2';
       )}
     </div>
   </section>
+  </div>
 </Base>

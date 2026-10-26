@@ -31,7 +31,7 @@ const docs = (await getCollection('documents', (d) => isLive(d.data))).sort((a, 
       <h2>{t('Lokalsamfunn og sponsing', 'Community and sponsorship')}</h2>
       <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
       <p>{t('Kelvara er hovedsponsor for redningsskøyta RS 138 «Sotrabuen», som Redningsselskapet driver med frivillig mannskap. Vi er også med på karrieremesser ved videregående skoler i regionen, og vi tar inn lærlinger hvert år.', 'Kelvara is main sponsor of the rescue vessel RS 138 «Sotrabuen», which the Norwegian Society for Sea Rescue runs with a volunteer crew. We also attend careers fairs at upper secondary schools in the region, and we take on apprentices every year.')}</p>
-      <p><a href={`${paths[lang].news}2028-08-18-hovedsponsor-sotrabuen/`}>{t('Les om sponsoravtalen', 'Read about the sponsorship agreement')}</a></p>
+      <p data-date="2028-08-18"><a href={`${paths[lang].news}2028-08-18-hovedsponsor-sotrabuen/`}>{t('Les om sponsoravtalen', 'Read about the sponsorship agreement')}</a></p>
     </div>
   </section>
 

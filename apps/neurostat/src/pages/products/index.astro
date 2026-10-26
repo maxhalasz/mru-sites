@@ -15,7 +15,7 @@ const products = (await published('products')).sort((a, b) => a.data.order - b.d
     <div class="wrap">
       <div class="grid c3">
         {products.map((p) => (
-          <a class="card" href={`/products/${p.id}/`} style="text-decoration:none;color:inherit">
+          <a class="card" href={`/products/${p.id}/`} style="text-decoration:none;color:inherit" data-date={`${p.data.approved}-01-01`}>
             <span class="tag" style="align-self:flex-start">{p.data.kind}</span>
             <h3 style="margin-top:.8rem">{p.data.name}</h3>
             <p class="muted small" style="margin-bottom:.6rem">{p.data.generic}</p>

@@ -1,16 +1,34 @@
 ---
 import Base from '../layouts/Base.astro';
 import StockChart from '../components/StockChart.astro';
-import { published, shortDate, longDate } from '../data/util';
+import { published, shortDate, longDate, isoDay } from '../data/util';
 import { last, change, changePct } from '../data/stock';
 
 const reports = (await published('reports')).filter((r) => r.data.kind !== 'Governance').sort((a, b) => +b.data.date - +a.data.date);
 const up = change >= 0;
 const ranges = ['1M', '1Y', '5Y', 'MAX'] as const;
+const baseDay = '2028-10-19';
+// Each date is shown until it has passed, so the calendar always lists what is still ahead.
 const calendar = [
-  ['November 2028', 'Third-quarter 2028 results'],
-  ['February 2029', 'Full-year 2028 results'],
-  ['April 2029', 'Annual General Meeting 2029'],
+  ['2027-02-24', 'February 2027', 'Full-year 2026 results'],
+  ['2027-04-21', 'April 2027', 'Annual General Meeting 2027'],
+  ['2027-08-26', 'August 2027', 'Half-year 2027 results'],
+  ['2027-11-11', 'November 2027', 'Third-quarter 2027 results'],
+  ['2028-02-23', 'February 2028', 'Full-year 2027 results'],
+  ['2028-04-20', 'April 2028', 'Annual General Meeting 2028'],
+  ['2028-08-24', 'August 2028', 'Half-year 2028 results'],
+  ['2028-11-09', 'November 2028', 'Third-quarter 2028 results'],
+  ['2029-02-22', 'February 2029', 'Full-year 2028 results'],
+  ['2029-04-19', 'April 2029', 'Annual General Meeting 2029'],
+];
+// A results column appears on the day its report is published.
+const cols = [['H1 2028', '2028-08-24'], ['FY 2027', '2028-02-23'], ['FY 2026', '2027-02-24']];
+const rows = [
+  ['Revenue', '603', '1,184', '1,149'],
+  ['Core operating profit', '171', '322', '296'],
+  ['Net profit', '118', '231', '187'],
+  ['Research and development', '162', '318', '301'],
+  ['Dividend per share (CHF)', 'n/a', '1.10', '1.00'],
 ];
 ---
 <Base title="Investors" current="/investors/" description="NeuroStat share price, reports and financial calendar.">
@@ -22,13 +40,13 @@ const calendar = [
     </div>
   </div>
 
-  <section class="band">
+  <section class="band" data-stock-block>
     <div class="wrap">
       <p class="eyebrow">SIX Swiss Exchange · NEUS</p>
       <div class="ticker">
-        <div class="px">CHF {last.close.toFixed(2)}</div>
-        <div class={`chg ${up ? 'up' : 'down'}`}>{up ? '+' : ''}{change.toFixed(2)} ({up ? '+' : ''}{changePct.toFixed(2)}%)</div>
-        <div class="muted small">Close, {longDate(new Date(last.date))}</div>
+        <div class="px" data-px>CHF {last.close.toFixed(2)}</div>
+        <div class={`chg ${up ? 'up' : 'down'}`} data-chg>{up ? '+' : ''}{change.toFixed(2)} ({up ? '+' : ''}{changePct.toFixed(2)}%)</div>
+        <div class="muted small" data-close-date>Close, {longDate(new Date(last.date))}</div>
       </div>
       <div class="range" data-range role="group" aria-label="Chart range">
         {ranges.map((r) => <button type="button" data-r={r} aria-pressed={r === '1Y' ? 'true' : 'false'}>{r === 'MAX' ? 'Max' : r}</button>)}
@@ -43,13 +61,9 @@ const calendar = [
       <h2>Financial highlights</h2>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>CHF million</th><th>H1 2028</th><th>FY 2027</th><th>FY 2026</th></tr></thead>
+          <thead><tr><th>CHF million</th>{cols.map(([label, day]) => <th data-date={day}>{label}</th>)}</tr></thead>
           <tbody>
-            <tr><td>Revenue</td><td>603</td><td>1,184</td><td>1,149</td></tr>
-            <tr><td>Core operating profit</td><td>171</td><td>322</td><td>296</td></tr>
-            <tr><td>Net profit</td><td>118</td><td>231</td><td>187</td></tr>
-            <tr><td>Research and development</td><td>162</td><td>318</td><td>301</td></tr>
-            <tr><td>Dividend per share (CHF)</td><td>n/a</td><td>1.10</td><td>1.00</td></tr>
+            {rows.map(([label, ...vals]) => <tr><td>{label}</td>{vals.map((v, i) => <td data-date={cols[i][1]}>{v}</td>)}</tr>)}
           </tbody>
         </table>
       </div>
@@ -63,7 +77,7 @@ const calendar = [
         <h2>Reports and presentations</h2>
         <ul class="list-plain">
           {reports.map((r) => (
-            <li>
+            <li data-date={isoDay(r.data.date)}>
               <span class="tag">{r.data.kind}</span>
               <p style="margin:.5rem 0 0">{r.data.title} <span class="muted small">· {shortDate(r.data.date)}</span></p>
               <p class="small" style="margin:.2rem 0 0"><a href={r.data.file ?? `/docs/${r.id}.pdf`}>Download PDF</a></p>
@@ -74,7 +88,7 @@ const calendar = [
       <div>
         <h2>Financial calendar</h2>
         <table>
-          <tbody>{calendar.map(([d, e]) => <tr><td style="white-space:nowrap">{d}</td><td>{e}</td></tr>)}</tbody>
+          <tbody data-limit="4">{calendar.map(([day, when, what]) => <tr data-until={day} hidden={day < baseDay}><td style="white-space:nowrap">{when}</td><td>{what}</td></tr>)}</tbody>
         </table>
         <h2 style="margin-top:2rem">Share information</h2>
         <table>
@@ -93,7 +107,7 @@ const calendar = [
   <section class="band alt">
     <div class="wrap prose">
       <h2>Governance and general meeting</h2>
-      <p>The 2028 Annual General Meeting was held on 20 April 2028. Our articles of association and corporate governance report are available under <a href="/about/governance/">Governance</a>.</p>
+      <p><span data-date="2028-04-20">The 2028 Annual General Meeting was held on 20 April 2028.</span><span data-until="2028-04-19" hidden>The 2028 Annual General Meeting will be held on 20 April 2028.</span> Our articles of association and corporate governance report are available under <a href="/about/governance/">Governance</a>.</p>
       <h2>Investor alerts</h2>
       <form data-confirm="alert-done" data-ref-prefix="NS-IR" data-log="investor-alert">
         <div class="field"><label for="ir-email">Email address</label><input id="ir-email" name="email" type="email" required autocomplete="email" /></div>

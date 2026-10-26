@@ -12,6 +12,7 @@ const d = p.data;
 const isMedicine = d.kind === 'Medicine';
 ---
 <Base title={d.name} current="/products/" description={d.tagline}>
+  <div data-gate={`${d.approved}-01-01`}>
   <div class="page-head">
     <div class="wrap">
       <div class="crumbs"><a href="/">Home</a> / <a href="/products/">Products</a> / {d.name}</div>
@@ -67,4 +68,5 @@ const isMedicine = d.kind === 'Medicine';
       <noscript><p class="muted small">Enable JavaScript to confirm you are a healthcare professional and view this section.</p></noscript>
     </div>
   </section>
+  </div>
 </Base>

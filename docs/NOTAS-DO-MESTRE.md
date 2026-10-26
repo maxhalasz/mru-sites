@@ -101,6 +101,7 @@ Tudo isto está fora do pitch e é substituível:
 - Documentos do portal e quem assina o quê. O Dr. A. Fenn (Office of Clinical Affairs) vem do pitch; o texto não dá primeiro nome nem gênero.
 - E-mails: NeuroStat em `@neurostat.com` (domínio registrado por terceiros desde 2006, sem serviço de e-mail, então as mensagens não são entregues; escolhido por pedido do Max para ser internacional) e Kelvara em `@kelvara.no` (domínio não registrado, conferi no registro norueguês). Telefones: NeuroStat `+41 44 538 17 00` (sede e informações legais) e `+41 44 538 17 20` (imprensa); Kelvara `+47 51 94 30 00`. Os números são inventados e podem coincidir com números reais que eu não consigo verificar.
 - Passos do estudo BOREAS-2 (20 semanas, desfecho primário na semana 12).
+- Datas para a data compartilhada: início dos estudos (BOREAS-2 em 14/09/2028, NS-AFC-01 em 01/09/2026, NS-091 fase III em 15/03/2027) e as datas do calendário financeiro da NeuroStat (resultados em fevereiro e agosto, terceiro trimestre em novembro, assembleia em abril, de 2027 a 2029).
 
 ## Decisões ainda abertas
 

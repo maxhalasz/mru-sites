@@ -18,7 +18,7 @@ const trials = (await published('trials')).sort((a, b) => a.data.order - b.data.
           <thead><tr><th>Study</th><th>Phase</th><th>Status</th><th>Details</th></tr></thead>
           <tbody>
             {trials.map((t) => (
-              <tr>
+              <tr data-date={t.data.start}>
                 <td><span class="doc-no">{t.data.id}</span><br /><b>{t.data.title}</b></td>
                 <td>{t.data.phase}</td>
                 <td>{t.data.status}</td>

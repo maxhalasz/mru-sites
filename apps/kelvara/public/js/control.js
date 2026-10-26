@@ -109,9 +109,16 @@
     if (el.tagName === 'OPTION') el.disabled = off;
   }
 
-  function today() {
-    return new Date((state.today || c.baseDate || '2028-10-19') + 'T23:59:59Z');
+  // On a developer's own machine the date can also be tried out with ?today=YYYY-MM-DD in the address.
+  var LOCAL_PREVIEW = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  function todayISO() {
+    if (LOCAL_PREVIEW) {
+      var q = (/[?&]today=(\d{4}-\d{2}-\d{2})/.exec(location.search) || [])[1];
+      if (q) return q;
+    }
+    return state.today || c.baseDate || '2028-10-19';
   }
+  function today() { return new Date(todayISO() + 'T23:59:59Z'); }
 
   function words(n, l) {
     var no = ['ingen', 'én', 'to', 'tre', 'fire', 'fem', 'seks', 'sju', 'åtte', 'ni', 'ti'];
@@ -137,35 +144,45 @@
   }
 
   function openCount(list) {
-    var closed = state.jobs || {}, t = today(), n = 0;
+    var closed = state.jobs || {}, n = 0;
     (list || '').split(',').forEach(function (p) {
       var bits = p.split(':');
       if (!bits[0]) return;
-      if (bits[1] && new Date(bits[1] + 'T00:00:00Z') > t) return;
+      if (bits[1] && bits[1] > todayISO()) return;
       if (closed[bits[0]] !== 'closed') n++;
     });
     return n;
   }
 
   function applyDates() {
-    var t = today(), l = lang();
-    nodes('[data-date]').forEach(function (el) { hide(el, 'date', new Date(el.getAttribute('data-date') + 'T00:00:00Z') > t); });
+    var day = todayISO(), l = lang();
+    // data-date="YYYY-MM-DD": shown from that day on. data-until="YYYY-MM-DD": shown up to and including that day.
+    nodes('[data-date]').forEach(function (el) { hide(el, 'date', el.getAttribute('data-date') > day); });
+    nodes('[data-until]').forEach(function (el) { hide(el, 'until', day > el.getAttribute('data-until')); });
     nodes('[data-limit]').forEach(function (box) {
       var max = +box.getAttribute('data-limit'), seen = 0;
       Array.prototype.forEach.call(box.children, function (el) {
-        if (!el.hasAttribute('data-date')) return;
-        if (el._why && el._why.date) { hide(el, 'limit', false); return; }
+        if (!el.hasAttribute('data-date') && !el.hasAttribute('data-until')) return;
+        if (el._why && (el._why.date || el._why.until)) { hide(el, 'limit', false); return; }
         hide(el, 'limit', seen >= max);
         seen++;
       });
     });
+    // A message that appears only when everything in a list is hidden.
+    nodes('[data-empty-for]').forEach(function (msg) {
+      var box = document.getElementById(msg.getAttribute('data-empty-for'));
+      if (!box) return;
+      var shown = Array.prototype.some.call(box.querySelectorAll('[data-date],[data-until]'), function (el) { return !el.hidden; });
+      hide(msg, 'empty', shown);
+    });
     nodes('[data-today]').forEach(function (el) {
       var kind = el.getAttribute('data-today');
-      el.textContent = kind === 'year' ? String(t.getUTCFullYear())
-        : t.toLocaleDateString(l === 'nb' || l === 'no' ? 'nb-NO' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+      var d = new Date(day + 'T12:00:00Z');
+      el.textContent = kind === 'year' ? String(d.getUTCFullYear())
+        : d.toLocaleDateString(l === 'nb' || l === 'no' ? 'nb-NO' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
     });
     nodes('[data-gate]').forEach(function (el) {
-      var gated = new Date(el.getAttribute('data-gate') + 'T00:00:00Z') > t;
+      var gated = el.getAttribute('data-gate') > day;
       if (gated && el._kept === undefined) {
         el._kept = el.innerHTML;
         el.innerHTML = '<div class="wrap"><p class="lead">' + (l === 'nb' || l === 'no' ? 'Denne siden er ikke tilgjengelig.' : 'This page is not available.') + '</p></div>';
@@ -241,6 +258,7 @@
     applyNotice();
     applyDates();
     applyJobs();
+    if (window.siteStock) { try { window.siteStock.apply(todayISO(), c.baseDate || '2028-10-19'); } catch (e) { /* ignore */ } }
   }
 
   // ---- polling --------------------------------------------------------------------------------
@@ -257,6 +275,7 @@
   window.siteControl = {
     state: function () { return state; },
     today: today,
+    todayISO: todayISO,
     loadSeq: function () { return loadSeq; },
     onChange: function (fn) { listeners.push(fn); },
     // Used by the sign-in page, which wants the very latest settings before it decides anything.

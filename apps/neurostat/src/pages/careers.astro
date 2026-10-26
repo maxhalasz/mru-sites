@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import ExtLink from '../components/ExtLink.astro';
-import { published, shortDate } from '../data/util';
+import { published, shortDate, isoDay } from '../data/util';
 const jobs = (await published('jobs')).sort((a, b) => +b.data.date - +a.data.date);
 ---
 <Base title="Careers" current="/careers/" description="Work at NeuroStat: open positions in Zürich and field positions with our partners.">
@@ -33,7 +33,7 @@ const jobs = (await published('jobs')).sort((a, b) => +b.data.date - +a.data.dat
           <thead><tr><th>Position</th><th>Team</th><th>Location</th><th>Posted</th></tr></thead>
           <tbody>
             {jobs.map((j) => (
-              <tr>
+              <tr data-date={isoDay(j.data.date)}>
                 <td><b>{j.data.title}</b><br /><span class="doc-no">{j.data.reference}</span></td>
                 <td>{j.data.team}</td>
                 <td>{j.data.location}</td>

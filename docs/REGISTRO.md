@@ -37,6 +37,21 @@ Uma página só sua, separada dos sites, para ver o que os jogadores mandam e pa
 - Bloquear e esconder valem no navegador do jogador. Quem entende de código consegue contornar. Para a mesa, funciona como um interruptor.
 - Qualquer pessoa pode criar entradas no banco (é assim que os formulários funcionam). Alguém que soubesse como poderia entupir a lista, mas não consegue publicar um aviso válido.
 
+## O que acompanha a data compartilhada
+
+Tudo que tem data nos sites aparece ou some conforme a data definida na aba Data, nos dois sites, em segundos:
+
+- **NeuroStat:** notícias (home e Newsroom), relatórios e apresentações (Investors e Governança), vagas em Zürich, a história da empresa, os produtos (aparecem no ano da aprovação), os estudos clínicos (aparecem quando começam), as colunas de resultados da tabela de Investors (cada uma aparece no dia do relatório) e o calendário financeiro (mostra só o que ainda está por vir, os próximos 4).
+- **Preço da ação:** a cotação, a variação, a data do fechamento e os gráficos são refeitos para a data escolhida, a partir do histórico de preços. Para datas depois de 19 de outubro de 2028 o preço fica no último fechamento que existe.
+- **Frases que mudam de tempo:** por exemplo, "A Assembleia Geral de 2028 foi realizada em 20 de abril de 2028" vira "será realizada" antes dessa data. Na Kelvara, o texto sobre quem é dona da empresa muda no dia da compra (24 de setembro de 2028): antes, Sundvor Partners AS; depois, NeuroStat.
+- **Kelvara:** notícias, vagas, documentos de sustentabilidade, a história da empresa e os links para notícias.
+- **Páginas de detalhe:** abrir diretamente o endereço de uma notícia, produto ou estudo que ainda não existe na data mostra "Esta página não está disponível".
+- **Documentos do portal:** os que têm data depois da data compartilhada ficam escondidos.
+
+Para novas coisas com data, use os atributos `data-date="AAAA-MM-DD"` (aparece a partir desse dia) e `data-until="AAAA-MM-DD"` (aparece até esse dia). Quem abre a página vê as duas formas de uma frase no código-fonte, mas só uma aparece.
+
+Para testar uma data sem mexer no painel, abra o site no seu computador (`npm run dev:neurostat`) e acrescente `?today=2027-03-01` ao endereço. Isso só funciona no computador local.
+
 ## Data e conteúdo para o futuro
 
 - A data compartilhada decide o que aparece: notícias, vagas e documentos do portal com data posterior ficam escondidos, e o ano do rodapé acompanha.

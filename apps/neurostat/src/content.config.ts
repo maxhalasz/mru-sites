@@ -56,6 +56,7 @@ export const collections = {
       phase: z.string(),
       status: z.enum(['Recruiting', 'Active, not recruiting', 'By invitation', 'Completed']),
       site: z.string().optional(),
+      start: z.string().optional(),
       order: z.number().default(0),
       published,
       summary: z.string(),

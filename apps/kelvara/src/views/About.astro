@@ -11,12 +11,12 @@ const people = (await getCollection('leadership', (p) => p.data.published)).sort
 const mgmt = people.filter((p) => p.data.group === 'management');
 const board = people.filter((p) => p.data.group === 'board');
 const slug = (n: string) => n.toLowerCase().replace(/ø/g, 'o').replace(/å/g, 'a').replace(/æ/g, 'ae').replace(/[^a-z]+/g, '-');
-const history: [string, string, string][] = [
-  ['2011', 'Sundvor Partners AS stifter Kelvara for å kjøpe og reaktivere Ødemark A. Selskapet kjøper plattformen samme år.', 'Sundvor Partners AS founds Kelvara to buy and reactivate Ødemark A. The company buys the platform the same year.'],
-  ['2012', 'Produksjonen gjenopptas etter oppgradering av topside.', 'Production resumes after the topside has been upgraded.'],
-  ['2014', 'Ågotnes Væskeanlegg åpner ved forsyningsbasen.', 'Ågotnes Væskeanlegg opens at the supply base.'],
-  ['2027', 'Ødemark A blir studiested i NeuroStats forskning på helse og kognitiv ytelse i offshorearbeid på høy breddegrad.', 'Ødemark A becomes a study site in NeuroStat\'s research on health and cognitive performance in high-latitude offshore work.'],
-  ['2028', 'Havtil samtykker til forlenget levetid for Ødemark A til og med 2038. NeuroStat Holding AG kjøper Kelvara 24. september.', 'Havtil consents to a life extension for Ødemark A through 2038. NeuroStat Holding AG acquires Kelvara on 24 September.'],
+const history: [string, string, string, string][] = [
+  ['2011', 'Sundvor Partners AS stifter Kelvara for å kjøpe og reaktivere Ødemark A. Selskapet kjøper plattformen samme år.', 'Sundvor Partners AS founds Kelvara to buy and reactivate Ødemark A. The company buys the platform the same year.', '2011-01-01'],
+  ['2012', 'Produksjonen gjenopptas etter oppgradering av topside.', 'Production resumes after the topside has been upgraded.', '2012-01-01'],
+  ['2014', 'Ågotnes Væskeanlegg åpner ved forsyningsbasen.', 'Ågotnes Væskeanlegg opens at the supply base.', '2014-01-01'],
+  ['2027', 'Ødemark A blir studiested i NeuroStats forskning på helse og kognitiv ytelse i offshorearbeid på høy breddegrad.', 'Ødemark A becomes a study site in NeuroStat\'s research on health and cognitive performance in high-latitude offshore work.', '2027-01-01'],
+  ['2028', 'Havtil samtykker til forlenget levetid for Ødemark A til og med 2038. NeuroStat Holding AG kjøper Kelvara 24. september.', 'Havtil consents to a life extension for Ødemark A through 2038. NeuroStat Holding AG acquires Kelvara on 24 September.', '2028-09-24'],
 ];
 const values: [string, string, string, string][] = [
   ['Sikkerhet først', 'Safety first', 'Ingen jobb er så viktig eller så hastig at den ikke kan stanses.', 'No job is so important or so urgent that it cannot be stopped.'],
@@ -47,7 +47,7 @@ const values: [string, string, string, string][] = [
     <div class="wrap">
       <h2>{t('Historie', 'History')}</h2>
       <ul class="timeline">
-        {history.map(([y, no, en]) => <li><span class="yr">{y}</span>{t(no, en)}</li>)}
+        {history.map(([y, no, en, day]) => <li data-date={day}><span class="yr">{y}</span>{t(no, en)}</li>)}
       </ul>
     </div>
   </section>
@@ -56,9 +56,10 @@ const values: [string, string, string, string][] = [
     <div class="wrap prose">
       <h2>{t('Eierskap', 'Ownership')}</h2>
       <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-      <p>{t('Siden 24. september 2028 eies Kelvara Petrochemicals AS fullt og helt av NeuroStat Holding AG (SIX: NEUS) i Zürich. Fra 2011 til 2028 var Sundvor Partners AS eier.', 'Since 24 September 2028 Kelvara Petrochemicals AS has been wholly owned by NeuroStat Holding AG (SIX: NEUS) in Zürich. From 2011 to 2028 the owner was Sundvor Partners AS.')}</p>
-      <p>{t('Kelvara fortsetter som selvstendig operatør under eget navn, med samme ledelse og organisasjon som før.', 'Kelvara continues as an independent operator under its own name, with the same management and organisation as before.')}</p>
-      <p><a href={`${paths[lang].news}2028-09-24-neurostat-kjoper-kelvara/`}>{t('Les kunngjøringen', 'Read the announcement')}</a></p>
+      <p data-until="2028-09-23" hidden>{t('Kelvara Petrochemicals AS eies av Sundvor Partners AS, som stiftet selskapet i 2011.', 'Kelvara Petrochemicals AS is owned by Sundvor Partners AS, which founded the company in 2011.')}</p>
+      <p data-date="2028-09-24">{t('Siden 24. september 2028 eies Kelvara Petrochemicals AS fullt og helt av NeuroStat Holding AG (SIX: NEUS) i Zürich. Fra 2011 til 2028 var Sundvor Partners AS eier.', 'Since 24 September 2028 Kelvara Petrochemicals AS has been wholly owned by NeuroStat Holding AG (SIX: NEUS) in Zürich. From 2011 to 2028 the owner was Sundvor Partners AS.')}</p>
+      <p data-date="2028-09-24">{t('Kelvara fortsetter som selvstendig operatør under eget navn, med samme ledelse og organisasjon som før.', 'Kelvara continues as an independent operator under its own name, with the same management and organisation as before.')}</p>
+      <p data-date="2028-09-24"><a href={`${paths[lang].news}2028-09-24-neurostat-kjoper-kelvara/`}>{t('Les kunngjøringen', 'Read the announcement')}</a></p>
     </div>
   </section>
 
