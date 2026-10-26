@@ -81,23 +81,31 @@ Use só Unsplash ou Pexels, com licença que permita uso comercial sem atribuiç
 
 ## Rostos (fornecidos pelo Max)
 
-Onze rostos gerados por IA (StyleGAN2, pessoas que não existem) que o Max mandou em 26/10/2026. Ficam em `public/img/` com o nome do retrato. Cada imagem foi recortada na proporção do espaço (4:5, ou 1:1 no Gunnar), sem a linha de crédito do gerador no canto, e salva sem metadados.
+Rostos gerados por IA (StyleGAN2, pessoas que não existem) que o Max mandou em 26/10/2026, em duas levas. Ficam em `public/img/` com o nome do retrato. Cada imagem foi recortada na proporção do espaço (4:5, ou 1:1 no Del), sem a linha de crédito do gerador no canto, e salva sem metadados.
 
 | Arquivo | Pessoa | Por que este rosto |
 | --- | --- | --- |
 | `neurostat: portrait-alessandro-ferri-lutz.jpg` | Alessandro Ferri-Lutz, CEO | Cinquenta e poucos, cabelo escuro grisalho, terno, olhar de quem fala em público |
-| `neurostat: portrait-thomas-eggenberger.jpg` | Thomas Eggenberger, presidente do conselho | O mais velho e calvo, terno escuro, expressão calma de banqueiro suíço |
+| `neurostat: portrait-rafael-steinmetz.jpg` | Rafael Steinmetz, CFO | Terno, sorriso largo, foto de relatório anual |
 | `neurostat: portrait-felix-haldane.jpg` | Dr. Felix Haldane, CSO | Óculos finos, cabelo cacheado desarrumado, cara de cientista |
-| `neurostat: portrait-adrian-fankhauser.jpg` | Adrian Fankhauser, Head of Digital | O mais jovem do grupo, cabelo escuro curto |
 | `neurostat: portrait-claire-dumont.jpg` | Dr. Claire Dumont, CMO | Mulher de uns quarenta e cinco, cabelo escuro, brincos, sorriso contido |
+| `neurostat: portrait-thomas-eggenberger.jpg` | Thomas Eggenberger, presidente do conselho | O mais velho e calvo, terno escuro, expressão calma de banqueiro suíço |
+| `neurostat: portrait-marc-sutter.jpg` | Marc Sutter, conselho | Cabelo escuro com grisalho nas têmporas, expressão séria |
+| `neurostat: portrait-eva-tanner.jpg` | Dr. Eva Tanner, conselho | Mulher de uns cinquenta e cinco, cabelo castanho-avermelhado, olhar direto |
+| `neurostat: portrait-adrian-fankhauser.jpg` | Adrian Fankhauser, Head of Digital | O mais jovem do grupo, cabelo escuro curto |
+| `neurostat: portrait-oliver-zeller.jpg` | Oliver Zeller, Head of Regulatory Affairs | Fundo branco liso, óculos finos, cara de quem lê normas |
+| `neurostat: portrait-tobias-rutz.jpg` | Dr. Tobias Rutz, Head of Medical Affairs | Cabelo ruivo, óculos, rosto fino |
 | `kelvara: portrett-eirik-sandvold.jpg` | Eirik Sandvold, diretor-presidente | Cabelo ralo grisalho, olhos claros, sorriso aberto, ar nórdico |
-| `kelvara: portrett-sverre-nordtveit.jpg` | Sverre Nordtveit, presidente do conselho | Mais velho, rosto marcado pelo tempo, jaqueta simples |
-| `kelvara: portrett-lars-kvamme.jpg` | Lars Kvamme, diretor de operações | Mais novo, barba por fazer, camiseta polo: gente de operação |
 | `kelvara: portrett-siri-ostrem.jpg` | Siri Østrem, diretora financeira | Loira de olhos azuis, sorriso aberto |
-| `kelvara: portrett-gunnar-mackenzie.jpg` | Gunnar Mackenzie (Karriere) | O mais próximo do canon (cabelo comprido, rosto fino), mas tem barba curta e óculos |
+| `kelvara: portrett-lars-kvamme.jpg` | Lars Kvamme, diretor de operações | Mais novo, barba por fazer, camiseta polo: gente de operação |
+| `kelvara: portrett-marit-fjeldstad.jpg` | Marit Fjeldstad, diretora de HMS | Loira de cabelo ondulado, sorriso caloroso, blusa vermelha |
+| `kelvara: portrett-sverre-nordtveit.jpg` | Sverre Nordtveit, presidente do conselho | Mais velho, rosto marcado pelo tempo, jaqueta simples |
+| `kelvara: portrett-rolf-hetland.jpg` | Rolf Hetland, conselho | Óculos, olhos azuis claros, sorriso discreto |
+| `kelvara: portrett-del-carbone.jpg` | Del Carbone (Karriere) | O mais próximo do canon (barbudo, rosto cheio, bigode), mas usa óculos e a barba é grisalha e aparada |
 
 Sem rosto de propósito: Marcus Holt e Dr. Adriond Fisher.
-Sem rosto por falta de imagem adequada: Dr. Samuel Okonkwo (nenhum dos onze combina), Del Carbone (baixo, pesado, bigode grosso: nenhum combina), Sofie Aune (25 anos: nenhum rosto tão jovem), Rafael Steinmetz, Marc Sutter, Reto Zbinden, Dr. Eva Tanner, Lukas Bachmann, Oliver Zeller, Dr. Tobias Rutz, Marit Fjeldstad, Rolf Hetland, Dag Helgesen, Eli Tveit.
+Sem rosto, esperando foto do Max: Gunnar Mackenzie (ele ainda vai mandar).
+Sem rosto por falta de imagem adequada: Dr. Samuel Okonkwo, Sofie Aune (25 anos, nenhum rosto tão jovem), Lukas Bachmann, Dag Helgesen, Eli Tveit.
 Rosto sobrando: a mulher mais velha de óculos escuros, que não serve para foto de empresa. Dá para usar numa personagem de campanha.
 
 Para trocar um rosto, mantenha o nome do arquivo.

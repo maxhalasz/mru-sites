@@ -51,6 +51,15 @@ Bônus: a busca do site por "Kelvara" devolve essas páginas, e os documentos do
 
 NeuroStat: lista de empresas do grupo (About), logística do estudo (página do BOREAS-2 e comunicado de 14/09), nota em Investors (relatório sob "Other"), Careers (vagas de segurança e logística) e pôster do NS-760. Kelvara: MS Nordvakt "operado pela Aegis Corporation" (Operations e Contact). Portal: escala de standby do Gunnar (contrato Cardume, operado pela Aegis). O link da NeuroStat vai para aegiscorp.net, que não existe.
 
+## Empresas fora da marca (ainda sem site)
+
+Duas empresas de fachada que a NeuroStat usa em lugares remotos, ao lado da Aegis. Nomes escolhidos pelo Max em 26/10/2026, todos internacionais (regra: nada da NeuroStat ou da DRE leva nome em língua local).
+
+- **Hiemal**: opera estações polares (apoio, logística e manutenção). Do latim "invernal".
+- **Eremos**: opera sítios no deserto (a ideia inicial era o Atacama). Do grego "deserto".
+
+Nenhuma aparece nos sites hoje. Se aparecerem na lista de empresas do grupo (About) ou em documentos do portal, usar sempre esses nomes. A Aegis usa o logo que o Max mandou, em `packages/brand/logos/`.
+
 ## Vagas e registro
 
 As três vagas da Kelvara (Roughneck, Driller, Subsea Operator) têm início em **28 de outubro de 2028**; a rotação de inverno da plataforma começa em 1º de novembro. As candidaturas e tudo o que os jogadores mandam (inclusive quem tenta entrar no portal e quais documentos abre) aparecem no console do mestre, dentro do portal de parceiros (veja `REGISTRO.md`).
