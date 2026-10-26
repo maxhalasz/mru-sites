@@ -56,8 +56,48 @@ function frontmatter(path) {
   return YAML.parse(m[1]);
 }
 
-// The game master account also carries what the console needs: the key that reads the activity log, the
-// key that signs site settings, every prop login with its documents, the open positions and the sites.
+// Every portal document is encrypted once with its own key and stored as a static file. A login only
+// needs the keys of the documents it may open, so which documents a login has can change later without
+// rebuilding anything: the panel writes a small encrypted "keyring" per login. The keys live in
+// private/doc-keys.json (never committed) and in the game master package.
+//   document file: "NSD1" | iv (12) | ciphertext | auth tag (16), AES-256-GCM, JSON inside
+function buildLibrary(accountNames) {
+  const keyFile = join(priv, 'doc-keys.json');
+  const store = existsSync(keyFile) ? JSON.parse(readFileSync(keyFile, 'utf8')) : { dirKey: '', docs: {} };
+  if (!store.dirKey) store.dirKey = randomBytes(32).toString('base64');
+  if (!store.docs) store.docs = {};
+  const libDir = join(root, 'apps', 'neurostat', 'public', 'partner', 'lib');
+  mkdirSync(libDir, { recursive: true });
+  const library = [];
+  const seen = new Set();
+  for (const account of accountNames) {
+    const b = loadAccount(account, true);
+    for (const d of b.docs) {
+      const id = account + '--' + d.id;
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const entry = store.docs[id] || (store.docs[id] = { key: randomBytes(32).toString('base64'), sha: '' });
+      const plain = JSON.stringify({ mime: d.file ? d.file.mime : '', filename: d.file ? d.file.filename : '', b64: d.file ? d.file.b64 : '', stamp: d.stamp });
+      const sha = createHash('sha256').update(plain).digest('hex');
+      const path = join(libDir, id + '.enc');
+      if (entry.sha !== sha || !existsSync(path)) {
+        const iv = randomBytes(12);
+        const cipher = createCipheriv('aes-256-gcm', Buffer.from(entry.key, 'base64'), iv);
+        const enc = Buffer.concat([cipher.update(plain, 'utf8'), cipher.final()]);
+        writeFileSync(path, Buffer.concat([Buffer.from('NSD1'), iv, enc, cipher.getAuthTag()]));
+        entry.sha = sha;
+      }
+      library.push({ id, account, title: d.title, number: d.number, date: d.date, folder: d.folder, classification: d.classification,
+        description: d.description, hasFile: !!d.file, key: entry.key });
+    }
+  }
+  writeFileSync(keyFile, JSON.stringify(store, null, 2) + '\n');
+  return { library, dirKey: store.dirKey };
+}
+
+// The game master account also carries what the panel needs: the key that reads the activity log, the
+// key that signs site settings, every prop login with the documents it has, the document library
+// (with keys), the open positions and the sites.
 function adminConfig() {
   const keyFile = join(priv, 'log-keys.json');
   if (!existsSync(keyFile)) fail('private/log-keys.json not found (needed by the game master account)');
@@ -66,18 +106,24 @@ function adminConfig() {
   const fb = existsSync(fbFile) ? JSON.parse(readFileSync(fbFile, 'utf8')) : null;
   if (!fb) console.warn('portal: private/firebase.json is missing, so the console has no data source yet');
   if (!keys.signing) console.warn('portal: private/log-keys.json has no signing key, so site settings cannot be published');
-  const accounts = [];
+
+  const logins = [];
   const propLogins = propsFile || join(priv, 'credentials');
   if (existsSync(propLogins)) {
     for (const raw of readFileSync(propLogins, 'utf8').split(/\r?\n/)) {
       const line = raw.trim();
       if (!line || line.startsWith('#')) continue;
       const [user, pass, account] = line.split('\t');
-      const b = loadAccount(account.trim(), false);
-      accounts.push({ user: user.trim().toLowerCase(), pass, account: account.trim(), name: b.name, role: b.role,
-        docs: b.docs.map((d) => ({ id: d.id, title: d.title, number: d.number, date: d.date, folder: d.folder, classification: d.classification })) });
+      logins.push({ user: user.trim().toLowerCase(), pass, account: account.trim() });
     }
   }
+  const { library, dirKey } = buildLibrary([...new Set(logins.map((l) => l.account))]);
+  const accounts = logins.map((l) => {
+    const b = loadAccount(l.account, false);
+    return { user: l.user, pass: l.pass, account: l.account, name: b.name, role: b.role, welcome: b.welcome, folders: b.folders,
+      docs: b.docs.map((d) => l.account + '--' + d.id) };
+  });
+
   const jobs = [];
   const jobsDir = join(root, 'apps', 'kelvara', 'src', 'content', 'jobs');
   if (existsSync(jobsDir)) {
@@ -88,7 +134,8 @@ function adminConfig() {
   }
   const sites = readdirSync(join(root, 'apps')).filter((d) => existsSync(join(root, 'apps', d, 'public', 'js', 'log-config.js')));
   const baseDate = (readFileSync(join(root, 'apps', 'neurostat', 'public', 'js', 'log-config.js'), 'utf8').match(/baseDate:\s*'([\d-]+)'/) || [])[1] || '';
-  return { projectId: fb ? fb.projectId : '', apiKey: fb ? fb.apiKey : '', privateJwk: keys.privateJwk, signJwk: keys.signing ? keys.signing.privateJwk : null, accounts, jobs, sites, baseDate };
+  return { projectId: fb ? fb.projectId : '', apiKey: fb ? fb.apiKey : '', privateJwk: keys.privateJwk, signJwk: keys.signing ? keys.signing.privateJwk : null,
+    accounts, library, dirKey, jobs, sites, baseDate };
 }
 
 function loadAccount(account, withFiles = true) {

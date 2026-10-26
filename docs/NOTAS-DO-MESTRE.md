@@ -71,7 +71,7 @@ As três vagas da Kelvara (Roughneck, Driller, Subsea Operator) têm início em 
 
 ## Portal "Partner Access"
 
-Entrada pelo link "Partner Access" no rodapé. Logins (também em `private/credentials`):
+Entrada pelo link "Partner Access" no rodapé. Logins de partida (também em `private/credentials`). Depois do primeiro uso do Painel do Mestre, usuários, senhas e documentos de cada login são mudados pelo painel (veja `REGISTRO.md`), e esta tabela fica como registro do começo:
 
 | Conta | Usuário | Senha |
 | --- | --- | --- |

@@ -11,19 +11,27 @@ Uma página só sua, separada dos sites, para ver o que os jogadores mandam e pa
 
 ## Abas
 
+- **Visão geral:** resumo de tudo (mensagens novas, logins, documentos, data do jogo, avisos no ar, vagas) e a atividade recente.
 - **Mensagens:** candidaturas da Kelvara, contato, triagem do BOREAS-2, newsletter, alertas de investidores, entradas no portal e documentos abertos. Busca, CSV, e atualização sozinha a cada 8 segundos. O que chegou desde a sua última visita fica destacado.
-- **Logins:** todos os logins de portal com a senha (mostrar e copiar). Para cada um:
-  - **Bloquear (vale no próximo login):** ele continua dentro se já estiver logado, mas não consegue entrar de novo.
-  - **Bloquear agora (derruba a sessão):** a sessão dele cai em até 5 segundos, com a mensagem de bloqueio.
-  - **Bloquear e recarregar a página dele:** a página dele recarrega em até 5 segundos e volta à tela de login.
-  - **Desbloquear.**
-  - **Aviso:** um texto que aparece no portal quando ele entra.
-  - A mensagem de bloqueio é editável.
-- **Documentos:** esconde ou libera cada documento de cada login, ao vivo, mesmo com o jogador dentro do portal. Documentos com data depois da data compartilhada ficam escondidos sozinhos.
+- **Logins:** um cartão por pessoa, com usuário e senha (mostrar e copiar), quantos documentos ela tem e se está ativa. Dá para:
+  - **Editar:** mudar usuário, senha (tem botão de gerar), nome, função, mensagem de boas-vindas, pastas do portal, o aviso mostrado quando ela entra e a mensagem de bloqueio. Salvar publica na hora, e quem estiver dentro do portal é atualizado em segundos.
+  - **Novo login:** cria uma pessoa nova, que entra no portal assim que você salva.
+  - **Excluir:** tira o login do ar. Quem estiver dentro cai com "This account is no longer available", e o login deixa de funcionar.
+  - **Bloquear:** "vale no próximo login" (quem já está dentro continua), "agora" (derruba a sessão em até 5 segundos) ou "e recarregar a página dela". **Desbloquear** devolve o acesso.
+- **Documentos:** uma grade com todos os documentos nas linhas e todos os logins nas colunas. Marque para dar o documento a alguém, desmarque para tirar. Dá para marcar a linha inteira ("todos") ou a coluna inteira, buscar e filtrar por pasta ou origem. As mudanças ficam destacadas e só valem depois de **Aplicar**. Quem estiver dentro do portal vê a lista mudar em segundos. Documentos com data depois da data compartilhada ficam escondidos sozinhos.
 - **Avisos:** uma faixa no topo de todas as páginas de um site (informativa ou de alerta), ou uma mensagem que cobre a tela inteira. Um aviso por site.
 - **Vagas:** marca uma vaga da Kelvara como preenchida. Ela some da lista, do formulário e do diagrama, e a contagem e os textos ("três vagas") se ajustam.
 - **Data:** a data de hoje no jogo, compartilhada por todos os sites. Tem +1 dia, −1 dia, +1 semana e "voltar ao padrão" (19 de outubro de 2028).
-- **Recarregar todas as páginas** (botão no topo): faz todas as páginas abertas dos sites recarregarem agora.
+- **Recarregar páginas abertas** (botão na lateral): faz todas as páginas abertas dos sites recarregarem agora.
+
+## Como os logins e os documentos funcionam
+
+- Cada documento do portal é um arquivo criptografado com uma chave própria, guardado no site (`/partner/lib/`). Quem não tem a chave não lê nem o título.
+- Cada login recebe um **chaveiro**: um registro pequeno, criptografado com o usuário e a senha dele, que lista os documentos que ele pode abrir e a chave de cada um. Dar ou tirar um documento é reescrever o chaveiro. Mudar a senha também.
+- A lista de logins (usuário, senha, nome, documentos) fica num registro criptografado que só o painel abre. Por isso a senha que você vê no painel é sempre a atual, e vale em qualquer aparelho.
+- O arquivo `private/credentials` só serve de ponto de partida. Depois do primeiro uso do painel, quem manda é o painel: mudanças feitas lá não voltam para esse arquivo (e ele fica velho).
+- Os documentos novos entram na biblioteca assim: ponha o `.md` e o arquivo em `private/portal/<pasta>/`, rode `npm run panel-bundle` e faça o commit de `apps/neurostat/public/partner/lib/` e do pacote do painel. Depois é só dar o documento a quem você quiser, na aba Documentos.
+- Cada login pode ter até uns 25 documentos, e a lista toda comporta uns 25 logins. Passou disso, o painel avisa.
 
 ## Como funciona
 
@@ -78,6 +86,7 @@ Os sites não conseguem apagar nem alterar entradas, só criar. Por isso apagar 
 
 A pasta `private/` existe só neste computador e não vai para o GitHub:
 
+- `doc-keys.json`: as chaves de cada documento da biblioteca e a chave da lista de logins. **Se perder, os documentos já publicados deixam de abrir para todos os logins, e a lista de logins fica ilegível.**
 - `log-keys.json`: a chave que lê as mensagens e a chave que assina os avisos. **Se perder, as mensagens ficam ilegíveis para sempre e o painel não consegue mais publicar.**
 - `credentials.gm`: usuário e senha do mestre.
 - `firebase.json`: projeto e chave pública do Firebase.
