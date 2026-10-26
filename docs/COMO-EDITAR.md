@@ -119,7 +119,7 @@ Depois do lançamento, qualquer jogador pode ver os arquivos e o histórico dos 
 
 ## 12. Ver o que os jogadores enviam
 
-Candidaturas da Kelvara, formulários de contato, respostas do BOREAS-2, inscrições e tentativas de entrar no portal vão para uma planilha do Google que só você vê. A configuração (5 minutos) e o que cada aba guarda estão em [`REGISTRO.md`](REGISTRO.md). Sem essa configuração, nada é salvo.
+Candidaturas da Kelvara, formulários de contato, respostas do BOREAS-2, inscrições e tentativas de entrar no portal aparecem numa tela só sua, dentro do login de parceiros da NeuroStat (conta do mestre). Como abrir, o que cada aba guarda e como apagar entradas de teste estão em [`REGISTRO.md`](REGISTRO.md).
 
 ## Plano B (sem o Pages CMS)
 

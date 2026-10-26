@@ -1,39 +1,53 @@
-# Ver o que os jogadores enviam (registro em planilha)
+# Ver o que os jogadores enviam
 
-Os sites guardam tudo o que os jogadores mandam numa **planilha do Google que só você vê**. Cada tipo de formulário vira uma aba, com uma linha por envio:
+Tudo que os jogadores mandam pelos sites é guardado e aparece numa tela só sua, dentro do login de parceiros da NeuroStat.
 
-| Aba | O que entra |
-| --- | --- |
-| Candidaturas | Vaga escolhida, nome, e-mail, anos offshore, confirmação de certificados, mensagem (site da Kelvara) |
-| Contato | Formulários de contato dos dois sites |
-| BOREAS-2 triagem | Todas as respostas do questionário e o resultado ("May be eligible" ou "May not be") |
-| Newsletter e Alertas investidor | E-mails inscritos |
-| Portal logins | Cada tentativa de entrar no portal: usuário, deu certo ou não, quantas falhas seguidas. **A senha digitada nunca é enviada** |
-| Portal documentos | Qual usuário abriu qual documento |
+## Como abrir
 
-Toda linha traz data e hora, site, protocolo (o número que o jogador viu), página, idioma e navegador. Se o site ganhar um campo novo, a coluna aparece sozinha.
+1. Entre em https://neurostat-group.github.io/partner/
+2. Use o usuário e a senha do mestre. Eles estão no arquivo `private/credentials.gm` deste computador (a primeira coluna é o usuário, a segunda é a senha).
+3. A tela "Game master console" abre sozinha. Ninguém mais vê essa tela: para qualquer outro login o portal mostra só os documentos da conta.
 
-**Enquanto você não fizer a configuração abaixo, nada é salvo.** Os sites mostram o protocolo normalmente, mas os envios se perdem. Faça isso antes de mandar o link para os jogadores.
+Seu próprio login não aparece no registro.
 
-## Configurar (uns 5 minutos, uma vez só)
+## O que aparece
 
-1. Abra https://sheets.google.com e crie uma planilha em branco. Dê o nome "Sites: registro".
-2. No menu da planilha: **Extensões → Apps Script**.
-3. Apague o código que estiver lá e cole o conteúdo inteiro de [`docs/apps-script-registro.gs`](apps-script-registro.gs) (abra o arquivo no GitHub e use "Copy raw file"). Clique em **Salvar**.
-4. Clique em **Implantar → Nova implantação**. Na engrenagem escolha **App da Web** e preencha:
-   - Executar como: **Eu**
-   - Quem pode acessar: **Qualquer pessoa**
-5. Clique em **Implantar**. O Google pede autorização: **Autorizar acesso → escolha sua conta → Avançado → Acessar (não seguro) → Permitir**. O aviso aparece porque o script é seu e não foi revisado pelo Google, é normal.
-6. Copie o **URL do app da Web** (termina em `/exec`).
-7. **Me mande esse URL.** Eu coloco nos dois sites e publico. (Se preferir, cole o endereço entre as aspas em `apps/kelvara/public/js/log-config.js` e em `apps/neurostat/public/js/log-config.js`.)
-8. Teste: abra o site da Kelvara, mande uma candidatura de teste e confira se a linha apareceu na aba "Candidaturas".
+- Abas por tipo: candidaturas da Kelvara, contato (os dois sites), triagem do BOREAS-2, newsletter, alertas para investidores, entradas no portal e documentos abertos.
+- Busca, botão **Download CSV** (abre no Excel) e atualização automática a cada 30 segundos.
+- O que chegou desde sua última visita fica destacado.
+- Senhas digitadas no portal nunca são guardadas. Só o usuário, a data e se deu certo.
 
-## Receber aviso por e-mail
+## Como funciona
 
-No começo do script há a linha `const NOTIFY_EMAIL = '';`. Coloque seu e-mail entre as aspas e você recebe um e-mail a cada nova candidatura. Depois de alterar o script, vá em **Implantar → Gerenciar implantações → lápis → Versão: Nova versão → Implantar**. O endereço continua o mesmo.
+Cada envio é embaralhado no navegador do jogador antes de sair. O que fica no banco do Firebase (projeto `sitesmru`) é texto ilegível. A chave que desfaz isso está dentro do pacote criptografado da sua conta, e só abre com seu login. Quem olhar o código dos sites ou o banco não consegue ler nada.
 
-## Bom saber
+## Apagar as entradas de teste
 
-- O endereço do app não é secreto: qualquer pessoa que o tenha consegue mandar linhas. O site tem um campo-armadilha que descarta robôs, e o script impede que um texto começando com `=` vire fórmula.
-- Os jogadores podem digitar nome e e-mail reais. Use só para a campanha e apague a planilha quando acabar.
-- Para parar de salvar, apague o endereço de `log-config.js` (nos dois sites) e publique.
+Existe uma entrada de teste ("TEST - ignore (setup check)", tipo Contact). Para apagar:
+
+1. Abra o console do Firebase, projeto `sitesmru`, **Firestore Database**.
+2. Clique na coleção `submissions`.
+3. Clique nos três pontinhos ao lado do documento e em **Delete document**.
+
+Os sites não conseguem apagar nem alterar entradas, só criar. Por isso apagar é sempre por aí.
+
+## Guarde estes arquivos
+
+A pasta `private/` existe só neste computador e não vai para o GitHub:
+
+- `log-keys.json`: a chave que lê o registro. **Se perder, as entradas ficam ilegíveis para sempre.**
+- `credentials.gm`: usuário e senha do mestre.
+- `firebase.json`: projeto e chave pública do Firebase.
+
+Faça uma cópia da pasta inteira num pen drive ou na nuvem.
+
+## Mudar a senha do mestre
+
+1. Edite a senha em `private/credentials.gm`.
+2. Rode `npm run gm-bundle` na pasta do projeto.
+3. Faça o commit do arquivo `.bin` que mudou em `apps/neurostat/public/partner/d/` e dê push.
+
+## Se alguma coisa parar de funcionar
+
+- O jogador nunca vê erro de registro. Se o envio falhar (sem internet, por exemplo), o navegador dele guarda a entrada e tenta de novo na próxima visita ao site.
+- As regras do banco estão em `firebase/firestore.rules` (só criar, nunca apagar). Se alguém mexer nelas no console, os envios passam a falhar com erro 403.

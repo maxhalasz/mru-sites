@@ -78,3 +78,26 @@ Use só Unsplash ou Pexels, com licença que permita uso comercial sem atribuiç
 | `kelvara: agotnes-base.jpg` | https://www.pexels.com/photo/industrial-cargo-port-with-crane-at-sunset-36060469/ | ver a página | Licença Pexels | 2026-10-25 |
 | `kelvara: agotnes-vaeskeanlegg.jpg` | https://www.pexels.com/photo/large-industrial-storage-tanks-at-sunset-38672257/ | ver a página | Licença Pexels | 2026-10-25 |
 | `kelvara: mannskap-odemark-a.jpg` | https://www.pexels.com/photo/two-men-in-orange-safety-gear-stand-on-the-deck-of-a-ship-28247164/ | ver a página | Licença Pexels | 2026-10-25 |
+
+## Rostos (fornecidos pelo Max)
+
+Onze rostos gerados por IA (StyleGAN2, pessoas que não existem) que o Max mandou em 26/10/2026. Ficam em `public/img/` com o nome do retrato. Cada imagem foi recortada na proporção do espaço (4:5, ou 1:1 no Gunnar), sem a linha de crédito do gerador no canto, e salva sem metadados.
+
+| Arquivo | Pessoa | Por que este rosto |
+| --- | --- | --- |
+| `neurostat: portrait-alessandro-ferri-lutz.jpg` | Alessandro Ferri-Lutz, CEO | Cinquenta e poucos, cabelo escuro grisalho, terno, olhar de quem fala em público |
+| `neurostat: portrait-thomas-eggenberger.jpg` | Thomas Eggenberger, presidente do conselho | O mais velho e calvo, terno escuro, expressão calma de banqueiro suíço |
+| `neurostat: portrait-felix-haldane.jpg` | Dr. Felix Haldane, CSO | Óculos finos, cabelo cacheado desarrumado, cara de cientista |
+| `neurostat: portrait-adrian-fankhauser.jpg` | Adrian Fankhauser, Head of Digital | O mais jovem do grupo, cabelo escuro curto |
+| `neurostat: portrait-claire-dumont.jpg` | Dr. Claire Dumont, CMO | Mulher de uns quarenta e cinco, cabelo escuro, brincos, sorriso contido |
+| `kelvara: portrett-eirik-sandvold.jpg` | Eirik Sandvold, diretor-presidente | Cabelo ralo grisalho, olhos claros, sorriso aberto, ar nórdico |
+| `kelvara: portrett-sverre-nordtveit.jpg` | Sverre Nordtveit, presidente do conselho | Mais velho, rosto marcado pelo tempo, jaqueta simples |
+| `kelvara: portrett-lars-kvamme.jpg` | Lars Kvamme, diretor de operações | Mais novo, barba por fazer, camiseta polo: gente de operação |
+| `kelvara: portrett-siri-ostrem.jpg` | Siri Østrem, diretora financeira | Loira de olhos azuis, sorriso aberto |
+| `kelvara: portrett-gunnar-mackenzie.jpg` | Gunnar Mackenzie (Karriere) | O mais próximo do canon (cabelo comprido, rosto fino), mas tem barba curta e óculos |
+
+Sem rosto de propósito: Marcus Holt e Dr. Adriond Fisher.
+Sem rosto por falta de imagem adequada: Dr. Samuel Okonkwo (nenhum dos onze combina), Del Carbone (baixo, pesado, bigode grosso: nenhum combina), Sofie Aune (25 anos: nenhum rosto tão jovem), Rafael Steinmetz, Marc Sutter, Reto Zbinden, Dr. Eva Tanner, Lukas Bachmann, Oliver Zeller, Dr. Tobias Rutz, Marit Fjeldstad, Rolf Hetland, Dag Helgesen, Eli Tveit.
+Rosto sobrando: a mulher mais velha de óculos escuros, que não serve para foto de empresa. Dá para usar numa personagem de campanha.
+
+Para trocar um rosto, mantenha o nome do arquivo.
