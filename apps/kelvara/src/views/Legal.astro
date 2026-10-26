@@ -19,7 +19,7 @@ const page: PageKey = kind;
     <div class="wrap prose">
       {kind === 'privacy' && (<>
         <h2>{t('1. Behandlingsansvarlig', '1. Controller')}</h2>
-        <p>{t('Kelvara Petrochemicals AS, org.nr. 921 447 306 MVA, Postboks 2217 Sentrum, N-4001 Stavanger, er behandlingsansvarlig for personopplysninger på dette nettstedet. Du kan kontakte oss på personvern@kelvara.example.', 'Kelvara Petrochemicals AS, org. no. 921 447 306 MVA, Postboks 2217 Sentrum, N-4001 Stavanger, is the controller for personal data on this website. You can contact us at personvern@kelvara.example.')}</p>
+        <p>{t('Kelvara Petrochemicals AS, org.nr. 921 447 306 MVA, Postboks 2217 Sentrum, N-4001 Stavanger, er behandlingsansvarlig for personopplysninger på dette nettstedet. Du kan kontakte oss på personvern@kelvara.no.', 'Kelvara Petrochemicals AS, org. no. 921 447 306 MVA, Postboks 2217 Sentrum, N-4001 Stavanger, is the controller for personal data on this website. You can contact us at personvern@kelvara.no.')}</p>
         <h2>{t('2. Hva vi behandler', '2. What we process')}</h2>
         <p>{t('Når du besøker nettstedet, registrerer driftsleverandøren vår tekniske data som IP-adresse, tidspunkt og hvilken side du åpnet. Vi bruker dem til å levere og sikre nettstedet. Når du sender oss en melding eller fyller ut et skjema, behandler vi det du oppgir for å svare deg.', 'When you visit the site, our hosting provider records technical data such as your IP address, the time and the page you opened. We use it to deliver and secure the site. When you send us a message or fill in a form, we process what you provide so that we can reply.')}</p>
         <h2>{t('3. Rettslig grunnlag og lagring', '3. Legal basis and retention')}</h2>
@@ -35,7 +35,7 @@ const page: PageKey = kind;
       </>)}
       {kind === 'transparency' && (<>
         <p>{t('Etter åpenhetsloven har enhver rett til å be om opplysninger om hvordan Kelvara håndterer faktiske og potensielle negative konsekvenser for grunnleggende menneskerettigheter og anstendige arbeidsforhold. Vi svarer skriftlig og innen rimelig tid, senest etter tre uker.', 'Under the Norwegian Transparency Act, anyone has the right to request information on how Kelvara handles actual and potential adverse impacts on fundamental human rights and decent working conditions. We reply in writing and within a reasonable time, no later than three weeks.')}</p>
-        <p>{t('Send forespørselen til ', 'Send your request to ')}<a href="mailto:apenhet@kelvara.example">apenhet@kelvara.example</a>{t(', og oppgi hvilken informasjon du ønsker.', ', stating which information you want.')}</p>
+        <p>{t('Send forespørselen til ', 'Send your request to ')}<a href="mailto:apenhet@kelvara.no">apenhet@kelvara.no</a>{t(', og oppgi hvilken informasjon du ønsker.', ', stating which information you want.')}</p>
         <p><a href={paths[lang].sustainability + '#apenhetsloven'}>{t('Se vår redegjørelse', 'See our statement')}</a></p>
       </>)}
     </div>

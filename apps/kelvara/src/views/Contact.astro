@@ -6,9 +6,9 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = (no: string, en: string) => (lang === 'no' ? no : en);
 const contacts: [string, string, string][] = [
-  ['C. Vance', t('Logistikkoordinator', 'Logistics Coordinator'), 'logistikk@kelvara.example'],
-  ['M. Krog', t('HMS', 'HSE'), 'hms@kelvara.example'],
-  [t('Kpt. H. Sæther', 'Capt. H. Sæther'), t('Skipsfører, MS Nordvakt (Aegis Corporation)', 'Master, MS Nordvakt (Aegis Corporation)'), 'nordvakt@kelvara.example'],
+  ['C. Vance', t('Logistikkoordinator', 'Logistics Coordinator'), 'logistikk@kelvara.no'],
+  ['M. Krog', t('HMS', 'HSE'), 'hms@kelvara.no'],
+  [t('Kpt. H. Sæther', 'Capt. H. Sæther'), t('Skipsfører, MS Nordvakt (Aegis Corporation)', 'Master, MS Nordvakt (Aegis Corporation)'), 'nordvakt@kelvara.no'],
 ];
 ---
 <Base lang={lang} page="contact" title={label[lang].contact}>
@@ -26,7 +26,7 @@ const contacts: [string, string, string][] = [
         <h2>{t('Adresser', 'Addresses')}</h2>
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
         <p><b>{ui[lang].postal}</b><br />Kelvara Petrochemicals AS<br />Postboks 2217 Sentrum<br />N-4001 Stavanger</p>
-        <p><b>{ui[lang].visit}</b><br />Strandkaien 41<br />4005 Stavanger<br />+47 00 000 000</p>
+        <p><b>{ui[lang].visit}</b><br />Strandkaien 41<br />4005 Stavanger<br />+47 51 94 30 00</p>
         <p><b>{t('Forsyningsbase og Ågotnes Væskeanlegg', 'Supply base and Ågotnes Væskeanlegg')}</b><br />Kollsnesveien 8<br />5363 Ågotnes</p>
         <p class="doc-no">{ui[lang].orgnr} 921 447 306 MVA</p>
 
@@ -38,7 +38,7 @@ const contacts: [string, string, string][] = [
             </tbody>
           </table>
         </div>
-        <p class="small muted" style="margin-top:1rem">{t('Pressehenvendelser: ', 'Press enquiries: ')}<a href="mailto:presse@kelvara.example">presse@kelvara.example</a></p>
+        <p class="small muted" style="margin-top:1rem">{t('Pressehenvendelser: ', 'Press enquiries: ')}<a href="mailto:presse@kelvara.no">presse@kelvara.no</a></p>
       </div>
 
       <div>

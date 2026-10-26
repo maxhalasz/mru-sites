@@ -99,7 +99,7 @@ Tudo isto está fora do pitch e é substituível:
 - Estudo `NS091-301` (Fase III do NS-091), estudo militar `NS-AFC-01`.
 - Notícias da NeuroStat e da Kelvara (temas, datas e citações), vagas, depoimentos traduzidos para o norueguês, números de segurança (TRIF 3,1) e emissões da Kelvara.
 - Documentos do portal e quem assina o quê. O Dr. A. Fenn (Office of Clinical Affairs) vem do pitch; o texto não dá primeiro nome nem gênero.
-- E-mails `@neurostat.example` e `@kelvara.example`, telefones `+41 00 000 00 00` e `+47 00 000 000`.
+- E-mails em `@neurostat.ch` e `@kelvara.no` (domínios que não estão registrados, conferi nos registros suíço e norueguês, então as mensagens não chegam a ninguém). Telefones: NeuroStat `+41 44 538 17 00` (sede e informações legais) e `+41 44 538 17 20` (imprensa); Kelvara `+47 51 94 30 00`. Os números são inventados e podem coincidir com números reais que eu não consigo verificar.
 - Passos do estudo BOREAS-2 (20 semanas, desfecho primário na semana 12).
 
 ## Decisões ainda abertas
