@@ -4,7 +4,7 @@ Uma página só sua, separada dos sites, para ver o que os jogadores mandam e pa
 
 - **Endereço:** https://maxhalasz.github.io/mru-sites/
 - **Como abrir:** a página é uma tela preta, sem nada escrito. É só digitar `halasz` (não aparece nada na tela) e o painel abre. O botão "Trancar" volta para a tela preta.
-- **Primeira vez em cada aparelho:** abra o endereço com o segredo no fim: `https://maxhalasz.github.io/mru-sites/#SEGREDO`. O segredo é a segunda coluna de `private/credentials.panel`. O navegador lembra dele, tira da barra de endereço, e nas próximas vezes basta o endereço simples e digitar `halasz`.
+- **Primeira vez em cada aparelho:** abra o endereço com o segredo no fim: `https://maxhalasz.github.io/mru-sites/#SEGREDO`. Para pegar esse endereço pronto, rode `npm run panel-link` na pasta do projeto: ele copia o link completo para a área de transferência, sem mostrar o segredo (o segredo é a segunda coluna de `private/credentials.panel`). O navegador lembra dele, tira da barra de endereço, e nas próximas vezes basta o endereço simples e digitar `halasz`.
 - **Por que existe o segredo:** "halasz" sozinho seria fácil de adivinhar (está até no endereço). Quem acertasse leria as mensagens dos jogadores e poderia publicar avisos. O segredo longo é o que de fato protege o pacote com as chaves.
 - A página é pública, mas sem o segredo ela fica preta para sempre. Os sites nunca citam esse endereço.
 
