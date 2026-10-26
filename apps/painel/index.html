@@ -11,7 +11,10 @@
   <link rel="stylesheet" href="painel.css" />
 </head>
 <body class="locked">
-  <div id="stage"><input id="keys" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="." /></div>
+  <div id="stage"><input id="keys" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="." />
+    <div id="busy" hidden></div>
+    <input id="keyask" type="password" hidden autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="." />
+  </div>
 
   <main id="app">
     <section id="panel-view" hidden>

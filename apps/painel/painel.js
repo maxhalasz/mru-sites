@@ -10,7 +10,8 @@
   var KEY_STORE = 'painel_k';
   var SEEN_KEY = 'painel_seen';
   // Only used to skip pointless work: the typed word is checked here before the slow decryption starts.
-  var PHRASE_HASH = 'f38bee3511dcdfaf4443f2e6a274719201e1ca5b86af79f715272c4c7e611d6c';
+  var PHRASE_HASH = '85d800049636a686c8a502c08760c93e482d02ae87639a7a7103f46e53ab41a2';
+  var WORD_LEN = 8;
   var enc = new TextEncoder();
 
   var S = { cfg: null, bundle: null, ctl: { v: 1, seq: 0 }, maxId: 0, priv: null, signKey: null, verifyKey: null,
@@ -84,38 +85,89 @@
 
   var typed = '';
   var unlocking = false;
+  var pendingWord = '';
 
   function sha256hex(text) { return crypto.subtle.digest('SHA-256', enc.encode(text)).then(hex); }
+  function show(id, on) { $(id).hidden = !on; }
   function lockScreen(on) {
     document.body.classList.toggle('locked', on);
     $('stage').hidden = !on;
     $('panel-view').hidden = on;
     document.title = on ? 'Nova guia' : 'Painel do Mestre';
-    if (on) { var k = $('keys'); k.value = ''; k.focus(); }
+    if (on) { show('busy', false); show('keyask', false); var k = $('keys'); k.value = ''; k.focus(); }
+  }
+  async function tryOpen(word, secret) {
+    try { var b = await openPackage(word, secret); return b && b.admin ? b : null; } catch (e) { return null; }
+  }
+  function readSecret() {
+    try { var h = decodeURIComponent(location.hash.slice(1)); if (h) return h; } catch (e) { /* ignore */ }
+    try { return localStorage.getItem(KEY_STORE) || ''; } catch (e) { return ''; }
+  }
+  async function finish(secret, bundle) {
+    try { localStorage.setItem(KEY_STORE, secret); } catch (e) { /* ignore */ }
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    typed = '';
+    await start(bundle);
+  }
+  // The word was right but the secret is missing or wrong: ask for it on the same black screen.
+  function askKey() {
+    var k = $('keyask');
+    k.value = ''; k.disabled = false; k.classList.remove('bad'); k.hidden = false; k.focus();
+  }
+  async function submitKey() {
+    var k = $('keyask'), raw = k.value.trim();
+    if (!raw || !pendingWord || unlocking) return;
+    var secret = raw.indexOf('#') >= 0 ? raw.slice(raw.indexOf('#') + 1) : raw;
+    try { secret = decodeURIComponent(secret); } catch (e) { /* keep as typed */ }
+    unlocking = true; k.disabled = true; show('busy', true);
+    var bundle = await tryOpen(pendingWord, secret);
+    show('busy', false); k.disabled = false;
+    if (bundle) {
+      k.hidden = true;
+      try { await finish(secret, bundle); } catch (e) { askKey(); } finally { unlocking = false; }
+      return;
+    }
+    unlocking = false;
+    k.classList.add('bad');
+    setTimeout(function () { k.hidden = true; $('keys').focus(); }, 900);
   }
   async function check() {
-    if (unlocking || typed.length < 6) return;
-    var word = typed.slice(-6).toLowerCase();
+    if (unlocking || typed.length < WORD_LEN) return;
+    var word = typed.slice(-WORD_LEN).toLowerCase();
     if ((await sha256hex('painel:' + word)) !== PHRASE_HASH) return;
-    var secret = decodeURIComponent(location.hash.slice(1)) || '';
-    if (!secret) { try { secret = localStorage.getItem(KEY_STORE) || ''; } catch (e) { secret = ''; } }
-    if (!secret) return;
-    unlocking = true;
+    typed = ''; pendingWord = word; unlocking = true;
+    var opened = false;
     try {
-      var bundle = await openPackage(word, secret);
-      if (!bundle || !bundle.admin) return;
-      try { localStorage.setItem(KEY_STORE, secret); } catch (e) { /* ignore */ }
-      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-      typed = '';
-      await start(bundle);
-    } catch (e) { /* stay black */ } finally { unlocking = false; }
+      var secret = readSecret();
+      if (secret) {
+        show('busy', true);
+        var bundle = await tryOpen(word, secret);
+        if (bundle) { opened = true; await finish(secret, bundle); return; }
+        try { localStorage.removeItem(KEY_STORE); } catch (e) { /* ignore */ }
+      }
+    } catch (e) { /* fall through to the key prompt */ } finally { show('busy', false); unlocking = false; }
+    if (!opened || document.body.classList.contains('locked')) askKey();
   }
+
   $('keys').addEventListener('input', function (ev) {
     typed = (typed + (ev.target.value || '')).slice(-32);
     ev.target.value = '';
     check();
   });
-  document.addEventListener('click', function () { if (!$('stage').hidden) $('keys').focus(); });
+  $('keyask').addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); submitKey(); } });
+  $('keyask').addEventListener('input', function () { if ($('keyask').value.length > 40) setTimeout(submitKey, 250); });
+  // Typing works even if the page was not clicked first: the first letter moves the focus to the hidden field.
+  document.addEventListener('keydown', function (ev) {
+    if ($('stage').hidden || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    var id = ev.target && ev.target.id;
+    if (id === 'keys' || id === 'keyask') return;
+    if (ev.key && ev.key.length === 1) { var ask = $('keyask'); (ask.hidden ? $('keys') : ask).focus(); }
+  });
+  document.addEventListener('click', function () {
+    if ($('stage').hidden) return;
+    var ask = $('keyask');
+    (ask.hidden ? $('keys') : ask).focus();
+  });
   $('keys').focus();
 
   // ---- the service (Firestore REST) -----------------------------------------------------------

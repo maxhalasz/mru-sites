@@ -3,9 +3,10 @@
 Uma página só sua, separada dos sites, para ver o que os jogadores mandam e para mexer nos sites durante a campanha.
 
 - **Endereço:** https://maxhalasz.github.io/mru-sites/
-- **Como abrir:** a página é uma tela preta, sem nada escrito. É só digitar `halasz` (não aparece nada na tela) e o painel abre. O botão "Trancar" volta para a tela preta.
-- **Primeira vez em cada aparelho:** abra o endereço com o segredo no fim: `https://maxhalasz.github.io/mru-sites/#SEGREDO`. Para pegar esse endereço pronto, rode `npm run panel-link` na pasta do projeto: ele copia o link completo para a área de transferência, sem mostrar o segredo (o segredo é a segunda coluna de `private/credentials.panel`). O navegador lembra dele, tira da barra de endereço, e nas próximas vezes basta o endereço simples e digitar `halasz`.
-- **Por que existe o segredo:** "halasz" sozinho seria fácil de adivinhar (está até no endereço). Quem acertasse leria as mensagens dos jogadores e poderia publicar avisos. O segredo longo é o que de fato protege o pacote com as chaves.
+- **Como abrir:** a página é uma tela preta, sem nada escrito. É só digitar `nyarlath` (não aparece nada na tela) e o painel abre. Não precisa clicar antes. Leva uns segundos para abrir, e um pontinho apagado pulsa no meio da tela enquanto isso. O botão "Trancar" volta para a tela preta.
+- **Primeira vez em cada aparelho:** abra o endereço com o segredo no fim: `https://maxhalasz.github.io/mru-sites/#SEGREDO`. Para pegar esse endereço pronto, rode `npm run panel-link` na pasta do projeto: ele copia o link completo para a área de transferência, sem mostrar o segredo (o segredo é a segunda coluna de `private/credentials.panel`). O navegador lembra dele, tira da barra de endereço, e nas próximas vezes basta o endereço simples e digitar `nyarlath`.
+- **Se esquecer o link:** abra o endereço simples e digite `nyarlath`. Se o navegador não conhece o segredo, aparece só uma linha apagada no meio da tela. Cole ali o link completo (ou só o segredo) e dê Enter. Se o segredo estiver errado, a linha some e a tela volta ao preto.
+- **Por que existe o segredo:** A palavra sozinha seria fácil de adivinhar. Quem acertasse leria as mensagens dos jogadores e poderia publicar avisos. O segredo longo é o que de fato protege o pacote com as chaves.
 - A página é pública, mas sem o segredo ela fica preta para sempre. Os sites nunca citam esse endereço.
 
 ## Abas
@@ -72,7 +73,7 @@ Faça uma cópia da pasta inteira num pen drive ou na nuvem.
 
 O painel guarda dentro do pacote criptografado a lista de logins de portal, os documentos de cada um, as vagas e os sites. Sempre que mudar algum desses, rode `npm run panel-bundle` e faça o commit do arquivo `.bin` em `apps/painel/p/`.
 
-Para trocar o segredo ou a palavra, edite `private/credentials.panel` (palavra, segredo e `gm`, separados por tab). Se trocar a palavra, avise para eu atualizar a conferência dela na página.
+Para trocar o segredo ou a palavra, edite `private/credentials.panel` (palavra, segredo e `gm`, separados por tab). Se trocar a palavra, avise para eu atualizar a conferência dela na página (`PHRASE_HASH` em `apps/painel/painel.js`).
 
 ## Mudar a senha do mestre (tela de leitura do portal)
 
