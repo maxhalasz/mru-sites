@@ -87,7 +87,7 @@ Documentos que estão lá (todos corporativos e secos, no modelo padrão de form
 - Callum: plano de integração pós-compra, revisão de pessoal do inverno, metas e corte de custo (com a ordem de manter a produção), alocação do programa Legacy Sites (NOETIC e Cinza).
 - Dr. Fossum: sinopse do protocolo, termo de consentimento, registro de dispensação (só C.V.), troca de mensagens com o Dr. A. Fenn, relatório de adesão ao Baseline, e a pasta "Monthly assessments" vazia para você preencher.
 
-Regra: todo documento precisa ter um propósito único na história. Rascunhos de mais 35 documentos (rotina de plataforma e uma biblioteca da empresa para todos os logins) estão guardados como "não publicados" em `private/portal/` e fora do painel, esperando você dizer quais servem. Veja `tools/portal-docs/held.txt`.
+Regra: todo documento precisa ter um propósito único na história. Os rascunhos de rotina e a biblioteca da empresa (33 documentos) estão na aba Documentos do painel, sem ninguém marcado, e você entrega só o que servir. Documentos novos você escreve no Editor do painel. Veja `tools/portal-docs/held.txt`.
 
 ## O que eu inventei (pode trocar)
 

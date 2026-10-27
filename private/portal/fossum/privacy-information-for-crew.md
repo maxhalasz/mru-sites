@@ -7,5 +7,6 @@ stamp: "STUDY CONFIDENTIAL"
 description: "What data BOREAS-2 collects, who sees it and for how long. Referred to in the consent form."
 file: "files/privacy-information-for-crew.pdf"
 folder: "Study documents"
-published: false
+published: true
+assign: false
 ---

@@ -7,5 +7,6 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "Annual leave, sickness, family leave and other absence."
 file: "files/leave-and-absence-policy.pdf"
 folder: "Company library / Policies"
-published: false
+published: true
+assign: false
 ---

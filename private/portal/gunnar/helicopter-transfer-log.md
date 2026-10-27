@@ -7,5 +7,6 @@ stamp: "CONTROLLED COPY"
 description: "Blank log for helicopter transfers during the winter period."
 file: "files/helicopter-transfer-log.pdf"
 folder: "Installation management"
-published: false
+published: true
+assign: false
 ---

@@ -16,7 +16,7 @@
   var enc = new TextEncoder();
 
   var S = { cfg: null, ctl: { v: 1, seq: 0 }, maxId: 0, priv: null, signKey: null, verifyKey: null, dirKey: null,
-    dir: { seq: 0, logins: [] }, lib: {}, entries: [], newest: '', prevSeen: '', tab: 'visao', type: 'all', q: '', open: {},
+    dir: { seq: 0, logins: [] }, lib: {}, panelDocs: [], libSeq: 0, entries: [], newest: '', prevSeen: '', tab: 'visao', type: 'all', q: '', open: {},
     pend: {}, docQ: '', docFilter: 'all', reveal: {}, menu: '', timers: [] };
 
   var TYPES = [['all', 'Todas'], ['application', 'Candidaturas'], ['contact', 'Contato'], ['boreas-screening', 'Triagem BOREAS-2'],
@@ -29,10 +29,11 @@
     logins: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/>',
     documentos: '<path d="M6 3h8l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v4h4M8.5 12h7M8.5 16h7"/>',
     avisos: '<path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/>',
+    editor: '<path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17z"/><path d="M14.5 7.5l3 3"/>',
     vagas: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/>',
     data: '<rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 3v3M16 3v3"/>',
   };
-  var TABS = [['visao', 'Visão geral'], ['mensagens', 'Mensagens'], ['logins', 'Logins'], ['documentos', 'Documentos'], ['avisos', 'Avisos'], ['vagas', 'Vagas'], ['data', 'Data']];
+  var TABS = [['visao', 'Visão geral'], ['mensagens', 'Mensagens'], ['logins', 'Logins'], ['documentos', 'Documentos'], ['editor', 'Editor'], ['avisos', 'Avisos'], ['vagas', 'Vagas'], ['data', 'Data']];
   var W1 = ['Fjord', 'Cobalt', 'Lantern', 'Harbor', 'Granite', 'Meridian', 'Quartz', 'Falcon', 'Ember', 'Tundra', 'Marble', 'Copper', 'Willow', 'Anchor', 'Saffron', 'Juniper'];
   var W2 = ['Signal', 'Ledger', 'Compass', 'Beacon', 'Vessel', 'Ridge', 'Orbit', 'Cipher', 'Harvest', 'Summit', 'Relay', 'Atlas', 'Tether', 'Kiln', 'Prism', 'Vector'];
 
@@ -286,7 +287,8 @@
 
   // ---- logins: the directory and the keyrings ---------------------------------------------------
 
-  function sigOf(L) { return JSON.stringify([L.user, L.pass, L.name, L.role, L.welcome, L.folders, (L.docs || []).slice().sort()]); }
+  function metaOf(id) { var d = S.lib[id]; return d ? [d.title, d.number, d.date, d.classification, d.folder, d.description].join('|') : ''; }
+  function sigOf(L) { return JSON.stringify([L.user, L.pass, L.name, L.role, L.welcome, L.folders, (L.docs || []).slice().sort(), (L.docs || []).slice().sort().map(metaOf)]); }
   function plainLogin(L) { return { key: L.key, user: L.user, pass: L.pass, name: L.name, role: L.role, welcome: L.welcome || '', folders: L.folders || [], docs: L.docs || [], ver: L.ver || 0, sig: L.sig || '' }; }
 
   async function decryptDir(doc) {
@@ -322,7 +324,7 @@
     var ring = { v: 1, name: L.name, role: L.role, welcome: L.welcome || '', folders: L.folders || [],
       docs: (L.docs || []).filter(function (id) { return S.lib[id]; }).map(function (id) {
         var d = S.lib[id];
-        return { id: d.id, folder: d.folder || '', title: d.title, number: d.number, date: d.date, classification: d.classification, description: d.description || '', lib: d.id, key: d.key };
+        return { id: d.id, folder: d.folder || '', title: d.title, number: d.number, date: d.date, classification: d.classification, description: d.description || '', lib: d.fs ? '' : d.id, fs: d.fs ? d.id : undefined, key: d.key };
       }) };
     var salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
     var base = await crypto.subtle.importKey('raw', enc.encode(L.user + '\n' + L.pass), 'PBKDF2', false, ['deriveKey']);
@@ -710,6 +712,7 @@
       tr.appendChild(h('th', { scope: 'row' }, h('span', { class: 'doc-t', text: d.title }),
         h('span', { class: 'doc-m' }, h('span', { class: 'mono', text: d.number }), h('span', { text: longDate(d.date) }), h('span', { class: 'chip plain', text: d.classification }),
           d.folder ? h('span', { class: 'chip plain', text: d.folder }) : null, h('span', { class: 'chip plain', text: 'origem ' + d.account }),
+          h('button', { class: 'btn ghost small', type: 'button', onclick: function () { if (d.fs) viewPanelDoc(d); else viewStatic(d); } }, 'ver'),
           h('label', { style: 'display:inline-flex;gap:.35rem;align-items:center;cursor:pointer' }, rowBox, 'todos'))));
       logins.forEach(function (L) {
         var has = (L.docs || []).indexOf(d.id) >= 0, now = wanted(L).indexOf(d.id) >= 0;
@@ -905,6 +908,416 @@
     return wrap;
   }
 
+  // ---- documents written in the panel -----------------------------------------------------------------
+  // A document is encrypted with a key of its own. The ciphertext is cut into pieces of up to 36,000 characters
+  // (the record limit), the pieces are written first ("dp-<id>-<version>-<n>") and then a small encrypted
+  // manifest ("dm-<id>-<version>"). Editing writes a newer version; the portal always reads the newest manifest
+  // that opens with the key. The list of these documents, with their keys, is an encrypted record of its own
+  // ("lib-<n>") that only the panel can read. The keyrings of the logins list the documents each one may open.
+  var DOC_CHUNK = 36000;
+  var SITE = 'https://neurostat-group.github.io';
+  var CLASSES = ['Internal', 'Internal, installation managers', 'Internal, management', 'Confidential, installation managers', 'Confidential, management', 'Study confidential'];
+  var STAMPS = ['INTERNAL USE · LEVEL N2', 'INTERNAL USE · LEVEL N3', 'CONFIDENTIAL · LEVEL N4', 'STUDY CONFIDENTIAL', 'CONTROLLED COPY'];
+
+  function newDocId() { return 'x' + hex(crypto.getRandomValues(new Uint8Array(5))); }
+  function newDocKey() { return b64(crypto.getRandomValues(new Uint8Array(32))); }
+  function aes(keyB64, use) { return crypto.subtle.importKey('raw', unb64(keyB64), 'AES-GCM', false, use); }
+  function two(n) { return ('0' + n).slice(-2); }
+
+  async function putDocContent(id, keyB64, payload, kind, ver0) {
+    var key = await aes(keyB64, ['encrypt']);
+    var ivP = crypto.getRandomValues(new Uint8Array(12));
+    var ct = b64(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: ivP }, key, enc.encode(JSON.stringify(payload))));
+    var parts = [];
+    for (var i = 0; i < ct.length; i += DOC_CHUNK) parts.push(ct.slice(i, i + DOC_CHUNK));
+    if (parts.length > 99) throw new Error('O documento é grande demais (' + Math.round(ct.length * 0.75 / 1024) + ' KB). O limite é cerca de 2,5 MB.');
+    var ivM = crypto.getRandomValues(new Uint8Array(12));
+    var manifest = b64(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: ivM }, key, enc.encode(JSON.stringify({ n: parts.length, iv: b64(ivP), kind: kind }))));
+    var now = new Date().toISOString();
+    for (var tries = 0, ver = ver0; tries < 6; tries++, ver++) {
+      var clash = false;
+      for (var p = 0; p < parts.length && !clash; p++) {
+        if (!(await createDoc('dp-' + id + '-' + inv(ver) + '-' + two(p), { t: now, k: 'dp1', iv: '-', c: parts[p] }))) clash = true;
+      }
+      if (clash) continue;
+      if (await createDoc('dm-' + id + '-' + inv(ver), { t: now, k: 'dm1', iv: b64(ivM), c: manifest })) return ver;
+    }
+    throw new Error('Não consegui publicar o documento.');
+  }
+  async function putTombstone(id, keyB64, ver0) {
+    var key = await aes(keyB64, ['encrypt']);
+    var ivM = crypto.getRandomValues(new Uint8Array(12));
+    var man = b64(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: ivM }, key, enc.encode(JSON.stringify({ gone: 1 }))));
+    for (var tries = 0, ver = ver0; tries < 6; tries++, ver++) {
+      if (await createDoc('dm-' + id + '-' + inv(ver), { t: new Date().toISOString(), k: 'dm1', iv: b64(ivM), c: man })) return ver;
+    }
+    throw new Error('Não consegui apagar o documento.');
+  }
+  // Reads a document written in the panel (the same steps the portal takes).
+  async function readPanelDoc(entry) {
+    var key = await aes(entry.key, ['decrypt']);
+    var mine = (await rangeQuery('dm-' + entry.id, 8).catch(function () { return []; })).filter(function (r) { return r.document; });
+    for (var i = 0; i < mine.length; i++) {
+      var f = mine[i].document.fields;
+      try {
+        var man = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(f.iv.stringValue) }, key, unb64(f.c.stringValue))));
+        if (man.gone) return null;
+        var invStr = mine[i].document.name.split('/').pop().split('-')[2];
+        var pieces = [];
+        for (var p = 0; p < man.n; p++) {
+          var res = await fetch(api('/submissions/dp-' + entry.id + '-' + invStr + '-' + two(p)) + '?' + keyQ());
+          if (!res.ok) throw new Error('missing part');
+          pieces.push((await res.json()).fields.c.stringValue);
+        }
+        return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(man.iv) }, key, unb64(pieces.join('')))));
+      } catch (e) { /* try the next older manifest */ }
+    }
+    return null;
+  }
+
+  async function decryptLib(doc) {
+    var f = doc.fields || {};
+    try {
+      var plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(f.iv.stringValue) }, S.dirKey, unb64(f.c.stringValue));
+      var o = JSON.parse(new TextDecoder().decode(plain));
+      return o && Array.isArray(o.docs) ? o : null;
+    } catch (e) { return null; }
+  }
+  async function loadLibIndex() {
+    var rows = await rangeQuery('lib', 6), found = null;
+    for (var i = 0; i < rows.length && !found; i++) {
+      if (!rows[i].document) continue;
+      var o = await decryptLib(rows[i].document);
+      if (o) { o.seq = seqOf(rows[i].document.name.split('/').pop()); found = o; }
+    }
+    S.panelDocs = found ? found.docs : [];
+    S.libSeq = found ? found.seq : 0;
+    mergePanelDocs();
+  }
+  function mergePanelDocs() {
+    Object.keys(S.lib).forEach(function (k) { if (S.lib[k].fs) delete S.lib[k]; });
+    (S.panelDocs || []).forEach(function (d) { if (!d.gone) S.lib[d.id] = Object.assign({}, d, { account: 'painel', fs: true }); });
+  }
+  async function putLibIndex(docs) {
+    var seq = (S.libSeq || 0) + 1;
+    for (var tries = 0; tries < 6; tries++, seq++) {
+      var iv = crypto.getRandomValues(new Uint8Array(12));
+      var body = { v: 1, seq: seq, t: new Date().toISOString(), docs: docs };
+      var ct = b64(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, S.dirKey, enc.encode(JSON.stringify(body))));
+      if (ct.length > 39000) throw new Error('A lista de documentos do painel ficou grande demais. Apague alguns que não usa mais.');
+      if (await createDoc('lib-' + inv(seq), { t: body.t, k: 'lib1', iv: b64(iv), c: ct })) { S.libSeq = seq; S.panelDocs = docs; mergePanelDocs(); return; }
+    }
+    throw new Error('Não consegui publicar a lista de documentos.');
+  }
+
+  function recipientsOf(id) { return S.dir.logins.filter(function (L) { return (L.docs || []).indexOf(id) >= 0; }).map(function (L) { return L.key; }); }
+  function withAssignment(id, keys) {
+    var next = clone(S.dir.logins);
+    next.forEach(function (L) {
+      L.docs = (L.docs || []).filter(function (x) { return x !== id; });
+      if (keys.indexOf(L.key) >= 0) L.docs.push(id);
+    });
+    return next;
+  }
+
+  // ---- showing a file in an overlay -------------------------------------------------------------------------
+  function closeOverlay() { var o = $('ov'); if (o) o.remove(); }
+  function overlay(title, node) {
+    closeOverlay();
+    var o = h('div', { id: 'ov', class: 'ov', role: 'dialog', 'aria-label': title },
+      h('div', { class: 'ov-box' }, h('div', { class: 'row between ov-head' }, h('h3', { text: title }), h('button', { class: 'btn small', type: 'button', onclick: closeOverlay }, 'Fechar')), node));
+    document.body.appendChild(o);
+    return o;
+  }
+  async function viewStatic(d) {
+    try {
+      var res = await fetch(SITE + '/partner/lib/' + d.id + '.enc', { cache: 'no-store' });
+      if (!res.ok) throw new Error('arquivo não encontrado (' + res.status + ')');
+      var data = new Uint8Array(await res.arrayBuffer());
+      var key = await crypto.subtle.importKey('raw', unb64(d.key), 'AES-GCM', false, ['decrypt']);
+      var o = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: data.slice(4, 16) }, key, data.slice(16))));
+      showFile(d.title, o);
+    } catch (e) { toast('Não abriu: ' + (e && e.message || e), true); }
+  }
+  function showFile(title, f) {
+    var url = URL.createObjectURL(new Blob([unb64(f.b64)], { type: f.mime }));
+    var node = f.mime === 'application/pdf' ? h('iframe', { class: 'ov-frame', src: url, title: title }) : h('img', { class: 'ov-img', src: url, alt: title });
+    overlay(title, node);
+  }
+  function showNsdoc(title, doc) {
+    NSDoc.ensureCss();
+    var box = h('div', { class: 'ov-doc' });
+    var o = overlay(title, box);
+    box.innerHTML = NSDoc.render(doc);
+    NSDoc.fit(box.firstChild, 1.6);
+    return o;
+  }
+  async function viewPanelDoc(d) {
+    var payload = await readPanelDoc(d);
+    if (!payload) { toast('Não consegui ler esse documento.', true); return; }
+    if (payload.kind === 'file') showFile(d.title, payload); else showNsdoc(d.title, payload);
+  }
+
+  // ---- the editor ---------------------------------------------------------------------------------------------
+  function foldersKnown() {
+    var seen = {};
+    S.dir.logins.forEach(function (L) { (L.folders || []).forEach(function (f) { seen[f.name] = 1; }); });
+    Object.keys(S.lib).forEach(function (k) { if (S.lib[k].folder) seen[S.lib[k].folder] = 1; });
+    return Object.keys(seen).sort();
+  }
+  function headerCls(c) { return String(c || '').toUpperCase().replace(', ', ' — '); }
+
+  function openEditor(entry, base) {
+    closeOverlay();
+    var meta = entry ? clone(entry) : { id: '', key: '', title: '', number: '', date: S.ctl.today || S.cfg.baseDate || '2028-10-19', folder: '', classification: 'Internal', description: '', kind: 'nsdoc', ver: 0 };
+    var doc = clone(base || (NSDoc.templates.memo.doc));
+    var picked = entry ? recipientsOf(entry.id) : [];
+    var loading = !!entry && !base;
+    var el = h('div', { id: 'ed', class: 'ed', role: 'dialog', 'aria-label': 'Editor de documento' });
+    document.body.appendChild(el);
+    document.body.classList.add('no-scroll');
+
+    function close() { el.remove(); document.body.classList.remove('no-scroll'); }
+    function field(label, node, hint) { return h('div', { class: 'ed-f' }, h('label', { class: 'l', text: label }), node, hint ? h('p', { class: 'muted small', text: hint }) : null); }
+    function txt(key, obj, opts) {
+      var i = h('input', { type: 'text', value: obj[key] || '', list: opts && opts.list, placeholder: (opts && opts.ph) || '' });
+      i.addEventListener('input', function () { obj[key] = i.value; refresh(); });
+      return i;
+    }
+
+    var preview = h('div', { class: 'ed-prev' });
+    var timer = null;
+    function refresh() {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        NSDoc.ensureCss();
+        doc.cls = headerCls(meta.classification);
+        doc.number = doc.number || meta.number;
+        preview.innerHTML = NSDoc.render(doc);
+        NSDoc.fit(preview.firstChild, 1.5);
+      }, 160);
+    }
+
+    var form = h('div', { class: 'ed-form' });
+    function build() {
+      form.textContent = '';
+      var fl = h('datalist', { id: 'ed-folders' }, foldersKnown().map(function (f) { return h('option', { value: f }); }));
+      var clsSel = h('select', {}, CLASSES.map(function (c) { return h('option', { value: c, selected: meta.classification === c, text: c }); }));
+      clsSel.addEventListener('change', function () { meta.classification = clsSel.value; refresh(); });
+      var stampSel = h('input', { type: 'text', value: doc.stamp || '', list: 'ed-stamps', placeholder: 'sem carimbo' });
+      stampSel.addEventListener('input', function () { doc.stamp = stampSel.value; refresh(); });
+      var dateIn = h('input', { type: 'date', value: meta.date });
+      dateIn.addEventListener('input', function () { meta.date = dateIn.value; doc.date = dateIn.value; refresh(); });
+
+      form.appendChild(h('div', { class: 'ed-sec' }, h('h3', { text: 'Dados do documento' }),
+        field('Título (como aparece na lista do portal)', txt('title', meta)),
+        h('div', { class: 'ed-2' },
+          field('Número', (function () { var i = h('input', { type: 'text', value: meta.number }); i.addEventListener('input', function () { meta.number = i.value; doc.number = i.value; refresh(); }); return i; })()),
+          field('Data (documentos com data futura ficam escondidos até lá)', dateIn)),
+        h('div', { class: 'ed-2' }, field('Classificação', clsSel), field('Pasta no portal', txt('folder', meta, { list: 'ed-folders', ph: 'ex.: Installation management' }))),
+        field('Descrição curta (aparece na lista)', txt('description', meta)),
+        fl, h('datalist', { id: 'ed-stamps' }, STAMPS.map(function (s) { return h('option', { value: s }); }))));
+
+      form.appendChild(h('div', { class: 'ed-sec' }, h('h3', { text: 'Cabeçalho do formulário' }),
+        h('div', { class: 'ed-2' }, field('Código do formulário', txt('form', doc)), field('Tipo de documento (título grande)', txt('formname', doc))),
+        h('div', { class: 'ed-2' }, field('Departamento (abaixo do logo)', txt('unit', doc)), field('Texto no canto direito do título', txt('unitRight', doc))),
+        field('Carimbo', stampSel)));
+
+      // fields grid
+      var fg = h('div', { class: 'ed-sec' }, h('h3', { text: 'Campos' }), h('p', { class: 'muted small', text: 'Cada linha é uma fileira da grade. A largura é relativa (1, 2…).' }));
+      (doc.fields = doc.fields || []).forEach(function (row, ri) {
+        var rowEl = h('div', { class: 'ed-row' });
+        row.forEach(function (c, ci) {
+          var w = h('input', { type: 'text', value: String(c.w || 1), 'aria-label': 'Largura' }); w.addEventListener('input', function () { c.w = parseFloat(w.value) || 1; refresh(); });
+          var mono = h('label', { class: 'ed-chk' }, (function () { var k = h('input', { type: 'checkbox' }); k.checked = !!c.m; k.addEventListener('change', function () { c.m = k.checked; refresh(); }); return k; })(), 'mono');
+          var bold = h('label', { class: 'ed-chk' }, (function () { var k = h('input', { type: 'checkbox' }); k.checked = !!c.b; k.addEventListener('change', function () { c.b = k.checked; refresh(); }); return k; })(), 'negrito');
+          rowEl.appendChild(h('div', { class: 'ed-cell' }, txt('l', c, { ph: 'Rótulo' }), txt('v', c, { ph: 'Valor' }),
+            h('div', { class: 'row' }, h('span', { class: 'muted small', text: 'largura' }), w, mono, bold,
+              h('button', { class: 'btn small ghost', type: 'button', title: 'Tirar este campo', onclick: function () { row.splice(ci, 1); if (!row.length) doc.fields.splice(ri, 1); build(); refresh(); } }, '×'))));
+        });
+        rowEl.appendChild(h('button', { class: 'btn small', type: 'button', onclick: function () { row.push({ w: 1, l: '', v: '' }); build(); refresh(); } }, '+ campo na fileira'));
+        fg.appendChild(rowEl);
+      });
+      fg.appendChild(h('button', { class: 'btn small', type: 'button', onclick: function () { doc.fields.push([{ w: 1, l: '', v: '' }]); build(); refresh(); } }, '+ fileira'));
+      form.appendChild(fg);
+
+      // body
+      var ta = h('textarea', { class: 'ed-body', spellcheck: 'true', rows: '16' });
+      ta.value = doc.body || '';
+      ta.addEventListener('input', function () { doc.body = ta.value; refresh(); });
+      function snippet(text) {
+        var a = ta.selectionStart, b = ta.selectionEnd;
+        ta.value = ta.value.slice(0, a) + text + ta.value.slice(b);
+        ta.focus(); ta.selectionStart = ta.selectionEnd = a + text.length;
+        doc.body = ta.value; refresh();
+      }
+      form.appendChild(h('div', { class: 'ed-sec' }, h('h3', { text: 'Texto' }),
+        h('div', { class: 'row', style: 'margin-bottom:.5rem' },
+          h('button', { class: 'btn small', type: 'button', onclick: function () { snippet('\n## A | Título da seção\n'); } }, 'Seção'),
+          h('button', { class: 'btn small', type: 'button', onclick: function () { snippet('\n- Primeiro item\n- Segundo item\n'); } }, 'Lista'),
+          h('button', { class: 'btn small', type: 'button', onclick: function () { snippet('\n| Coluna | Valor> |\n| Linha 1 | 10 |\n| Linha 2 | 20 |\n'); } }, 'Tabela'),
+          h('button', { class: 'btn small', type: 'button', onclick: function () { snippet('\n> Texto numa caixa destacada.\n'); } }, 'Caixa'),
+          h('button', { class: 'btn small', type: 'button', onclick: function () { snippet('\n!! Texto pequeno e cinza.\n'); } }, 'Nota'),
+          h('button', { class: 'btn small', type: 'button', onclick: function () { snippet('\n[sign] ASSINATURA | DATA\n'); } }, 'Assinatura')),
+        ta,
+        h('details', { class: 'muted small' }, h('summary', { text: 'Como escrever' }),
+          h('pre', { class: 'ed-help', text: '## A | Título da seção     título (a parte antes do | é a letra ou o número)\nLinha comum                 parágrafo (linha em branco separa)\n- item                      lista        1. item   lista numerada\n| Col | Col# | Col> |       tabela; a primeira linha é o cabeçalho\n                            # = coluna em fonte mono, > = alinhada à direita\n> texto                     caixa azul   !! texto   nota pequena\n[sign] NOME | DATA          linhas de assinatura\n**negrito** vale em qualquer linha' }))));
+
+      // approvals
+      var ap = h('div', { class: 'ed-sec' }, h('h3', { text: 'Aprovações' }), h('p', { class: 'muted small', text: 'Deixe o nome vazio para aparecer "PENDING".' }));
+      (doc.approvals = doc.approvals || []).forEach(function (a, ai) {
+        ap.appendChild(h('div', { class: 'ed-3' }, txt('r', a, { ph: 'Papel (ex.: Issued by)' }), txt('n', a, { ph: 'Nome' }), txt('s', a, { ph: 'ex.: 28 SEP 09:12 · e-sig' }),
+          h('button', { class: 'btn small ghost', type: 'button', onclick: function () { doc.approvals.splice(ai, 1); build(); refresh(); } }, '×')));
+      });
+      ap.appendChild(h('button', { class: 'btn small', type: 'button', onclick: function () { doc.approvals.push({ r: '', n: '', s: '' }); build(); refresh(); } }, '+ aprovação'));
+      form.appendChild(ap);
+
+      // who gets it
+      var who = h('div', { class: 'ed-sec' }, h('h3', { text: 'Quem recebe' }));
+      S.dir.logins.forEach(function (L) {
+        var k = h('input', { type: 'checkbox' }); k.checked = picked.indexOf(L.key) >= 0;
+        k.addEventListener('change', function () { var i = picked.indexOf(L.key); if (k.checked && i < 0) picked.push(L.key); if (!k.checked && i >= 0) picked.splice(i, 1); });
+        who.appendChild(h('label', { class: 'ed-chk big' }, k, L.name, h('span', { class: 'muted small', text: ' · ' + L.role })));
+      });
+      if (!S.dir.logins.length) who.appendChild(h('p', { class: 'muted', text: 'Nenhum login ainda.' }));
+      form.appendChild(who);
+    }
+
+    var err = h('p', { class: 'note', hidden: true, role: 'alert' });
+    var saveBtn = h('button', { class: 'btn primary', type: 'button' }, entry ? 'Salvar e publicar' : 'Criar e publicar');
+    var bar = h('div', { class: 'ed-bar' }, h('div', {}, h('b', { text: entry ? 'Editando documento' : 'Novo documento' }), h('span', { class: 'muted small', text: entry ? ' · ' + entry.number : '' })),
+      h('div', { class: 'row' }, err, h('button', { class: 'btn', type: 'button', onclick: close }, 'Cancelar'), saveBtn));
+    el.appendChild(bar);
+    el.appendChild(h('div', { class: 'ed-main' }, form, h('div', { class: 'ed-side' }, h('p', { class: 'muted small', text: 'Prévia (como o jogador vê)' }), preview)));
+
+    saveBtn.addEventListener('click', async function () {
+      err.hidden = true;
+      if (!meta.title.trim()) { err.textContent = 'Dê um título ao documento.'; err.hidden = false; return; }
+      if (!meta.number.trim()) { err.textContent = 'Dê um número ao documento.'; err.hidden = false; return; }
+      saveBtn.disabled = true; saveBtn.textContent = 'Publicando…';
+      try {
+        var id = entry ? entry.id : newDocId(), key = entry ? entry.key : newDocKey();
+        doc.v = 1; doc.kind = 'nsdoc'; doc.cls = headerCls(meta.classification); doc.number = meta.number; doc.date = meta.date;
+        var ver = await putDocContent(id, key, doc, 'nsdoc', ((entry && entry.ver) || 0) + 1);
+        var rec = { id: id, key: key, title: meta.title.trim(), number: meta.number.trim(), date: meta.date, folder: meta.folder.trim(), classification: meta.classification, description: meta.description.trim(), kind: 'nsdoc', ver: ver };
+        var docs = (S.panelDocs || []).filter(function (d) { return d.id !== id; }).concat([rec]);
+        await putLibIndex(docs);
+        await saveLogins(withAssignment(id, picked));
+        close();
+        toast('Documento publicado. Quem o recebeu o vê em segundos.');
+        render();
+      } catch (e) { err.textContent = (e && e.message) || String(e); err.hidden = false; saveBtn.disabled = false; saveBtn.textContent = entry ? 'Salvar e publicar' : 'Criar e publicar'; }
+    });
+
+    if (loading) {
+      form.appendChild(h('p', { class: 'muted', text: 'Abrindo o documento…' }));
+      readPanelDoc(entry).then(function (p) {
+        if (!p || p.kind === 'file') { close(); toast('Não consegui abrir esse documento para edição.', true); return; }
+        doc = p; build(); refresh();
+      }, function () { close(); toast('Não consegui abrir esse documento.', true); });
+    } else { build(); refresh(); }
+  }
+
+  // Uploading a PDF or an image as a document.
+  function openUpload(entry) {
+    var meta = entry ? clone(entry) : { id: '', key: '', title: '', number: '', date: S.ctl.today || S.cfg.baseDate || '2028-10-19', folder: '', classification: 'Internal', description: '', kind: 'file', ver: 0 };
+    var picked = entry ? recipientsOf(entry.id) : [];
+    var file = null;
+    var d = $('dlg');
+    d.textContent = '';
+    var f = {
+      file: h('input', { type: 'file', accept: 'application/pdf,image/png,image/jpeg,image/webp' }),
+      title: h('input', { type: 'text', value: meta.title }), number: h('input', { type: 'text', value: meta.number }), date: h('input', { type: 'date', value: meta.date }),
+      folder: h('input', { type: 'text', value: meta.folder, list: 'up-folders' }), desc: h('input', { type: 'text', value: meta.description }),
+      cls: h('select', {}, CLASSES.map(function (c) { return h('option', { value: c, selected: meta.classification === c, text: c }); })),
+    };
+    var err = h('p', { class: 'note', hidden: true, role: 'alert' });
+    var who = h('div', {}, S.dir.logins.map(function (L) {
+      var k = h('input', { type: 'checkbox' }); k.checked = picked.indexOf(L.key) >= 0;
+      k.addEventListener('change', function () { var i = picked.indexOf(L.key); if (k.checked && i < 0) picked.push(L.key); if (!k.checked && i >= 0) picked.splice(i, 1); });
+      return h('label', { class: 'ed-chk big' }, k, L.name);
+    }));
+    var save = h('button', { class: 'btn primary', type: 'button' }, entry ? 'Salvar' : 'Enviar e publicar');
+    d.appendChild(h('div', { class: 'dlg-head' }, h('h2', { id: 'dlg-title', text: entry ? 'Dados do arquivo' : 'Enviar arquivo' }), h('button', { class: 'btn ghost small', type: 'button', onclick: function () { d.close(); } }, 'Fechar')));
+    if (!entry) d.appendChild(h('div', {}, h('label', { class: 'l', text: 'PDF ou imagem (até cerca de 2 MB)' }), f.file));
+    d.appendChild(h('div', {},
+      h('label', { class: 'l', text: 'Título' }), f.title, h('label', { class: 'l', text: 'Número' }), f.number, h('label', { class: 'l', text: 'Data' }), f.date,
+      h('label', { class: 'l', text: 'Classificação' }), f.cls, h('label', { class: 'l', text: 'Pasta no portal' }), f.folder,
+      h('datalist', { id: 'up-folders' }, foldersKnown().map(function (x) { return h('option', { value: x }); })),
+      h('label', { class: 'l', text: 'Descrição curta' }), f.desc, h('label', { class: 'l', text: 'Quem recebe' }), who, err));
+    d.appendChild(h('div', { class: 'dlg-foot' }, h('span'), save));
+    f.file.addEventListener('change', function () {
+      var fl = f.file.files[0];
+      if (!fl) return;
+      if (fl.size > 2000000) { err.textContent = 'O arquivo tem ' + Math.round(fl.size / 1024) + ' KB. O limite é cerca de 2 MB.'; err.hidden = false; f.file.value = ''; return; }
+      var r = new FileReader();
+      r.onload = function () { file = { mime: fl.type || 'application/pdf', filename: fl.name, b64: String(r.result).split(',')[1] }; if (!f.title.value) f.title.value = fl.name.replace(/\.[^.]+$/, ''); err.hidden = true; };
+      r.readAsDataURL(fl);
+    });
+    save.addEventListener('click', async function () {
+      err.hidden = true;
+      if (!entry && !file) { err.textContent = 'Escolha um arquivo.'; err.hidden = false; return; }
+      if (!f.title.value.trim() || !f.number.value.trim()) { err.textContent = 'Título e número são obrigatórios.'; err.hidden = false; return; }
+      save.disabled = true; save.textContent = 'Publicando…';
+      try {
+        var id = entry ? entry.id : newDocId(), key = entry ? entry.key : newDocKey(), ver = entry ? entry.ver : 0;
+        if (!entry) ver = await putDocContent(id, key, { v: 1, kind: 'file', mime: file.mime, filename: file.filename, b64: file.b64 }, 'file', 1);
+        var rec = { id: id, key: key, title: f.title.value.trim(), number: f.number.value.trim(), date: f.date.value, folder: f.folder.value.trim(), classification: f.cls.value, description: f.desc.value.trim(), kind: 'file', ver: ver };
+        await putLibIndex((S.panelDocs || []).filter(function (x) { return x.id !== id; }).concat([rec]));
+        await saveLogins(withAssignment(id, picked));
+        d.close();
+        toast('Arquivo publicado.');
+        render();
+      } catch (e) { err.textContent = (e && e.message) || String(e); err.hidden = false; save.disabled = false; save.textContent = entry ? 'Salvar' : 'Enviar e publicar'; }
+    });
+    d.showModal();
+  }
+
+  function removePanelDoc(entry) {
+    act('Documento "' + entry.title + '" apagado.', async function () {
+      await putTombstone(entry.id, entry.key, (entry.ver || 1) + 1);
+      await putLibIndex((S.panelDocs || []).map(function (d) { return d.id === entry.id ? Object.assign({}, d, { gone: true }) : d; }));
+      await saveLogins(withAssignment(entry.id, []));
+    });
+  }
+
+  function viewEditor() {
+    var wrap = h('div');
+    var menu = h('div', { class: 'menu' },
+      h('button', { class: 'btn primary', type: 'button', onclick: function () { S.menu = S.menu === 'new' ? '' : 'new'; render(); } }, 'Novo documento ▾'),
+      S.menu === 'new' ? h('div', { class: 'menu-list' }, Object.keys(NSDoc.templates).map(function (k) {
+        return h('button', { type: 'button', onclick: function () { S.menu = ''; openEditor(null, NSDoc.templates[k].doc); } }, NSDoc.templates[k].label);
+      }).concat([h('button', { type: 'button', onclick: function () { S.menu = ''; openUpload(null); } }, 'Enviar PDF ou imagem')])) : null);
+    wrap.appendChild(head('Editor de documentos', 'Escreva documentos no formulário padrão da NeuroStat, entregue a quem quiser e apague quando quiser. Quem já está no portal vê a mudança em segundos.', [menu]));
+    var docs = (S.panelDocs || []).filter(function (d) { return !d.gone; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    var grid = h('div', { class: 'grid people' });
+    docs.forEach(function (d) {
+      var to = recipientsOf(d.id).length;
+      var delStep = false;
+      var del = h('button', { class: 'btn danger small', type: 'button' }, 'Apagar');
+      del.addEventListener('click', function () {
+        if (!delStep) { delStep = true; del.textContent = 'Confirmar: apagar de vez'; return; }
+        removePanelDoc(d);
+      });
+      grid.appendChild(h('div', { class: 'card' },
+        h('div', { class: 'row between' }, h('div', {}, h('h3', { text: d.title }), h('div', { class: 'muted small mono', text: d.number + ' · ' + longDate(d.date) })), h('span', { class: 'chip plain', text: d.kind === 'file' ? 'arquivo' : 'formulário' })),
+        h('p', { class: 'muted small', style: 'margin:.5rem 0', text: (d.description || 'Sem descrição.') }),
+        h('div', { class: 'row', style: 'margin-bottom:.7rem' }, h('span', { class: 'chip plain', text: d.classification }), d.folder ? h('span', { class: 'chip plain', text: d.folder }) : null,
+          h('span', { class: 'chip ' + (to ? '' : 'warn'), text: to ? 'em ' + to + ' login' + (to > 1 ? 's' : '') : 'sem ninguém' })),
+        h('div', { class: 'row' },
+          h('button', { class: 'btn small', type: 'button', onclick: function () { if (d.kind === 'file') openUpload(d); else openEditor(d, null); } }, 'Editar'),
+          h('button', { class: 'btn small ghost', type: 'button', onclick: function () { viewPanelDoc(d); } }, 'Ver'),
+          d.kind === 'nsdoc' ? h('button', { class: 'btn small ghost', type: 'button', onclick: async function () {
+            var p = await readPanelDoc(d);
+            if (!p) { toast('Não consegui copiar.', true); return; }
+            p.number = ''; openEditor(null, p);
+          } }, 'Duplicar') : null, del)));
+    });
+    if (!docs.length) grid.appendChild(h('div', { class: 'empty card' }, h('p', { text: 'Nenhum documento escrito no painel ainda.' }), h('p', { class: 'muted small', text: 'Use "Novo documento" para começar de um modelo. Os documentos que já estão na biblioteca (os PDFs) ficam na aba Documentos.' })));
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
   // ---- frame ----------------------------------------------------------------------------------
 
   function updateCounts() {
@@ -915,6 +1328,7 @@
     if (id === 'mensagens') return S.entries.length;
     if (id === 'logins') return S.dir.logins.length;
     if (id === 'documentos') return Object.keys(S.lib).length;
+    if (id === 'editor') return (S.panelDocs || []).filter(function (d) { return !d.gone; }).length;
     return null;
   }
   function renderTabs() {
@@ -934,7 +1348,7 @@
     renderTabs();
     var body = $('tab-body');
     body.textContent = '';
-    body.appendChild({ visao: viewVisao, mensagens: viewMensagens, logins: viewLogins, documentos: viewDocumentos, avisos: viewAvisos, vagas: viewVagas, data: viewData }[S.tab]());
+    body.appendChild({ visao: viewVisao, mensagens: viewMensagens, logins: viewLogins, documentos: viewDocumentos, editor: viewEditor, avisos: viewAvisos, vagas: viewVagas, data: viewData }[S.tab]());
     var c = S.ctl;
     $('state-line').textContent = (c.seq ? 'Aviso #' + c.seq + ' · ' + new Date(c.t).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : 'Nenhum aviso publicado') + ' · jogo em ' + longDate(c.today || S.cfg.baseDate);
   }
@@ -956,6 +1370,7 @@
     lockScreen(false);
     await loadCtl().catch(function () { /* shown below */ });
     try { await loadDir(); } catch (e) { toast('Não consegui ler a lista de logins: ' + (e && e.message || e), true); }
+    try { await loadLibIndex(); } catch (e) { toast('Não consegui ler a lista de documentos do editor: ' + (e && e.message || e), true); }
     try { await loadMessages(true); } catch (e) { toast((e && e.message) || 'Não foi possível ler as mensagens.', true); }
     if (S.newest) { try { localStorage.setItem(SEEN_KEY, S.newest); } catch (e) { /* ignore */ } }
     render();

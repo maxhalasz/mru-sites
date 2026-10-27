@@ -7,5 +7,6 @@ stamp: "CONFIDENTIAL · LEVEL N4"
 description: "September production and operating cost against plan, with comments."
 file: "files/monthly-production-cost-report-2028-09.pdf"
 folder: "Production and finance"
-published: false
+published: true
+assign: false
 ---

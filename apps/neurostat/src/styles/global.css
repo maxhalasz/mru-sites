@@ -220,6 +220,10 @@ button.tile:hover { background: var(--bg); }
 @media (max-width: 960px) { .intra .portal-viewer { position: static; } }
 .intra-foot { margin-top: 2rem; border-top: 1px solid var(--line); padding-top: .8rem; }
 
+.doc-page { padding: 1rem; }
+.doc-sheet { overflow: hidden; }
+.doc-sheet .nsd { margin: 0 auto; box-shadow: 0 2px 14px rgba(20, 36, 58, .25); }
+
 /* Image stand-ins: brand artwork until real photographs are added */
 .ph { position: relative; overflow: hidden; background: linear-gradient(140deg, #1d3556 0%, #0e1a2c 100%); color: #9fb2c8; }
 .ph-art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }

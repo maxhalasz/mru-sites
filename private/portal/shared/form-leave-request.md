@@ -7,5 +7,6 @@ stamp: "CONTROLLED COPY"
 description: "Standard form for requesting leave. Send it to HR Services after your manager has signed."
 file: "files/form-leave-request.pdf"
 folder: "Company library / Forms"
-published: false
+published: true
+assign: false
 ---

@@ -122,12 +122,12 @@ function adminConfig() {
     }
   }
   // private/portal/shared holds the company library: documents every login gets by default.
-  const shared = existsSync(join(priv, 'portal', 'shared')) ? loadAccount('shared', false).docs.map((d) => 'shared--' + d.id) : [];
-  const { library, dirKey } = buildLibrary([...new Set(logins.map((l) => l.account)), ...(shared.length ? ['shared'] : [])]);
+  const shared = existsSync(join(priv, 'portal', 'shared')) ? loadAccount('shared', false).docs.filter((d) => d.assign).map((d) => 'shared--' + d.id) : [];
+  const { library, dirKey } = buildLibrary([...new Set(logins.map((l) => l.account)), ...(existsSync(join(priv, 'portal', 'shared')) ? ['shared'] : [])]);
   const accounts = logins.map((l) => {
     const b = loadAccount(l.account, false);
     return { user: l.user, pass: l.pass, account: l.account, name: b.name, role: b.role, welcome: b.welcome, folders: b.folders,
-      docs: [...b.docs.map((d) => l.account + '--' + d.id), ...(b.noShared ? [] : shared)] };
+      docs: [...b.docs.filter((d) => d.assign).map((d) => l.account + '--' + d.id), ...(b.noShared ? [] : shared)] };
   });
 
   const jobs = [];
@@ -171,6 +171,7 @@ function loadAccount(account, withFiles = true) {
       classification: String(fm.classification),
       description: fm.description ? String(fm.description) : '',
       stamp: withFiles ? stampSvg({ text: stampText }) : '',
+      assign: fm.assign !== false,
       file,
     });
   }

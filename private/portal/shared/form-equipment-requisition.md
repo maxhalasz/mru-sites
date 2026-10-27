@@ -7,5 +7,6 @@ stamp: "CONTROLLED COPY"
 description: "Standard form for requesting equipment. Send the completed form to your supervisor."
 file: "files/form-equipment-requisition.pdf"
 folder: "Company library / Forms"
-published: false
+published: true
+assign: false
 ---

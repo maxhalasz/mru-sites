@@ -7,5 +7,6 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "How to run the monthly Baseline assessment with the crew."
 file: "files/baseline-guide-for-medics.pdf"
 folder: "Reports"
-published: false
+published: true
+assign: false
 ---

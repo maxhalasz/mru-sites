@@ -7,5 +7,6 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "The group policy on health, safety and the environment."
 file: "files/hse-policy-statement.pdf"
 folder: "Company library / Policies"
-published: false
+published: true
+assign: false
 ---

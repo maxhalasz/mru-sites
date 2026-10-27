@@ -69,7 +69,7 @@ class D:
             lines.append(f'folder: "{self.folder}"')
         held = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'held.txt')
         is_held = os.path.exists(held) and f'{self.account}/{self.slug}' in open(held).read().split()
-        lines += ['published: false' if is_held else 'published: true', '---', '']
+        lines += ['published: true'] + (['assign: false'] if is_held else []) + ['---', '']
         open(meta, 'w', encoding='utf-8').write('\n'.join(lines))
         return n
 

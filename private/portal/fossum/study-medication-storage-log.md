@@ -7,5 +7,6 @@ stamp: "STUDY CONFIDENTIAL"
 description: "Daily storage temperature of the study medication, weekly summary for October."
 file: "files/study-medication-storage-log.pdf"
 folder: "Study documents"
-published: false
+published: true
+assign: false
 ---

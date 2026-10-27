@@ -7,5 +7,6 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "Approval, limits and claiming for business travel."
 file: "files/travel-expenses-policy.pdf"
 folder: "Company library / Policies"
-published: false
+published: true
+assign: false
 ---

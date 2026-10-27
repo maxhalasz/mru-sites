@@ -7,5 +7,6 @@ stamp: "CONTROLLED COPY"
 description: "Standard form for reporting an incident or near miss."
 file: "files/form-incident-report.pdf"
 folder: "Company library / Forms"
-published: false
+published: true
+assign: false
 ---

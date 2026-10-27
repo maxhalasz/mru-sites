@@ -18,5 +18,5 @@ Precisa de Python com `reportlab` e `pymupdf`, e das fontes Roboto Condensed, So
 
 ## Documentos guardados
 
-Os documentos listados em `held.txt` são gerados com `published: false`: ficam fora da biblioteca e do painel até alguém decidir que têm um propósito na história.
+Os documentos listados em `held.txt` são gerados com `assign: false`: entram na biblioteca e aparecem na aba Documentos do painel, mas não são entregues a ninguém até você marcar.
 Para liberar um, tire a linha de `held.txt`, rode `generate.py` e siga os passos acima.

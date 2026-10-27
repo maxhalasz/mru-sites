@@ -100,14 +100,51 @@
       return {
         name: ring.name, role: ring.role, welcome: ring.welcome, folders: ring.folders || [],
         docs: (ring.docs || []).map(function (d) {
-          return { id: d.id, folder: d.folder || '', title: d.title, number: d.number, date: d.date, classification: d.classification, description: d.description || '', lib: d.lib, key: d.key };
+          return { id: d.id, folder: d.folder || '', title: d.title, number: d.number, date: d.date, classification: d.classification, description: d.description || '', lib: d.lib, fs: d.fs, key: d.key };
         }),
       };
     } catch (e) { return null; }
   }
 
   // A document of a keyring is an encrypted file of its own: fetched and opened only when selected.
+  // A document written in the control panel lives in the settings store: pieces of one encrypted payload and a small
+  // manifest, both named after the document and a version that counts down (so the newest sorts first).
+  async function loadFsDoc(d) {
+    var cfg = window.SITE_LOG || {};
+    var base = 'https://firestore.googleapis.com/v1/projects/' + encodeURIComponent(cfg.projectId) + '/databases/(default)/documents';
+    var key = await crypto.subtle.importKey('raw', unb64(d.key), 'AES-GCM', false, ['decrypt']);
+    var ref = function (id) { return 'projects/' + cfg.projectId + '/databases/(default)/documents/submissions/' + id; };
+    var f = function (op, id) { return { fieldFilter: { field: { fieldPath: '__name__' }, op: op, value: { referenceValue: ref(id) } } }; };
+    var res = await fetch(base + ':runQuery?key=' + encodeURIComponent(cfg.apiKey), { method: 'POST', headers: { 'Content-Type': 'application/json' }, cache: 'no-store',
+      body: JSON.stringify({ structuredQuery: { from: [{ collectionId: 'submissions' }],
+        where: { compositeFilter: { op: 'AND', filters: [f('GREATER_THAN_OR_EQUAL', 'dm-' + d.fs + '-'), f('LESS_THAN', 'dm-' + d.fs + '.')] } },
+        orderBy: [{ field: { fieldPath: '__name__' }, direction: 'ASCENDING' }], limit: 8 } }) });
+    if (!res.ok) throw new Error('The document could not be loaded.');
+    var rows = await res.json();
+    for (var i = 0; i < rows.length; i++) {
+      var doc = rows[i].document;
+      if (!doc) continue;
+      var fl = doc.fields || {};
+      var man;
+      try { man = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(fl.iv.stringValue) }, key, unb64(fl.c.stringValue)))); } catch (e) { continue; }
+      if (man.gone) { d.file = null; d.nsdoc = null; d.gone = true; return; }
+      var invStr = doc.name.split('/').pop().split('-')[2];
+      var pieces = [];
+      for (var p = 0; p < man.n; p++) {
+        var pr = await fetch(base + '/submissions/dp-' + d.fs + '-' + invStr + '-' + ('0' + p).slice(-2) + '?key=' + encodeURIComponent(cfg.apiKey), { cache: 'no-store' });
+        if (!pr.ok) throw new Error('The document could not be loaded.');
+        pieces.push((await pr.json()).fields.c.stringValue);
+      }
+      var payload = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(man.iv) }, key, unb64(pieces.join('')))));
+      if (payload.kind === 'file') { d.file = { filename: payload.filename, mime: payload.mime, b64: payload.b64 }; d.nsdoc = null; }
+      else { d.file = null; d.nsdoc = payload; }
+      d.stamp = '';
+      return;
+    }
+    throw new Error('The document could not be loaded.');
+  }
   async function loadDoc(d) {
+    if (d.fs) { if (d.file === undefined) await loadFsDoc(d); return; }
     if (d.file !== undefined || !d.lib) return;
     var res = await fetch('/partner/lib/' + d.lib + '.enc', { cache: 'no-store' });
     if (!res.ok) throw new Error('The document could not be loaded.');
@@ -389,14 +426,27 @@
     urls = [];
     logEvent('portal-open', [{ label: 'Username', value: user }, { label: 'Document', value: d.number + ' ' + d.title }]);
     var v = document.getElementById('viewer');
-    if (d.lib && d.file === undefined) {
+    if ((d.lib || d.fs) && d.file === undefined) {
       v.innerHTML = '<p class="muted">Loading…</p>';
       try { await loadDoc(d); } catch (e) { v.innerHTML = '<p class="muted">The document could not be loaded. Try again in a moment.</p>'; return; }
     }
     var wm = 'CONFIDENTIAL — ' + user;
+    if (d.gone) { v.innerHTML = '<p class="muted">This document is no longer available.</p>'; return; }
     var html = '<div class="doc-meta" data-open="' + esc(d.id) + '"><div><h2>' + esc(d.title) + '</h2><p class="doc-no">' + esc(d.number) + ' · ' + esc(d.date) + '</p>' +
       '<p class="small"><b>Classification:</b> ' + esc(d.classification) + '</p>' + (d.description ? '<p>' + esc(d.description) + '</p>' : '') + '</div>' +
       '<div class="doc-stamp" aria-hidden="true">' + (d.stamp || '') + '</div></div>';
+    if (d.nsdoc) {
+      window.NSDoc.ensureCss();
+      html += '<p><button class="btn ghost" id="print-doc" type="button">Print or save as PDF</button></p><div class="frame doc-page"><div class="doc-sheet" id="doc-sheet"></div>' +
+        '<div class="watermark" aria-hidden="true">' + new Array(24).join('<span>' + esc(wm) + '</span>') + '</div></div>';
+      v.innerHTML = html;
+      var sheet = document.getElementById('doc-sheet');
+      sheet.innerHTML = window.NSDoc.render(d.nsdoc);
+      window.NSDoc.fit(sheet.firstChild, 1.7);
+      document.getElementById('print-doc').addEventListener('click', function () { window.print(); });
+      v.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
     if (d.file) {
       var url = URL.createObjectURL(b64ToBlob(d.file.b64, d.file.mime));
       urls.push(url);

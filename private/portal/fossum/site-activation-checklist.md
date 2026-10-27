@@ -7,5 +7,6 @@ stamp: "STUDY CONFIDENTIAL"
 description: "Checklist completed before recruitment began on 14 September 2028."
 file: "files/site-activation-checklist.pdf"
 folder: "Study documents"
-published: false
+published: true
+assign: false
 ---
