@@ -6,8 +6,8 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = (no: string, en: string) => (lang === 'no' ? no : en);
 const numbers: [string, string, string][] = [
-  ['3,1', 'TRIF 2027', t('skader per million arbeidstimer', 'recordable injuries per million hours worked')],
-  ['0,8', t('Fraværsskader 2027', 'Lost-time injuries 2027'), t('per million arbeidstimer', 'per million hours worked')],
+  [t('3,1', '3.1'), 'TRIF 2027', t('skader per million arbeidstimer', 'recordable injuries per million hours worked')],
+  [t('0,8', '0.8'), t('Fraværsskader 2027', 'Lost-time injuries 2027'), t('per million arbeidstimer', 'per million hours worked')],
   ['412', t('Rapporterte observasjoner 2027', 'Reported observations 2027'), t('inkludert nestenulykker', 'including near misses')],
   ['100 %', t('Gjennomført sikkerhetsopplæring', 'Safety training completed'), t('av alle som reiste offshore i 2027', 'of everyone who travelled offshore in 2027')],
 ];
@@ -50,7 +50,7 @@ const principles: [string, string, string, string][] = [
     <div class="wrap prose">
       <h2>{t('Kultur for rapportering', 'Reporting culture')}</h2>
       <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-      <p>{t('Vi vil høre om alt som kunne ha gått galt, ikke bare det som faktisk gikk galt. Derfor skal det være enkelt å melde fra, og den som melder får alltid svar. Vi ser på hver rapport som en sjanse til å rette noe før noen blir skadet.', 'We want to hear about everything that could have gone wrong, not only what did. So reporting has to be easy, and whoever reports always gets an answer. We treat every report as a chance to fix something before someone gets hurt.')}</p>
+            <p>{t('Meld fra om nestenulykker også, ikke bare om det som faktisk skjedde. Det tar noen minutter å skrive en melding, og alle som sender en får svar. Mange av endringene vi har gjort på plattformen startet som en observasjon fra noen på dekk.', 'Report the near misses as well as the incidents. A report takes a few minutes to write, and everyone who sends one gets an answer. Many of the changes we have made on the platform started as an observation from someone on deck.')}</p>
       <p>{t('Mannskapet på Ødemark A har legetjeneste døgnet rundt, og vi følger opp både fysisk og psykisk helse gjennom hele rotasjonen.', 'The crew on Ødemark A has medical care around the clock, and we follow up physical and mental health throughout the rotation.')}</p>
       <p>{t('Varsling: ansatte og andre kan melde fra om kritikkverdige forhold i vår uavhengige varslingskanal. Du kan varsle anonymt.', 'Whistleblowing: employees and others can report concerns through our independent reporting channel, anonymously if they wish.')}</p>
     </div>
