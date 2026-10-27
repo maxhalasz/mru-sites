@@ -6,5 +6,6 @@ classification: "Internal, installation managers"
 stamp: "INTERNAL USE · LEVEL N3"
 description: "Arrangements for the winter operating period from 1 November 2028."
 file: "files/winter-operations-directive-2028-29.pdf"
+folder: "Installation management"
 published: true
 ---

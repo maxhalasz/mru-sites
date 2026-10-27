@@ -6,5 +6,6 @@ classification: "Internal, installation managers"
 stamp: "STUDY CONFIDENTIAL"
 description: "What the BOREAS-2 study means for the platform and its crew."
 file: "files/boreas-2-coordination-notice.pdf"
+folder: "Installation management"
 published: true
 ---

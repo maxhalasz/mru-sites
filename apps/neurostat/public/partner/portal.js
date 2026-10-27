@@ -203,6 +203,39 @@
     return JSON.stringify([currentSettings().note || '', st.today || '', current ? current.ver : 0]);
   }
 
+  // ---- the intranet page ----------------------------------------------------------------------
+
+  var LIB = 'Company library';
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var ui = { tab: 'mine', q: '', cls: '', sub: '' };
+
+  function isLib(d) { return (d.folder || '').indexOf(LIB) === 0; }
+  function subOf(d) {
+    var f = d.folder || '';
+    if (!isLib(d)) return f;
+    var i = f.indexOf(' / ');
+    return i >= 0 ? f.slice(i + 3) : '';
+  }
+  function fmtDate(iso) {
+    var p = String(iso).split('-');
+    return +p[2] + ' ' + MONTHS[+p[1] - 1] + ' ' + p[0];
+  }
+  function firstName(name) { return String(name).replace(/^(dr|mr|ms|mrs)\.?\s+/i, '').split(/\s+/)[0]; }
+  function todayISO() { return window.siteControl && window.siteControl.todayISO ? window.siteControl.todayISO() : '2028-10-19'; }
+  function dayNo(iso) { return Math.floor(new Date(iso + 'T12:00:00Z').getTime() / 86400000); }
+  function isNew(d) { var t = todayISO(); return d.date <= t && dayNo(t) - dayNo(d.date) <= 14; }
+  function longToday() {
+    return new Date(todayISO() + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+  }
+  function shortTitle(t) { return String(t).replace(/\s*\(blank form\)$/i, ''); }
+  function byDateDesc(a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; }
+
+  function rowHtml(d) {
+    return '<button type="button" class="doc-row" data-id="' + esc(d.id) + '"><span class="doc-title">' + esc(shortTitle(d.title)) +
+      (isNew(d) ? ' <span class="chip-new">New</span>' : '') + '</span>' +
+      '<span class="doc-no">' + esc(d.number) + '</span><span class="muted small">' + esc(fmtDate(d.date)) + ' · ' + esc(d.classification) + '</span></button>';
+  }
+
   function render(b, who) {
     watch();
     current = { b: b, user: who.user, pass: who.pass, hash: who.hash, ver: who.ver, dynamic: who.dynamic, sig: '' };
@@ -214,43 +247,141 @@
       try { new Function(b.app)(); } catch (e) { /* ignore */ }
       if (window.renderConsole) { window.renderConsole(portalView, b, signOut); return; }
     }
-    var folders = {};
-    docs.forEach(function (d) { (folders[d.folder] = folders[d.folder] || []).push(d); });
-    var names = [''];
-    (b.folders || []).forEach(function (f) { if (names.indexOf(f.name) < 0) names.push(f.name); });
-    Object.keys(folders).forEach(function (n) { if (names.indexOf(n) < 0) names.push(n); });
-
-    var html = '<div class="portal-head"><div><p class="eyebrow">NeuroStat Org.</p><h1>' + esc(b.name) + '</h1><p class="muted">' + esc(b.role) + '</p></div>' +
-      '<button class="btn ghost" id="signout" type="button">Sign out</button></div>';
-    if (b.welcome) html += '<p class="form-note">' + esc(b.welcome) + '</p>';
+    var mine = docs.filter(function (d) { return !isLib(d); });
+    var lib = docs.filter(isLib);
+    var hasLib = lib.length > 0;
+    if (!hasLib && ui.tab !== 'mine') ui.tab = 'mine';
     var note = currentSettings().note;
-    if (note) html += '<p class="form-note"><b>Notice:</b> ' + esc(note) + '</p>';
-    html += '<div class="portal-grid"><div class="portal-list">';
-    names.forEach(function (n) {
-      var list = folders[n] || [];
-      var meta = (b.folders || []).filter(function (f) { return f.name === n; })[0];
-      if (!n && !list.length) return;
-      if (n) html += '<h2 class="portal-folder">' + esc(n) + '</h2>';
-      if (meta && meta.note && !list.length) html += '<p class="muted small">' + esc(meta.note) + '</p>';
-      if (!list.length && !(meta && meta.note)) html += '<p class="muted small">No documents in this folder.</p>';
-      list.forEach(function (d) {
-        html += '<button type="button" class="doc-row" data-id="' + esc(d.id) + '"><span class="doc-title">' + esc(d.title) + '</span>' +
-          '<span class="doc-no">' + esc(d.number) + '</span><span class="muted small">' + esc(d.date) + ' · ' + esc(d.classification) + '</span></button>';
+
+    var h = '<div class="intra">';
+    h += '<header class="intra-head"><div><p class="eyebrow">NeuroStat Org. · Employee intranet</p><h1>Welcome, ' + esc(firstName(b.name)) + '</h1>' +
+      '<p class="muted">' + esc(b.name) + ' · ' + esc(b.role) + '</p></div>' +
+      '<div class="intra-actions"><span class="intra-date">' + esc(longToday()) + '</span><button class="btn ghost" id="signout" type="button">Sign out</button></div></header>';
+    if (b.welcome) h += '<p class="form-note">' + esc(b.welcome) + '</p>';
+    if (note) h += '<p class="form-note"><b>Notice:</b> ' + esc(note) + '</p>';
+
+    var newest = docs.slice().sort(byDateDesc)[0];
+    h += '<div class="intra-stats">' +
+      '<div class="stat"><b>' + mine.length + '</b><span>' + (hasLib ? 'Documents for your role' : 'Documents') + '</span></div>' +
+      (hasLib ? '<div class="stat"><b>' + lib.length + '</b><span>In the company library</span></div>' : '') +
+      '<div class="stat"><b>' + docs.filter(isNew).length + '</b><span>Added in the last 14 days</span></div>' +
+      (newest ? '<div class="stat wide"><b>' + esc(fmtDate(newest.date)) + '</b><span>Latest: ' + esc(shortTitle(newest.title)) + '</span></div>' : '') + '</div>';
+
+    if (hasLib) {
+      var forms = lib.filter(function (d) { return subOf(d) === 'Forms'; }).sort(function (x, y) { return x.title < y.title ? -1 : 1; });
+      var ref = lib.filter(function (d) { return /^NS-GRP-(DIR|CAL)/.test(d.number); });
+      var tiles = forms.concat(ref);
+      h += '<section class="intra-sec"><h2 class="intra-h">Forms and quick links</h2><div class="tiles">';
+      tiles.forEach(function (d) {
+        h += '<button type="button" class="tile" data-id="' + esc(d.id) + '"><span class="tile-k">' + (subOf(d) === 'Forms' ? 'Form' : 'Reference') + '</span><span class="tile-t">' + esc(shortTitle(d.title)) +
+          '</span><span class="tile-m">' + esc(d.number) + '</span></button>';
       });
-    });
-    if (!docs.length) html += '<p class="muted">There are no documents available to this account right now.</p>';
-    html += '</div><div class="portal-viewer" id="viewer"><p class="muted">Select a document.</p></div></div>';
-    portalView.innerHTML = html;
+      h += '<div class="tile tile-static"><span class="tile-k">IT Service Desk</span><span class="tile-t">+41 44 538 17 40</span><span class="tile-m">Every day, around the clock</span></div>' +
+        '<div class="tile tile-static"><span class="tile-k">HR Services</span><span class="tile-t">hr@neurostat.com</span><span class="tile-m">Weekdays 08:30 – 17:00</span></div>' +
+        '<div class="tile tile-static"><span class="tile-k">Security Operations</span><span class="tile-t">+41 44 538 17 45</span><span class="tile-m">Every day, around the clock</span></div></div></section>';
+      var news = lib.filter(function (d) { return subOf(d) === 'Bulletins'; }).sort(byDateDesc).slice(0, 3);
+      if (news.length) {
+        h += '<section class="intra-sec"><h2 class="intra-h">Notices and bulletins</h2><ul class="news-list">';
+        news.forEach(function (d) {
+          h += '<li><button type="button" class="news-item" data-id="' + esc(d.id) + '"><span class="news-d">' + esc(fmtDate(d.date)) + '</span><span class="news-t">' + esc(shortTitle(d.title)) +
+            '</span><span class="muted small">' + esc(d.description) + '</span></button></li>';
+        });
+        h += '</ul></section>';
+      }
+    }
+
+    h += '<section class="intra-sec"><h2 class="intra-h">Documents</h2><div class="intra-cols"><div class="intra-docs">';
+    h += '<div class="tabs" role="tablist">' +
+      '<button type="button" role="tab" data-tab="mine">' + (hasLib ? 'For your role' : 'All documents') + ' <span class="cnt" id="cnt-mine">' + mine.length + '</span></button>' +
+      (hasLib ? '<button type="button" role="tab" data-tab="library">Company library <span class="cnt" id="cnt-lib">' + lib.length + '</span></button>' +
+        '<button type="button" role="tab" data-tab="all">All <span class="cnt">' + docs.length + '</span></button>' : '') + '</div>';
+    var classes = {};
+    docs.forEach(function (d) { classes[d.classification] = 1; });
+    h += '<div class="doc-tools"><input type="search" id="doc-q" placeholder="Search title, number or text" aria-label="Search documents" value="' + esc(ui.q) + '" />' +
+      '<select id="doc-cls" aria-label="Classification"><option value="">All classifications</option>' +
+      Object.keys(classes).sort().map(function (c) { return '<option value="' + esc(c) + '"' + (ui.cls === c ? ' selected' : '') + '>' + esc(c) + '</option>'; }).join('') + '</select></div>';
+    h += '<div class="subs" id="doc-subs"></div><div class="doc-list" id="doc-list"></div>';
+    h += '</div><div class="portal-viewer" id="viewer"><p class="muted">Select a document from the list, a form or a notice.</p></div></div></section>';
+    h += '<p class="intra-foot small muted">Access to this intranet is logged. Documents marked confidential must not be forwarded or printed without the permission of the owner.</p></div>';
+    portalView.innerHTML = h;
 
     document.getElementById('signout').addEventListener('click', signOut);
-    portalView.querySelectorAll('.doc-row').forEach(function (row) {
-      row.addEventListener('click', function () {
-        portalView.querySelectorAll('.doc-row').forEach(function (r) { r.removeAttribute('aria-current'); });
-        row.setAttribute('aria-current', 'true');
-        var d = docs.filter(function (x) { return x.id === row.getAttribute('data-id'); })[0];
-        open(d, who.user);
+    var byId = {};
+    docs.forEach(function (d) { byId[d.id] = d; });
+    function pick(id, row) {
+      var d = byId[id];
+      if (!d) return;
+      portalView.querySelectorAll('.doc-row').forEach(function (r) { r.removeAttribute('aria-current'); });
+      portalView.querySelectorAll('.doc-row[data-id="' + id + '"]').forEach(function (r) { r.setAttribute('aria-current', 'true'); });
+      open(d, who.user);
+    }
+    function wire(scope) {
+      scope.querySelectorAll('[data-id]').forEach(function (el) { el.addEventListener('click', function () { pick(el.getAttribute('data-id')); }); });
+    }
+    wire(portalView.querySelector('.tiles') || document.createElement('div'));
+    wire(portalView.querySelector('.news-list') || document.createElement('div'));
+
+    function listDocs() {
+      var q = ui.q.trim().toLowerCase();
+      return docs.filter(function (d) {
+        if (ui.tab === 'mine' && isLib(d)) return false;
+        if (ui.tab === 'library' && !isLib(d)) return false;
+        if (ui.cls && d.classification !== ui.cls) return false;
+        if (ui.tab === 'library' && ui.sub && subOf(d) !== ui.sub) return false;
+        return !q || (d.title + ' ' + d.number + ' ' + d.description + ' ' + d.classification + ' ' + subOf(d)).toLowerCase().indexOf(q) >= 0;
       });
-    });
+    }
+    function renderList() {
+      portalView.querySelectorAll('[data-tab]').forEach(function (t) {
+        var on = t.getAttribute('data-tab') === ui.tab;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.classList.toggle('on', on);
+      });
+      var subs = document.getElementById('doc-subs');
+      if (ui.tab === 'library') {
+        var names = [];
+        lib.forEach(function (d) { var s = subOf(d); if (s && names.indexOf(s) < 0) names.push(s); });
+        subs.innerHTML = ['All'].concat(names).map(function (n) {
+          var val = n === 'All' ? '' : n;
+          return '<button type="button" class="sub' + (ui.sub === val ? ' on' : '') + '" data-sub="' + esc(val) + '">' + esc(n) + '</button>';
+        }).join('');
+        subs.hidden = false;
+        subs.querySelectorAll('[data-sub]').forEach(function (s) { s.addEventListener('click', function () { ui.sub = s.getAttribute('data-sub'); renderList(); }); });
+      } else {
+        subs.hidden = true;
+        subs.innerHTML = '';
+      }
+      var list = listDocs();
+      var groups = {}, order = [];
+      function add(name, d) { if (!groups[name]) { groups[name] = []; order.push(name); } if (d) groups[name].push(d); }
+      if (ui.tab !== 'library') {
+        (b.folders || []).forEach(function (f) { if (!ui.q && !ui.cls) add(f.name, null); });
+        list.filter(function (d) { return !isLib(d); }).forEach(function (d) { add(d.folder || 'Documents', d); });
+      }
+      if (ui.tab !== 'mine') {
+        list.filter(isLib).sort(function (x, y) { return subOf(x) < subOf(y) ? -1 : subOf(x) > subOf(y) ? 1 : byDateDesc(x, y); })
+          .forEach(function (d) { add(ui.tab === 'all' ? LIB + ' · ' + subOf(d) : subOf(d), d); });
+      }
+      var html = '';
+      order.forEach(function (name) {
+        var items = groups[name];
+        var meta = (b.folders || []).filter(function (f) { return f.name === name; })[0];
+        if (!items.length && !(meta && !ui.q && !ui.cls)) return;
+        html += '<h3 class="portal-folder">' + esc(name) + '</h3>';
+        if (!items.length) html += '<p class="muted small">' + esc(meta && meta.note ? meta.note : 'No documents in this folder.') + '</p>';
+        items.sort(byDateDesc).forEach(function (d) { html += rowHtml(d); });
+      });
+      if (!list.length && (ui.q || ui.cls || ui.tab !== 'mine' || !docs.length)) html += '<p class="muted">' + (docs.length ? 'No document matches.' : 'There are no documents available to this account right now.') + '</p>';
+      var box = document.getElementById('doc-list');
+      box.innerHTML = html;
+      wire(box);
+      var cur = document.querySelector('#viewer [data-open]');
+      if (cur) box.querySelectorAll('.doc-row[data-id="' + cur.getAttribute('data-open') + '"]').forEach(function (r) { r.setAttribute('aria-current', 'true'); });
+    }
+    portalView.querySelectorAll('[data-tab]').forEach(function (t) { t.addEventListener('click', function () { ui.tab = t.getAttribute('data-tab'); renderList(); }); });
+    document.getElementById('doc-q').addEventListener('input', function (ev) { ui.q = ev.target.value; renderList(); });
+    document.getElementById('doc-cls').addEventListener('change', function (ev) { ui.cls = ev.target.value; renderList(); });
+    renderList();
   }
 
   async function open(d, user) {
@@ -263,7 +394,7 @@
       try { await loadDoc(d); } catch (e) { v.innerHTML = '<p class="muted">The document could not be loaded. Try again in a moment.</p>'; return; }
     }
     var wm = 'CONFIDENTIAL — ' + user;
-    var html = '<div class="doc-meta"><div><h2>' + esc(d.title) + '</h2><p class="doc-no">' + esc(d.number) + ' · ' + esc(d.date) + '</p>' +
+    var html = '<div class="doc-meta" data-open="' + esc(d.id) + '"><div><h2>' + esc(d.title) + '</h2><p class="doc-no">' + esc(d.number) + ' · ' + esc(d.date) + '</p>' +
       '<p class="small"><b>Classification:</b> ' + esc(d.classification) + '</p>' + (d.description ? '<p>' + esc(d.description) + '</p>' : '') + '</div>' +
       '<div class="doc-stamp" aria-hidden="true">' + (d.stamp || '') + '</div></div>';
     if (d.file) {
@@ -284,6 +415,7 @@
 
   function signOut() {
     current = null;
+    ui = { tab: 'mine', q: '', cls: '', sub: '' };
     urls.forEach(function (u) { URL.revokeObjectURL(u); });
     urls = [];
     portalView.innerHTML = '';

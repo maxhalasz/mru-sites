@@ -646,9 +646,37 @@
     var w2 = $('matrix-wrap');
     if (w2) { w2.scrollTop = top; w2.scrollLeft = left; }
   }
+  // Library documents that nobody holds yet (added to the package after the logins were published), and the
+  // logins the package gives them to by default. The company library goes to every login.
+  function freshDocs() {
+    var held = {}, map = {}, count = 0;
+    S.dir.logins.forEach(function (L) { (L.docs || []).forEach(function (id) { held[id] = 1; }); });
+    (S.cfg.accounts || []).forEach(function (a) {
+      var L = S.dir.logins.filter(function (x) { return x.user === a.user; })[0];
+      if (!L) return;
+      (a.docs || []).forEach(function (id) { if (!held[id] && S.lib[id]) { (map[L.key] = map[L.key] || []).push(id); count++; } });
+    });
+    return { map: map, count: count, docs: Object.keys(S.lib).filter(function (id) { return !held[id]; }).length };
+  }
+  function giveFreshDocs() {
+    var f = freshDocs();
+    var next = clone(S.dir.logins);
+    next.forEach(function (L) {
+      (f.map[L.key] || []).forEach(function (id) { if ((L.docs || []).indexOf(id) < 0) (L.docs = L.docs || []).push(id); });
+      // folders that came with the package, in the order the package lists them
+      var pkg = (S.cfg.accounts || []).filter(function (x) { return x.user === L.user; })[0];
+      ((pkg && pkg.folders) || []).forEach(function (fo) { if (!(L.folders || []).some(function (x) { return x.name === fo.name; })) (L.folders = L.folders || []).push(fo); });
+    });
+    return act('Documentos novos entregues.', function () { return saveLogins(next); });
+  }
   function viewDocumentos() {
     var wrap = h('div'), logins = S.dir.logins, docs = visibleDocs();
     wrap.appendChild(head('Documentos', 'Marque quem recebe cada documento. Desmarque para tirar. As mudanças só valem depois de Aplicar.'));
+    var fresh = freshDocs();
+    if (fresh.count) wrap.appendChild(h('div', { class: 'note info' },
+      h('b', { text: fresh.docs + (fresh.docs === 1 ? ' documento novo na biblioteca' : ' documentos novos na biblioteca') + ', ainda sem ninguém. ' }),
+      'O pacote indica ' + fresh.count + ' entregas (a biblioteca da empresa vai para todos os logins). ',
+      h('button', { class: 'btn primary small', type: 'button', onclick: giveFreshDocs }, 'Entregar como o pacote indica')));
     var search = h('input', { type: 'search', id: 'doc-q', placeholder: 'Buscar documento, número, pasta', 'aria-label': 'Buscar documentos', value: S.docQ });
     search.addEventListener('input', function (ev) { S.docQ = ev.target.value; keepMatrix(render); var q = $('doc-q'); q.focus(); q.setSelectionRange(q.value.length, q.value.length); });
     var folders = {}, accounts = {};

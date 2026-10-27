@@ -28,8 +28,12 @@ const credsFile = credsIdx >= 0 ? args[credsIdx + 1] : null;
 // --props <file>: the prop logins listed in the game master package (used to test with a throwaway login).
 const propsIdx = args.indexOf('--props');
 const propsFile = propsIdx >= 0 ? args[propsIdx + 1] : null;
-const dist = args.find((a, i) => !a.startsWith('--') && (credsIdx < 0 || i !== credsIdx + 1) && (propsIdx < 0 || i !== propsIdx + 1));
-if (!dist) { console.error('portal: no output folder given'); process.exit(2); }
+// --print-config <file>: writes the panel configuration (logins, documents with keys) to a file and stops. Used by
+// tools/portal-docs/apply-defaults.mjs to publish new documents; the file holds secrets and must stay outside the repository.
+const printIdx = args.indexOf('--print-config');
+const printFile = printIdx >= 0 ? args[printIdx + 1] : null;
+const dist = args.find((a, i) => !a.startsWith('--') && (credsIdx < 0 || i !== credsIdx + 1) && (propsIdx < 0 || i !== propsIdx + 1) && (printIdx < 0 || i !== printIdx + 1));
+if (!dist && !printFile) { console.error('portal: no output folder given'); process.exit(2); }
 const root = new URL('../../', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
 const priv = join(root, 'private');
 
@@ -117,11 +121,13 @@ function adminConfig() {
       logins.push({ user: user.trim().toLowerCase(), pass, account: account.trim() });
     }
   }
-  const { library, dirKey } = buildLibrary([...new Set(logins.map((l) => l.account))]);
+  // private/portal/shared holds the company library: documents every login gets by default.
+  const shared = existsSync(join(priv, 'portal', 'shared')) ? loadAccount('shared', false).docs.map((d) => 'shared--' + d.id) : [];
+  const { library, dirKey } = buildLibrary([...new Set(logins.map((l) => l.account)), ...(shared.length ? ['shared'] : [])]);
   const accounts = logins.map((l) => {
     const b = loadAccount(l.account, false);
     return { user: l.user, pass: l.pass, account: l.account, name: b.name, role: b.role, welcome: b.welcome, folders: b.folders,
-      docs: b.docs.map((d) => l.account + '--' + d.id) };
+      docs: [...b.docs.map((d) => l.account + '--' + d.id), ...(b.noShared ? [] : shared)] };
   });
 
   const jobs = [];
@@ -176,9 +182,16 @@ function loadAccount(account, withFiles = true) {
     welcome: meta.welcome || '',
     folders,
     docs,
+    noShared: meta.shared === false,
     admin: meta.admin ? adminConfig() : undefined,
     app: meta.admin && existsSync(join(dir, 'console.js')) ? readFileSync(join(dir, 'console.js'), 'utf8') : undefined,
   };
+}
+
+if (printFile) {
+  writeFileSync(printFile, JSON.stringify(adminConfig(), null, 1));
+  console.log('portal: configuration written');
+  process.exit(0);
 }
 
 const creds = readCredentials();

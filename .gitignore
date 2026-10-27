@@ -13,3 +13,5 @@ private/credentials.gm
 private/firebase.json
 private/credentials.panel
 private/doc-keys.json
+__pycache__/
+*.pyc

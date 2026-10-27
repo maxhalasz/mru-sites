@@ -6,5 +6,6 @@ classification: "Confidential, installation managers"
 stamp: "CONFIDENTIAL · LEVEL N4"
 description: "Recoveries, retentions and placements across installations, Q3 2028. Confirm entries or report no change by 15 October 2028."
 file: "files/recovery-placement-summary-q3-2028.pdf"
+folder: "Reports"
 published: true
 ---

@@ -30,8 +30,8 @@ Uma página só sua, separada dos sites, para ver o que os jogadores mandam e pa
 - Cada login recebe um **chaveiro**: um registro pequeno, criptografado com o usuário e a senha dele, que lista os documentos que ele pode abrir e a chave de cada um. Dar ou tirar um documento é reescrever o chaveiro. Mudar a senha também.
 - A lista de logins (usuário, senha, nome, documentos) fica num registro criptografado que só o painel abre. Por isso a senha que você vê no painel é sempre a atual, e vale em qualquer aparelho.
 - O arquivo `private/credentials` só serve de ponto de partida. Depois do primeiro uso do painel, quem manda é o painel: mudanças feitas lá não voltam para esse arquivo (e ele fica velho).
-- Os documentos novos entram na biblioteca assim: ponha o `.md` e o arquivo em `private/portal/<pasta>/`, rode `npm run panel-bundle` e faça o commit de `apps/neurostat/public/partner/lib/` e do pacote do painel. Depois é só dar o documento a quem você quiser, na aba Documentos.
-- Cada login pode ter até uns 25 documentos, e a lista toda comporta uns 25 logins. Passou disso, o painel avisa.
+- Os documentos novos entram na biblioteca assim: ponha o `.md` e o arquivo em `private/portal/<pasta>/`, rode `npm run panel-bundle` e faça o commit de `apps/neurostat/public/partner/lib/` e do pacote do painel. Depois é só dar o documento a quem você quiser, na aba Documentos. Documentos em `private/portal/shared/` são a biblioteca da empresa: o painel mostra um aviso "documentos novos na biblioteca" com o botão **Entregar como o pacote indica**, que dá a biblioteca a todos os logins e os documentos de cada pasta ao dono dela.
+- Cada login pode ter até uns 60 documentos, e a lista toda comporta uns 25 logins. Passou disso, o painel avisa.
 
 ## Como funciona
 
