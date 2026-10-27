@@ -7,5 +7,5 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "Dates for the winter and the financial year, and public holidays."
 file: "files/group-calendar-2028-29.pdf"
 folder: "Company library / Directory and calendar"
-published: true
+published: false
 ---

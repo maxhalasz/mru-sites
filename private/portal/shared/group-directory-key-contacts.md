@@ -7,5 +7,5 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "Group functions, clinical contacts and offices, with phone numbers and opening hours."
 file: "files/group-directory-key-contacts.pdf"
 folder: "Company library / Directory and calendar"
-published: true
+published: false
 ---

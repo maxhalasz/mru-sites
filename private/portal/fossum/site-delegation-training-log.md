@@ -7,5 +7,5 @@ stamp: "STUDY CONFIDENTIAL"
 description: "Who may carry out study duties at the site, and the training they have had."
 file: "files/site-delegation-training-log.pdf"
 folder: "Study documents"
-published: true
+published: false
 ---

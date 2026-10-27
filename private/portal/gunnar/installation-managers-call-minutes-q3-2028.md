@@ -7,5 +7,5 @@ stamp: "INTERNAL USE · LEVEL N3"
 description: "Minutes of the Q3 call with the installation managers: items, outcomes and actions."
 file: "files/installation-managers-call-minutes-q3-2028.pdf"
 folder: "Reports"
-published: true
+published: false
 ---

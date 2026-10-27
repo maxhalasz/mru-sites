@@ -7,5 +7,5 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "What employees must do with personal data, and what to do when something goes wrong."
 file: "files/data-protection-confidentiality-notice.pdf"
 folder: "Company library / Policies"
-published: true
+published: false
 ---

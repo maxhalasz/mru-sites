@@ -15,3 +15,8 @@ Precisa de Python com `reportlab` e `pymupdf`, e das fontes Roboto Condensed, So
 1. rode `python tools/portal-docs/fix_pdf_meta.py` (limpa o autor e o produtor dos PDFs),
 2. `npm run panel-bundle` (criptografa os documentos para `apps/neurostat/public/partner/lib/` e refaz o pacote do painel),
 3. faça o commit, espere o deploy e rode `node tools/portal-docs/apply-defaults.mjs`.
+
+## Documentos guardados
+
+Os documentos listados em `held.txt` são gerados com `published: false`: ficam fora da biblioteca e do painel até alguém decidir que têm um propósito na história.
+Para liberar um, tire a linha de `held.txt`, rode `generate.py` e siga os passos acima.

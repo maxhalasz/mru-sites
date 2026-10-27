@@ -7,5 +7,5 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "The rules that apply to every employee and contractor, and how to raise a concern."
 file: "files/code-of-conduct-summary.pdf"
 folder: "Company library / Policies"
-published: true
+published: false
 ---

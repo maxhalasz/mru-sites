@@ -81,14 +81,13 @@ Entrada pelo link "Partner Access" no rodapé. Logins de partida (também em `pr
 
 Senha errada mostra "The username or password is incorrect." depois de 1 segundo. Cinco erros seguidos bloqueiam por 15 minutos (contador no navegador do jogador; apagar os dados do site zera). "Forgot password?" manda para o IT Service Desk.
 
-Documentos que já estão lá (todos corporativos e secos, no modelo padrão de formulário da NeuroStat do gerador de props; nenhum login da petroleira tem documento "absurdo"):
+Documentos que estão lá (todos corporativos e secos, no modelo padrão de formulário da NeuroStat do gerador de props; nenhum login da petroleira tem documento "absurdo"):
 
-- **Gunnar** (10): resumo de recuperações do Q3 (com o Elias, R-0117), diretriz de inverno, aviso do BOREAS-2, escala de standby (Verdugo e Cardume), ficha semanal de status (semana 41), escala de reabastecimento de novembro, horário das lâmpadas de luz do dia, critérios de evacuação médica, ata da ligação trimestral dos gerentes de instalação e o registro (em branco) de transferências de helicóptero.
-- **Callum** (8): plano de integração pós-compra, revisão de pessoal do inverno, metas e corte de custo (com a ordem de manter a produção), alocação do programa Legacy Sites (NOETIC e Cinza), relatório de produção e custo de setembro, previsão de horas extras de janeiro e fevereiro, escopo da revisão de compras e contratos (15/12) e situação da manutenção crítica de segurança no Q3.
-- **Dr. Fossum** (13): sinopse do protocolo, termo de consentimento, registro de dispensação (só C.V.), troca de mensagens com o Dr. A. Fenn, relatório de adesão ao Baseline, checklist de ativação do centro, registro de triagem e inclusão, registro de armazenamento e temperatura, informação de privacidade para a tripulação, registro de delegação e treinamento, guia e registro de eventos adversos (nenhum), guia do Baseline para médicos, inventário da sala médica; e a pasta "Monthly assessments" vazia para você preencher.
-- **Biblioteca da empresa** (17, para todos os logins): diretório de contatos, calendário 2028/29, benefícios, código de conduta, uso aceitável dos sistemas, proteção de dados, política de SSMA, viagens e despesas, férias e ausências, cinco formulários em branco (requisição de equipamento, férias, despesas, viagem, relatório de incidente), boletim de segurança, boletim interno de outubro e o aviso de acesso aos sistemas do grupo para a gerência da Kelvara.
+- Gunnar: resumo de recuperações do Q3 (com o Elias), diretriz de inverno, aviso do BOREAS-2, escala de standby (Verdugo e Cardume).
+- Callum: plano de integração pós-compra, revisão de pessoal do inverno, metas e corte de custo (com a ordem de manter a produção), alocação do programa Legacy Sites (NOETIC e Cinza).
+- Dr. Fossum: sinopse do protocolo, termo de consentimento, registro de dispensação (só C.V.), troca de mensagens com o Dr. A. Fenn, relatório de adesão ao Baseline, e a pasta "Monthly assessments" vazia para você preencher.
 
-Os PDFs são gerados por `tools/portal-docs/` (veja o README dessa pasta). Nada tem data depois de 19/10/2028.
+Regra: todo documento precisa ter um propósito único na história. Rascunhos de mais 35 documentos (rotina de plataforma e uma biblioteca da empresa para todos os logins) estão guardados como "não publicados" em `private/portal/` e fora do painel, esperando você dizer quais servem. Veja `tools/portal-docs/held.txt`.
 
 ## O que eu inventei (pode trocar)
 

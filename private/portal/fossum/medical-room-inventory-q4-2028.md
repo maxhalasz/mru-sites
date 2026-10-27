@@ -7,5 +7,5 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "Stock and expiry dates in the medical room before the winter rotation."
 file: "files/medical-room-inventory-q4-2028.pdf"
 folder: "Reports"
-published: true
+published: false
 ---

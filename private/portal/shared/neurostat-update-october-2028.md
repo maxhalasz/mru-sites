@@ -7,5 +7,5 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "Monthly employee newsletter: Kelvara, BOREAS-2, NS-455 data, dates."
 file: "files/neurostat-update-october-2028.pdf"
 folder: "Company library / Bulletins"
-published: true
+published: false
 ---

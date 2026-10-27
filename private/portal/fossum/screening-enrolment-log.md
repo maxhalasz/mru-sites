@@ -7,5 +7,5 @@ stamp: "STUDY CONFIDENTIAL"
 description: "Weekly screening and enrolment figures, 14 September to 13 October 2028."
 file: "files/screening-enrolment-log.pdf"
 folder: "Study documents"
-published: true
+published: false
 ---

@@ -7,5 +7,5 @@ stamp: "CONFIDENTIAL · LEVEL N4"
 description: "What the review on 15 December covers, the contract categories and the timetable."
 file: "files/procurement-contracts-review-scope.pdf"
 folder: "Production and finance"
-published: true
+published: false
 ---

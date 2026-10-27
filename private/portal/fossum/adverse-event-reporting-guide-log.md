@@ -7,5 +7,5 @@ stamp: "STUDY CONFIDENTIAL"
 description: "When and how to report adverse events, with the site log."
 file: "files/adverse-event-reporting-guide-log.pdf"
 folder: "Study documents"
-published: true
+published: false
 ---

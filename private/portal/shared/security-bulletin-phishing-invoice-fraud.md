@@ -7,5 +7,5 @@ stamp: "INTERNAL USE · LEVEL N2"
 description: "Fake invoices and payment requests: how to spot them and what to do."
 file: "files/security-bulletin-phishing-invoice-fraud.pdf"
 folder: "Company library / Bulletins"
-published: true
+published: false
 ---

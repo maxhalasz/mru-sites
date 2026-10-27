@@ -168,7 +168,12 @@ for (const L of next) {
   } else { L.ver = o.ver; L.sig = o.sig; }
 }
 const seq = await putDir(next, dir.seq);
-const noticeSeq = await publish((n) => { n.dir = n.dir || {}; next.forEach((L) => { n.dir[L.hash] = L.ver; }); });
+const noticeSeq = await publish((n) => {
+  n.dir = n.dir || {};
+  next.forEach((L) => { n.dir[L.hash] = L.ver; });
+  // leftovers of earlier tests
+  Object.values(n.banner || {}).forEach((b) => { if (b && /^TEST NOTICE/.test(b.text || '')) { b.text = ''; b.on = false; } });
+});
 console.log(`directory #${seq}, settings notice #${noticeSeq}, ${changed} keyrings published`);
 }
 if (!dry) await apply();
