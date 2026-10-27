@@ -179,7 +179,7 @@ def procurement():
     return [
         sec('1', 'Scope'),
         p('Finance reviews the procurement and contracts of Kelvara Petrochemicals AS as part of the integration. The review is on 15 December 2028 and covers the categories below. '
-          'Existing contracts stay in force. Suppliers are not contacted before the review has reported.'),
+          'Existing contracts stay in force. Suppliers are not contacted before the review has reported. The contracts Verdugo, Cinza and Cardume are held at programme level and are not part of this review.'),
         sec('2', 'Contract categories'),
         table(['Category', 'Contracts', 'Annual value (CHF m)', 'Kelvara contact'],
               [['Marine and supply services', '3', '18.5', 'Logistics'], ['Helicopter services', '2', '11.2', 'Logistics'], ['Catering and cabin services', '2', '6.4', 'Offshore operations'],
@@ -198,7 +198,7 @@ D(A, 'procurement-contracts-review-scope', 'Procurement and Contracts Review: Sc
   'CONFIDENTIAL · LEVEL N4', 'What the review on 15 December covers, the contract categories and the timetable.', PF, 'FORM NS-FN-07 · REV. 08/23', 'Review Plan', FIN, procurement,
   rows=[[(2, 'TITLE', 'Procurement and Contracts Review: Scope and Timetable', {'bold': True}), (1, 'DOCUMENT NO.', 'NS-CFO-FIN-2028-12', {'mono': True})],
         [(1, 'PROJECT', 'Kelvara integration'), (1, 'REVIEW DATE', '15 DEC 2028'), (1, 'DATE', '13 OCT 2028'), (1, 'TO', 'Site management')]],
-  appr=[('PREPARED BY', 'Group Finance', '13 OCT 09:25 · e-sig'), ('APPROVED', 'R. Steinmetz', '13 OCT 12:40 · e-sig'), ('FILE COPY', '', '')], unit_short='KELVARA INTEGRATION')
+  appr=[('PREPARED BY', 'Group Finance', '13 OCT 09:25 · e-sig'), ('APPROVED', 'R. Steinmetz', '13 OCT 12:40 · e-sig'), ('MARINE AND STANDBY CONTRACTS', 'F. Carvalho, Project Management', '13 OCT 15:12 · e-sig')], unit_short='KELVARA INTEGRATION')
 
 
 # ---- Safety-critical maintenance status ------------------------------------------------------------------------
@@ -210,7 +210,7 @@ def maint():
                ['Lifting and structural', '23', '22', '1', '0'], ['Safety systems', '30', '30', '0', '0']],
               [5, 2, 2, 3, 2], align=['l', 'r', 'r', 'r', 'r'], mono=(1, 2, 3, 4), total=('TOTAL', ['214', '211', '3', '0'])),
         sec('B', 'Deferrals'),
-        p('Three tasks were deferred with approval from the Production Superintendent and the installation manager. All three are rescheduled for the first two weeks of November, before the winter rotation starts.'),
+        p('Three tasks were deferred. Two were deferred by the Production Superintendent with the agreement of the installation manager, and are rescheduled for the first two weeks of November. One, the inspection of the crane 2 control cabinet, was deferred on instruction PM-2028-114 from Project Management and is rescheduled for December.'),
         sec('C', 'Winter backlog'),
         p('The winter maintenance plan is unchanged. Cost measures do not apply to safety-critical maintenance (see NS-CFO-FIN-2028-10, section 3).'),
     ]

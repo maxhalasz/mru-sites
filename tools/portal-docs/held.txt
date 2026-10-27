@@ -6,8 +6,6 @@ gunnar/weekly-status-sheet-week-41
 gunnar/winter-supply-run-schedule-november-2028
 callum/monthly-production-cost-report-2028-09
 callum/overtime-forecast-jan-feb-2029
-callum/procurement-contracts-review-scope
-callum/safety-critical-maintenance-status-q3-2028
 fossum/adverse-event-reporting-guide-log
 fossum/baseline-guide-for-medics
 fossum/medical-room-inventory-q4-2028

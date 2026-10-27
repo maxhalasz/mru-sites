@@ -7,5 +7,5 @@ stamp: "INTERNAL USE · LEVEL N3"
 description: "Planned, completed and deferred safety-critical maintenance in Q3 2028."
 file: "files/safety-critical-maintenance-status-q3-2028.pdf"
 folder: "Production and finance"
-published: false
+published: true
 ---

@@ -32,7 +32,7 @@ D(A, 'winter-operations-directive-2028-29', 'Winter Operations Directive 2028/29
   rows=[[(2, 'TITLE', 'Winter Operations Directive 2028/29', {'bold': True}), (1, 'DOCUMENT NO.', 'NS-CFO-WOD-2028-29', {'mono': True})],
         [(1.4, 'TO', 'Installation managers, Legacy Sites programme; Platform Supervisor, Ødemark A'), (1, 'FROM', 'Clinical Field Operations'), (0.8, 'DATE', '28 SEP 2028')],
         [(1, 'EFFECTIVE', '1 NOV 2028'), (1, 'REPLACES', 'Winter directive 2027/28'), (1, 'CLASSIFICATION', 'Internal, installation managers')]],
-  appr=[('ISSUED BY', 'M. Holt', '28 SEP 09:12 · e-sig'), ('ACKNOWLEDGED', '', ''), ('FILE COPY', '', '')], unit_short='LEGACY SITES PROGRAMME')
+  appr=[('ISSUED BY', 'M. Holt', '28 SEP 09:12 · e-sig'), ('APPROVED', 'F. Carvalho, Project Management', '26 SEP 17:40 · e-sig'), ('ACKNOWLEDGED', '', '')], unit_short='LEGACY SITES PROGRAMME')
 
 
 # ---- BOREAS-2 coordination notice -------------------------------------------------------------
@@ -103,7 +103,8 @@ def wsr():
         table(['Contract', 'Persons', 'Standby from', 'Readiness', 'Remarks'],
               [['Verdugo', '2', '01 Nov 2028', 'On call, 4 h', 'Field contractors. Not part of the installation crew.'],
                ['Cardume', '3', '01 Nov 2028', 'On station', 'Escort and standby with MS Nordvakt. Operated by Aegis Corporation.'],
-               ['Cardume', '2', '15 Nov 2028', 'On call, 6 h', 'Relief for the above.']],
+               ['Cardume', '2', '15 Nov 2028', 'On call, 6 h', 'Relief for the above.'],
+               ['Cinza', '0', '—', 'Reserved', 'Not on standby. Activation only by order of Project Management.']],
               [1.6, 1.3, 2, 2, 5], align=['l', 'r', 'l', 'l', 'l'], mono=(1, 2)),
         sec('B', 'Handling'),
         *bullets(['Standby contractors do not appear on the installation personnel-on-board list unless they are called out. Call-out is authorised by Clinical Field Operations.',
@@ -115,7 +116,7 @@ D(A, 'winter-standby-contractor-roster', 'Winter Standby: Contractor Roster 2028
   'INTERNAL USE · LEVEL N3', 'Contractors scheduled on standby for the winter period, by contract.', MGR, 'FORM NS-RS-02 · REV. 03/22', 'Roster', CFO, wsr,
   rows=[[(2, 'TITLE', 'Winter Standby: Contractor Roster 2028/29', {'bold': True}), (1, 'DOCUMENT NO.', 'NS-CFO-WSR-2028-10', {'mono': True})],
         [(1, 'AS AT', '16 OCT 2028'), (1, 'PERIOD', 'WINTER 2028/29'), (1, 'INSTALLATION', 'Ødemark A'), (1, 'DISTRIBUTION', 'Installation managers')]],
-  appr=[('ISSUED BY', 'Clinical Field Operations', '16 OCT 10:40 · e-sig'), ('RECEIVED', '', ''), ('FILE COPY', '', '')], unit_short='LEGACY SITES PROGRAMME')
+  appr=[('ISSUED BY', 'Clinical Field Operations', '16 OCT 10:40 · e-sig'), ('CINZA ACTIVATION', 'Project Management', ''), ('RECEIVED', '', '')], unit_short='LEGACY SITES PROGRAMME')
 
 
 # ---- Weekly status sheet ------------------------------------------------------------------------

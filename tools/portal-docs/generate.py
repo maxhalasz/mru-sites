@@ -6,7 +6,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import doclib
 
-MODULES = ['docs_gunnar', 'docs_callum', 'docs_fossum', 'docs_shared']
+MODULES = ['docs_gunnar', 'docs_gunnar2', 'docs_callum', 'docs_fossum', 'docs_shared']
 want = set(sys.argv[1:])
 for m in MODULES:
     if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), m + '.py')):
