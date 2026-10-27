@@ -91,7 +91,7 @@ Documentos que já estão lá (dê uma olhada, são todos corporativos e secos):
 
 Tudo isto está fora do pitch e é substituível:
 
-- Vagas da Kelvara: Roughneck, Driller e Subsea Operator (KV-2841 a KV-2843, início 28/10/2028, temporada inteira). Os requisitos (BOSIET, IWCF/IADC WellSharp etc.) são genéricos do setor.
+- Vagas da Kelvara: Roughneck (duas posições), Driller e Subsea Operator (KV-2841 a KV-2843), anunciadas desde 4 de junho de 2028, início 28/10/2028, temporada inteira. O site conta posições: quatro abertas. Os requisitos (BOSIET, IWCF/IADC WellSharp etc.) são genéricos do setor.
 - Maiores acionistas da NeuroStat: Sundvor Partners AS 9,8% e Rotbuche Capital AG 5,2% (inventado).
 - Anos de abertura dos escritórios: Basel 2008, Boston 2014, Londres 2018. Funcionários: cerca de 1.100 (NeuroStat) e cerca de 190 (Kelvara).
 - Números financeiros da NeuroStat (receita, lucro, dividendo, ações) e a série de cotação, que cai de CHF 116 para 74 em 12/03/2026 e fecha em CHF 84,35 em 19/10/2028. ISIN `CH0471833928` (dígito verificador válido) e UID `CHE-115.372.646` (idem). Podem coincidir com uma empresa real que eu não consigo verificar.

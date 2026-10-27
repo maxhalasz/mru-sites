@@ -478,7 +478,9 @@
     var libN = Object.keys(S.lib).length;
     var fresh = S.entries.filter(function (e) { return S.prevSeen && e.t > S.prevSeen; }).length;
     var banners = Object.keys(S.ctl.banner || {}).filter(function (k) { var b = S.ctl.banner[k]; return b && b.on && b.text; }).length;
-    var closed = Object.keys(S.ctl.jobs || {}).filter(function (k) { return S.ctl.jobs[k] === 'closed'; }).length;
+    var totalPos = (S.cfg.jobs || []).reduce(function (n, j) { return n + (j.positions || 1); }, 0);
+    var leftPos = (S.cfg.jobs || []).reduce(function (n, j) { return n + slotsLeft(j); }, 0);
+    var filledPos = totalPos - leftPos;
     var base = S.cfg.baseDate || '2028-10-19';
     var wrap = h('div');
     wrap.appendChild(head('Visão geral', 'O que está acontecendo nos sites agora.', [
@@ -489,7 +491,7 @@
       stat('Documentos', libN, assigned + ' atribuições aos logins'),
       stat('Data do jogo', S.ctl.today ? longDate(S.ctl.today) : longDate(base), S.ctl.today ? 'alterada pelo mestre' : 'data padrão'),
       stat('Avisos no ar', banners, banners ? 'em ' + banners + ' site' + (banners > 1 ? 's' : '') : 'nenhum aviso'),
-      stat('Vagas', (S.cfg.jobs || []).length - closed, closed ? closed + ' preenchida' + (closed > 1 ? 's' : '') : 'todas abertas')));
+      stat('Vagas', leftPos, filledPos ? filledPos + ' preenchida' + (filledPos > 1 ? 's' : '') + ' de ' + totalPos : 'todas abertas (' + totalPos + ')')));
     var recent = h('div', { class: 'card', style: 'margin-top:.9rem' }, h('div', { class: 'row between' }, h('h2', { text: 'Atividade recente' }),
       h('button', { class: 'btn small ghost', type: 'button', onclick: function () { S.tab = 'mensagens'; render(); } }, 'Ver todas')));
     var feed = h('div', { class: 'feed' });
@@ -805,19 +807,48 @@
     wrap.appendChild(grid);
     return wrap;
   }
+  // How many positions of a listing are still open: "closed" means none, a number is what is left.
+  function slotsLeft(j) {
+    var p = j.positions || 1, v = (S.ctl.jobs || {})[j.reference];
+    if (v === 'closed') return 0;
+    if (typeof v === 'number') return Math.max(0, Math.min(p, v));
+    return p;
+  }
+  function setSlots(j, left) {
+    var p = j.positions || 1;
+    return publish(function (n) {
+      n.jobs = n.jobs || {};
+      if (left >= p) delete n.jobs[j.reference];
+      else if (left <= 0) n.jobs[j.reference] = 'closed';
+      else n.jobs[j.reference] = left;
+    });
+  }
   function viewVagas() {
     var wrap = h('div');
-    wrap.appendChild(head('Vagas', 'Uma vaga preenchida some do site da Kelvara (lista, contagem, formulário e diagrama), e os textos com "três vagas" se ajustam.'));
+    wrap.appendChild(head('Vagas', 'Uma vaga preenchida some do site da Kelvara (lista, contagem, formulário e diagrama), e os textos com "três vagas" se ajustam. Anúncios com mais de uma posição (como o de roughneck) podem ser preenchidos uma de cada vez.'));
     var grid = h('div', { class: 'grid people' });
     (S.cfg.jobs || []).forEach(function (j) {
-      var closed = ((S.ctl.jobs || {})[j.reference]) === 'closed';
-      grid.appendChild(h('div', { class: 'card' }, h('div', { class: 'row between' }, h('div', {}, h('h3', { text: j.title }), h('div', { class: 'muted small mono', text: j.reference })),
-        h('span', { class: 'chip' + (closed ? ' off' : ''), text: closed ? 'Preenchida' : 'Aberta' })),
-        h('div', { style: 'margin-top:.8rem' }, h('button', { class: closed ? 'btn primary' : 'btn danger', type: 'button', onclick: function () {
-          act(closed ? j.title + ' reaberta.' : j.title + ' marcada como preenchida.', function () {
-            return publish(function (n) { n.jobs = n.jobs || {}; if (closed) delete n.jobs[j.reference]; else n.jobs[j.reference] = 'closed'; });
-          });
-        } }, closed ? 'Reabrir vaga' : 'Marcar como preenchida'))));
+      var p = j.positions || 1, left = slotsLeft(j), closed = left === 0;
+      var label = closed ? 'Preenchida' : p > 1 ? left + ' de ' + p + ' abertas' : 'Aberta';
+      var buttons = [];
+      if (p > 1) {
+        buttons.push(h('button', { class: 'btn', type: 'button', disabled: left <= 0 ? 'disabled' : null, onclick: function () {
+          act('Uma posição de ' + j.title + ' preenchida.', function () { return setSlots(j, left - 1); });
+        } }, 'Preencher uma'));
+        buttons.push(h('button', { class: 'btn ghost', type: 'button', disabled: left >= p ? 'disabled' : null, onclick: function () {
+          act('Uma posição de ' + j.title + ' reaberta.', function () { return setSlots(j, left + 1); });
+        } }, 'Reabrir uma'));
+      } else {
+        buttons.push(h('button', { class: closed ? 'btn primary' : 'btn danger', type: 'button', onclick: function () {
+          act(closed ? j.title + ' reaberta.' : j.title + ' marcada como preenchida.', function () { return setSlots(j, closed ? p : 0); });
+        } }, closed ? 'Reabrir vaga' : 'Marcar como preenchida'));
+      }
+      if (p > 1) buttons.push(h('button', { class: 'btn ' + (closed ? 'primary' : 'danger'), type: 'button', onclick: function () {
+        act(closed ? j.title + ' reaberta.' : j.title + ' marcada como preenchida.', function () { return setSlots(j, closed ? p : 0); });
+      } }, closed ? 'Reabrir todas' : 'Preencher todas'));
+      grid.appendChild(h('div', { class: 'card' }, h('div', { class: 'row between' }, h('div', {}, h('h3', { text: j.title }), h('div', { class: 'muted small mono', text: j.reference + ' · aberta desde ' + longDate(j.date) })),
+        h('span', { class: 'chip' + (closed ? ' off' : ''), text: label })),
+        h('div', { class: 'row', style: 'margin-top:.8rem;gap:.5rem;flex-wrap:wrap' }, buttons)));
     });
     if (!(S.cfg.jobs || []).length) grid.appendChild(h('p', { class: 'empty', text: 'Nenhuma vaga encontrada no pacote.' }));
     wrap.appendChild(grid);

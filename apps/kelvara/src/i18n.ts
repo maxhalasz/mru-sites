@@ -67,3 +67,29 @@ export const SITE_DATE = new Date('2028-10-19T23:59:59Z');
 export const isLive = (d: { published: boolean; date: Date; scheduled?: boolean }) => d.published && (d.date <= SITE_DATE || !!d.scheduled);
 export const isFuture = (d: Date) => d > SITE_DATE;
 export const isoDay = (d: Date) => d.toISOString().slice(0, 10);
+
+// ---- open positions -------------------------------------------------------------------------
+// A listing can have more than one position (data.positions). Counts and sentences are built from the
+// number of open positions, and control.js rewrites them with the same wording when the shared state
+// changes (a position filled, a different date).
+type JobLike = { data: { reference: string; date: Date; positions?: number } };
+export const positionsOf = (j: JobLike) => j.data.positions ?? 1;
+export const openPositions = (jobs: JobLike[]) => jobs.filter((j) => !isFuture(j.data.date)).reduce((n, j) => n + positionsOf(j), 0);
+export const jobsAttr = (jobs: JobLike[]) => jobs.map((j) => `${j.data.reference}:${isoDay(j.data.date)}:${positionsOf(j)}`).join(',');
+export const slotsText = (n: number, lang: Lang) => (n > 1 ? ` · ${n} ${lang === 'no' ? 'stillinger' : 'positions'}` : '');
+
+const numNo = ['ingen', 'én', 'to', 'tre', 'fire', 'fem', 'seks', 'sju', 'åtte', 'ni', 'ti'];
+const numEn = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+export function vacancyText(kind: 'top' | 'headline' | 'count' | 'now' | 'lead', lang: Lang, n: number) {
+  const no = lang === 'no';
+  const w = (no ? numNo : numEn)[n] ?? String(n);
+  if (kind === 'top') return no ? (n === 0 ? 'Ingen ledige stillinger' : n + (n === 1 ? ' ledig stilling' : ' ledige stillinger')) : (n === 0 ? 'No open positions' : n + (n === 1 ? ' open position' : ' open positions'));
+  if (kind === 'headline') return no ? (n === 0 ? 'Ingen ledige stillinger' : cap(n === 1 ? 'én ledig stilling' : w + ' ledige stillinger') + ' til vintersesongen') : (n === 0 ? 'No open positions' : cap(w) + (n === 1 ? ' open position' : ' open positions') + ' for the winter season');
+  if (kind === 'count') return no ? (n === 0 ? 'Ingen ledige stillinger' : n + (n === 1 ? ' stilling' : ' stillinger') + ' til vintersesongen') : (n === 0 ? 'No open positions' : n + (n === 1 ? ' position' : ' positions') + ' for the winter season');
+  if (kind === 'now') return no ? (n === 0 ? 'Akkurat nå er ingen stillinger ledige på Ødemark A.' : n === 1 ? 'Akkurat nå er én stilling ledig på Ødemark A.' : `Akkurat nå er ${w} stillinger ledige på Ødemark A.`) : (n === 0 ? 'Right now no positions are open on Ødemark A.' : n === 1 ? 'Right now one position is open on Ødemark A.' : `Right now ${w} positions are open on Ødemark A.`);
+  if (no) return n === 0 ? 'Bemanningen for vinteren 2028/29 er komplett. Det er ingen ledige stillinger på Ødemark A akkurat nå.'
+    : `Bemanningen for vinteren 2028/29 er nesten komplett. ${n === 1 ? 'Dette er den siste ledige stillingen' : `Disse ${w} er de siste ledige stillingene`} på Ødemark A. Vi leser søknadene etter hvert som de kommer og kaller inn til intervju med en gang.`;
+  return n === 0 ? 'The crew for winter 2028/29 is complete. There are no open positions on Ødemark A right now.'
+    : `The crew for winter 2028/29 is almost complete. ${n === 1 ? 'This is the last open position' : `These ${w} are the last open positions`} on Ødemark A. We read applications as they come in and call people in for interviews straight away.`;
+}

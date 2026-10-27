@@ -20,7 +20,7 @@ Uma página só sua, separada dos sites, para ver o que os jogadores mandam e pa
   - **Bloquear:** "vale no próximo login" (quem já está dentro continua), "agora" (derruba a sessão em até 5 segundos) ou "e recarregar a página dela". **Desbloquear** devolve o acesso.
 - **Documentos:** uma grade com todos os documentos nas linhas e todos os logins nas colunas. Marque para dar o documento a alguém, desmarque para tirar. Dá para marcar a linha inteira ("todos") ou a coluna inteira, buscar e filtrar por pasta ou origem. As mudanças ficam destacadas e só valem depois de **Aplicar**. Quem estiver dentro do portal vê a lista mudar em segundos. Documentos com data depois da data compartilhada ficam escondidos sozinhos.
 - **Avisos:** uma faixa no topo de todas as páginas de um site (informativa ou de alerta), ou uma mensagem que cobre a tela inteira. Um aviso por site.
-- **Vagas:** marca uma vaga da Kelvara como preenchida. Ela some da lista, do formulário e do diagrama, e a contagem e os textos ("três vagas") se ajustam.
+- **Vagas:** marca uma vaga da Kelvara como preenchida. Ela some da lista, do formulário e do diagrama, e a contagem e os textos ("quatro vagas") se ajustam. O anúncio de roughneck tem duas posições: dá para preencher uma de cada vez ("Preencher uma") ou as duas de uma vez.
 - **Data:** a data de hoje no jogo, compartilhada por todos os sites. Tem +1 dia, −1 dia, +1 semana e "voltar ao padrão" (19 de outubro de 2028).
 - **Recarregar páginas abertas** (botão na lateral): faz todas as páginas abertas dos sites recarregarem agora.
 

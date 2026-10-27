@@ -2,14 +2,15 @@
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import { getCollection } from 'astro:content';
-import { paths, label, dateFmt, isLive, isFuture, isoDay, type Lang } from '../i18n';
+import { paths, label, dateFmt, isLive, isFuture, isoDay, jobsAttr as jobsAttrOf, openPositions, positionsOf, slotsText, vacancyText, type Lang } from '../i18n';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = (no: string, en: string) => (lang === 'no' ? no : en);
 const quotes = (await getCollection('testimonials', (q) => q.data.published)).sort((a, b) => a.data.order - b.data.order);
 const jobs = (await getCollection('jobs', (j) => isLive(j.data))).sort((a, b) => a.data.order - b.data.order);
-const jobsAttr = jobs.map((j) => `${j.data.reference}:${isoDay(j.data.date)}`).join(',');
+const jobsAttr = jobsAttrOf(jobs);
+const openNow = openPositions(jobs);
 const slug = (n: string) => n.toLowerCase().replace(/[^a-z]+/g, '-');
 const lines = (s: string) => s.split('\n').filter(Boolean);
 ---
@@ -25,13 +26,13 @@ const lines = (s: string) => s.split('\n').filter(Boolean);
   <section class="band vacancies" id="stillinger">
     <div class="wrap">
       <p class="eyebrow">{t('Ledige stillinger', 'Open positions')}</p>
-      <h2 data-vac="count" data-jobs={jobsAttr}>{t(`${jobs.length} stillinger til vintersesongen`, `${jobs.length} positions for the winter season`)}</h2>
+      <h2 data-vac="count" data-jobs={jobsAttr}>{vacancyText('count', lang, openNow)}</h2>
       <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-      <p class="lead" data-vac="lead" data-jobs={jobsAttr}>{t('Bemanningen for vinteren 2028/29 er nesten komplett. Disse tre er de siste ledige stillingene på Ødemark A. Vi leser søknadene etter hvert som de kommer og kaller inn til intervju med en gang.', 'The crew for winter 2028/29 is almost complete. These three are the last open positions on Ødemark A. We read applications as they come in and call people in for interviews straight away.')}</p>
+      <p class="lead" data-vac="lead" data-jobs={jobsAttr}>{vacancyText('lead', lang, openNow)}</p>
       <div class="grid c3 jobs" data-vac-zero="hide" data-jobs={jobsAttr}>
         {jobs.map((j) => (
           <article class="job" id={j.data.reference.toLowerCase()} data-job={j.data.reference} data-date={isoDay(j.data.date)} hidden={isFuture(j.data.date)}>
-            <span class="tag new">{t('Ledig', 'Open')}</span>
+            <span class="tag new">{t('Ledig', 'Open')}<span data-slots={`${j.data.reference}:${positionsOf(j)}`}>{slotsText(positionsOf(j), lang)}</span></span>
             <h3>{lang === 'no' ? j.data.title_no : j.data.title_en}</h3>
             <p class="sub">{lang === 'no' ? j.data.subtitle_no : j.data.subtitle_en}</p>
             <p class="meta"><span>{j.data.location}</span><span>{lang === 'no' ? j.data.rotation_no : j.data.rotation_en}</span></p>

@@ -143,13 +143,20 @@
     return '';
   }
 
+  // A listing has a number of positions. The shared state can close it ("closed") or say how many are left (a number).
+  function slotsLeft(ref, positions) {
+    var v = (state.jobs || {})[ref];
+    if (v === 'closed') return 0;
+    if (typeof v === 'number') return Math.max(0, Math.min(positions, v));
+    return positions;
+  }
   function openCount(list) {
-    var closed = state.jobs || {}, n = 0;
+    var n = 0;
     (list || '').split(',').forEach(function (p) {
       var bits = p.split(':');
       if (!bits[0]) return;
       if (bits[1] && bits[1] > todayISO()) return;
-      if (closed[bits[0]] !== 'closed') n++;
+      n += slotsLeft(bits[0], Math.max(1, parseInt(bits[2], 10) || 1));
     });
     return n;
   }
@@ -195,7 +202,12 @@
 
   function applyJobs() {
     var closed = state.jobs || {}, l = lang();
-    nodes('[data-job]').forEach(function (el) { hide(el, 'closed', closed[el.getAttribute('data-job')] === 'closed'); });
+    nodes('[data-job]').forEach(function (el) { var v = closed[el.getAttribute('data-job')]; hide(el, 'closed', v === 'closed' || v === 0); });
+    nodes('[data-slots]').forEach(function (el) {
+      var bits = el.getAttribute('data-slots').split(':');
+      var n = slotsLeft(bits[0], Math.max(1, parseInt(bits[1], 10) || 1));
+      el.textContent = n > 1 ? ' · ' + n + (l === 'nb' || l === 'no' ? ' stillinger' : ' positions') : '';
+    });
     nodes('select').forEach(function (sel) {
       if (sel.selectedOptions && sel.selectedOptions[0] && sel.selectedOptions[0].hidden) sel.value = '';
     });

@@ -40,6 +40,7 @@ export const collections = {
       published,
       scheduled: z.boolean().optional(),
       order: z.number().default(0),
+      positions: z.number().int().min(1).default(1),
       location: z.string(),
       title_no: z.string(),
       title_en: z.string(),

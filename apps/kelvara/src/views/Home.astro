@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import HeroArt from '../components/HeroArt.astro';
 import { getCollection } from 'astro:content';
-import { paths, label, ui, dateFmt, isLive, isFuture, isoDay, type Lang } from '../i18n';
+import { paths, label, ui, dateFmt, isLive, isFuture, isoDay, jobsAttr as jobsAttrOf, openPositions, positionsOf, slotsText, vacancyText, type Lang } from '../i18n';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -11,7 +11,8 @@ const t = (no: string, en: string) => (lang === 'no' ? no : en);
 const news = (await getCollection('news', (n) => isLive(n.data))).sort((a, b) => +b.data.date - +a.data.date);
 const newsShown = news.filter((n) => !isFuture(n.data.date)).slice(0, 3).map((n) => n.id);
 const jobs = (await getCollection('jobs', (j) => isLive(j.data))).sort((a, b) => a.data.order - b.data.order);
-const jobsAttr = jobs.map((j) => `${j.data.reference}:${isoDay(j.data.date)}`).join(',');
+const jobsAttr = jobsAttrOf(jobs);
+const openNow = openPositions(jobs);
 const newsPath = (id: string) => `${paths[lang].news}${id}/`;
 const facts: [string, string][] = [
   ['303 m', t('vanndybde', 'water depth')],
@@ -39,12 +40,12 @@ const facts: [string, string][] = [
       <div class="vb">
         <div>
           <p class="eyebrow">{t('Vi trenger deg', 'We need you')}</p>
-          <h2 data-vac="headline" data-jobs={jobsAttr}>{t('Tre ledige stillinger til vintersesongen', 'Three open positions for the winter season')}</h2>
+          <h2 data-vac="headline" data-jobs={jobsAttr}>{vacancyText('headline', lang, openNow)}</h2>
           <p>{t('Oppstart 28. oktober 2028. Vi kaller deg inn til intervju så snart søknaden er kommet.', 'Start 28 October 2028. We will call you in for an interview as soon as your application arrives.')}</p>
         </div>
         <ul class="chips">
           {jobs.map((j) => (
-            <li data-job={j.data.reference} data-date={isoDay(j.data.date)} hidden={isFuture(j.data.date)}><a href={`${paths[lang].careers}#${j.data.reference.toLowerCase()}`}><b>{lang === 'no' ? j.data.title_no : j.data.title_en}</b><span>{lang === 'no' ? j.data.subtitle_no : j.data.subtitle_en}</span></a></li>
+            <li data-job={j.data.reference} data-date={isoDay(j.data.date)} hidden={isFuture(j.data.date)}><a href={`${paths[lang].careers}#${j.data.reference.toLowerCase()}`}><b>{lang === 'no' ? j.data.title_no : j.data.title_en}</b><span>{lang === 'no' ? j.data.subtitle_no : j.data.subtitle_en}<span data-slots={`${j.data.reference}:${positionsOf(j)}`}>{slotsText(positionsOf(j), lang)}</span></span></a></li>
           ))}
         </ul>
         <p class="go"><a class="btn" href={`${paths[lang].careers}#stillinger`}>{t('Se stillingene og søk', 'See the positions and apply')}</a></p>
@@ -97,7 +98,7 @@ const facts: [string, string][] = [
         <p class="eyebrow">{label[lang].careers}</p>
         <h2>{t('Jobb med oss', 'Work with us')}</h2>
         <div class="strata" aria-hidden="true"><i></i><i></i><i></i></div>
-        <p>{t('Vi vil ha folk som kan faget og som passer på hverandre.', 'We want people who know their trade and look out for each other.')} <span data-vac="now" data-jobs={jobsAttr}>{t('Akkurat nå er tre stillinger ledige på Ødemark A.', 'Right now three positions are open on Ødemark A.')}</span></p>
+        <p>{t('Vi vil ha folk som kan faget og som passer på hverandre.', 'We want people who know their trade and look out for each other.')} <span data-vac="now" data-jobs={jobsAttr}>{vacancyText('now', lang, openNow)}</span></p>
       </div>
       <p><a class="btn" href={paths[lang].careers}>{t('Se ledige stillinger', 'See open positions')}</a></p>
     </div>

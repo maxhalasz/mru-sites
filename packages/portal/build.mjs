@@ -129,7 +129,7 @@ function adminConfig() {
   if (existsSync(jobsDir)) {
     for (const n of readdirSync(jobsDir).filter((x) => x.endsWith('.yml')).sort()) {
       const j = YAML.parse(readFileSync(join(jobsDir, n), 'utf8'));
-      jobs.push({ reference: j.reference, title: j.title_en, date: j.date instanceof Date ? j.date.toISOString().slice(0, 10) : String(j.date) });
+      jobs.push({ reference: j.reference, title: j.title_en, positions: j.positions || 1, date: j.date instanceof Date ? j.date.toISOString().slice(0, 10) : String(j.date) });
     }
   }
   const sites = readdirSync(join(root, 'apps')).filter((d) => existsSync(join(root, 'apps', d, 'public', 'js', 'log-config.js')));
