@@ -102,11 +102,12 @@ Rostos gerados por IA (StyleGAN2, pessoas que não existem) que o Max mandou em 
 | `kelvara: portrett-sverre-nordtveit.jpg` | Sverre Nordtveit, presidente do conselho | Mais velho, rosto marcado pelo tempo, jaqueta simples |
 | `kelvara: portrett-rolf-hetland.jpg` | Rolf Hetland, conselho | Óculos, olhos azuis claros, sorriso discreto |
 | `kelvara: portrett-gunnar-mackenzie.jpg` | Gunnar MacKenzie (Karriere) | Foto que o Max mandou: cabelo loiro comprido, rosto fino, boné de marinheiro, convés de petroleiro ao fundo. Quadrada, 582 × 582 px |
+| `kelvara: portrett-del-carbone.jpg` | Del Carbone (Karriere) | Foto que o Max mandou em 27/10/2026: barbudo de cabelo comprido e macacão jeans sujo, sorrindo num corredor de metal. Quadrada, 582 × 582 px |
+| `kelvara: portrett-sofie-aune.jpg` | Sofie Aune (Karriere) | Foto que o Max mandou em 27/10/2026: mulher loira de cabelo ao vento numa passarela com neblina. Quadrada, 582 × 582 px |
 | `kelvara: portrett-dag-helgesen.jpg` | Dag Helgesen, conselho | Barba grisalha, óculos, sorriso simpático, paletó e colarinho branco |
 
 Sem rosto de propósito: Marcus Holt e Dr. Adriond Fisher.
-Sem rosto, esperando foto do Max: Del Carbone.
-Sem rosto por falta de imagem adequada: Dr. Samuel Okonkwo, Sofie Aune (25 anos, nenhum rosto tão jovem), Lukas Bachmann, Eli Tveit.
+Sem rosto por falta de imagem adequada: Dr. Samuel Okonkwo, Lukas Bachmann, Eli Tveit.
 Rosto sobrando: a mulher mais velha de óculos escuros, que não serve para foto de empresa. Dá para usar numa personagem de campanha.
 
 Para trocar um rosto, mantenha o nome do arquivo.
