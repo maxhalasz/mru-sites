@@ -16,6 +16,18 @@ const timeline = [
   ['2026', 'A Phase III study of tolugepant in migraine prevention does not meet its primary endpoint.', '2026-03-12'],
   ['2028', 'BOREAS-2, a Phase II study of NS-760 in extended offshore rotations, begins recruitment.', '2028-09-14'],
 ];
+const partners = [
+  ['Roche', 'Basel, Switzerland', 'Diagnostics and clinical development'],
+  ['Novartis', 'Basel, Switzerland', 'Neuroscience research'],
+  ['Lonza', 'Basel, Switzerland', 'Contract manufacturing'],
+  ['Lundbeck', 'Copenhagen, Denmark', 'Neuroscience research'],
+  ['UCB', 'Brussels, Belgium', 'Neurology research and patient programmes'],
+  ['Biogen', 'Cambridge, Massachusetts, USA', 'Clinical collaboration, North America'],
+  ['Pfizer', 'New York, USA', 'Distribution, North America'],
+  ['AstraZeneca', 'Cambridge, United Kingdom', 'Clinical development, United Kingdom'],
+  ['Bayer', 'Leverkusen, Germany', 'Distribution, Germany and Austria'],
+  ['Takeda', 'Tokyo, Japan', 'Distribution, Japan'],
+];
 const locations = [
   ['Zürich', 'Headquarters, research and corporate functions'],
   ['Basel', 'Clinical research'],
@@ -68,6 +80,22 @@ const locations = [
   </section>
 
   <section class="band alt">
+    <div class="wrap">
+      <h2>International network</h2>
+      <p class="lead">We work with research institutes, manufacturers and distributors in more than twenty countries. These are the partner companies we work with most.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Partner</th><th>Headquarters</th><th>Cooperation</th></tr></thead>
+          <tbody>
+            {partners.map(([n, c, a]) => <tr><td><b>{n}</b></td><td>{c}</td><td>{a}</td></tr>)}
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted" style="margin-top:1rem">Cooperation takes place under separate agreements with each partner.</p>
+    </div>
+  </section>
+
+  <section class="band">
     <div class="wrap">
       <h2>Locations</h2>
       <div class="grid c4">
