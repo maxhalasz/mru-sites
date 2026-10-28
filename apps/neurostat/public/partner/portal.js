@@ -213,14 +213,14 @@
       return;
     }
     save({ n: 0, until: 0 });
-    var acct = !bundle.app ? accountSettings(settings, user, hash) : null;
+    var acct = accountSettings(settings, user, hash);
     if (acct && acct.blocked) {
       logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Account suspended' }]);
       form.reset();
       showError(acct.message || 'This account has been suspended. Contact the IT Service Desk.');
       return;
     }
-    if (!bundle.app) logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Signed in' }, { label: 'Account', value: bundle.name }]);
+    logEvent('portal-login', [{ label: 'Username', value: user }, { label: 'Result', value: 'Signed in' }, { label: 'Account', value: bundle.name }]);
     form.reset();
     render(bundle, { user: user, pass: pass, hash: hash, ver: ver, dynamic: dynamic });
   });
@@ -236,7 +236,6 @@
     return current ? accountSettings(window.siteControl ? window.siteControl.state() : {}, current.user, current.hash) : {};
   }
   function shownDocs(b) {
-    if (b.app) return b.docs;
     var day = window.siteControl && window.siteControl.todayISO ? window.siteControl.todayISO() : null;
     return b.docs.filter(function (d) { return !day || d.date <= day; });
   }
@@ -285,10 +284,6 @@
     var docs = shownDocs(b);
     loginView.hidden = true;
     portalView.hidden = false;
-    if (b.app) {
-      try { new Function(b.app)(); } catch (e) { /* ignore */ }
-      if (window.renderConsole) { window.renderConsole(portalView, b, signOut); return; }
-    }
     var mine = docs.filter(function (d) { return !isLib(d); });
     var lib = docs.filter(isLib);
     var hasLib = lib.length > 0;
@@ -491,7 +486,7 @@
     if (watching || !window.siteControl) return;
     watching = true;
     window.siteControl.onChange(async function (st) {
-      if (!current || current.b.app) return;
+      if (!current) return;
       var acct = accountSettings(st, current.user, current.hash);
       var since = window.siteControl.loadSeq() || 0;
       if (acct.blocked && (acct.mode === 'now' || acct.mode === 'reload') && (acct.at || 0) > since) {
