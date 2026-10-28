@@ -110,6 +110,7 @@ def draw_tracked(c, x, y, text, font, size, color, track=0.0, anchor='l'):
     t.setFillColor(color)
     t.setCharSpace(track * size)
     t.textOut(text)
+    t.setCharSpace(0)  # the spacing must not leak into the text that follows
     c.drawText(t)
 
 

@@ -21,9 +21,7 @@ Visual: gente em lugar extremo (estação polar, plataforma offshore, base milit
 | `product-migrestil.jpg` | Max | 4:5, 1200 × 1500 px | Embalagem do Migrestil | idem |
 | `product-halo.jpg` | Max | 4:5, 1200 × 1500 px | Faixa de EEG de eletrodo seco, vista de frente e de lado | Aparência de brinquedo ou de gadget de consumo |
 | `product-baseline.jpg` | Max | 4:5, 1200 × 1500 px | Tablet com a tela de um dos testes, sem dados de pessoa | Dados reais |
-| `product-fathom.jpg` | Max | 4:5, 1200 × 1500 px | Scanner de cabeça (MRI) de 7 tesla, compacto, sobre fundo claro (#f2f5f9) | Marcas reais, aparência de aparelho de hospital genérico |
-| `product-diadem.jpg` | Max | 4:5, 1200 × 1500 px | Capacete leve com sensores (MEG vestível), visto de frente e de lado | Aparência de brinquedo ou de gadget de consumo |
-| `product-tenor.jpg` | Max | 4:5, 1200 × 1500 px | Armação de cabeça com transdutores de ultrassom, ao lado de um scanner | Aparência de arma ou de equipamento de tortura |
+| `product-fathom.jpg` | Max | 4:5, 1200 × 1500 px | Tanque de imersão para o corpo inteiro, de linhas arredondadas, parecido com um tanque de flutuação modernizado, sobre fundo claro (#f2f5f9) | Marcas reais, aparência de câmara criogênica de ficção científica |
 | `portrait-alessandro-ferri-lutz.jpg` | Max | 4:5, 800 × 1000 px | CEO. Ítalo-suíço, rico, relógio visível, roupa cara e discreta | |
 | `portrait-rafael-steinmetz.jpg` | Max | 4:5, 800 × 1000 px | CFO | |
 | `portrait-felix-haldane.jpg` | Max | 4:5, 800 × 1000 px | CSO | |
@@ -117,6 +115,8 @@ Sem rosto de propósito: Marcus Holt e Dr. Adriond Fisher.
 Todos os rostos que o site pede agora têm imagem, menos os que ficam sem rosto de propósito.
 
 Imagens de produto que o Max mandou em 28/10/2026 (embalagens do Vesperil, Lunavel e Migrestil, a faixa Halo e o tablet do Baseline): recortadas em 4:5 e levadas a 1200 × 1500 px com um acabamento de filme (leve suavização, grão de luminância e de cor, vinheta suave e compressão) para esconder falhas de geração, como o microtexto da tampa da caixa. Os arquivos são `product-vesperil.jpg`, `product-lunavel.jpg`, `product-migrestil.jpg`, `product-halo.jpg` e `product-baseline.jpg`, em `apps/neurostat/public/img/`.
+
+O `product-baseline.jpg` foi refeito em 28/10/2026 a pedido do Max, mais sério: é o relatório que o Baseline entrega ao médico responsável (tela de relatório, sem tablet e sem símbolos), desenhado com o formulário padrão da NeuroStat sobre fundo claro, com o mesmo acabamento de filme. A imagem anterior (tablet com símbolos coloridos) saiu do site.
 Rosto sobrando: a mulher mais velha de óculos escuros, que não serve para foto de empresa. Dá para usar numa personagem de campanha.
 
 Para trocar um rosto, mantenha o nome do arquivo.

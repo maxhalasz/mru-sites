@@ -89,9 +89,13 @@ Documentos que estão lá (todos corporativos e secos, no modelo padrão de form
 
 Regra: todo documento precisa ter um propósito único na história. Os rascunhos de rotina e a biblioteca da empresa (33 documentos) estão na aba Documentos do painel, sem ninguém marcado, e você entrega só o que servir. Documentos novos você escreve no Editor do painel. Veja `tools/portal-docs/held.txt`.
 
-## Aparelhos novos da NeuroStat (28/10/2026)
+## Aparelho novo da NeuroStat (28/10/2026)
 
-Três máquinas maiores entraram em Products, no Newsroom e na história da empresa: **Fathom** (ressonância de cabeça de 7 tesla com ímã selado imerso em hélio, CE em maio de 2027), **Diadem** (capacete de MEG vestível com 64 magnetômetros, lançado em março de 2028) e **Tenor** (ultrassom focalizado de baixa intensidade para pesquisa, maio de 2028). Todas têm instruções de uso em PDF. As perguntas em aberto estão em `docs/PERGUNTAS-PARA-O-MAX.md`.
+**Fathom** é um sistema de imagem do corpo inteiro (NeuroStat Diagnostics, CE em fevereiro de 2028): um tanque parecido com um tanque de flutuação modernizado, cheio de um líquido respirável que carrega oxigênio. A pessoa fica imóvel, flutuando, e uma coroa de transdutores passa ondas sonoras pelo corpo. Em uma sessão de cerca de 26 minutos (8 de varredura) o sistema monta mapas tridimensionais comparáveis a uma ressonância de corpo inteiro e acrescenta fluxo de sangue, densidade óssea e composição corporal. Tem página de produto, instruções de uso em PDF, notícia no Newsroom e linha na história da empresa.
+
+**Diadem** (capacete de MEG vestível) ficou de fora do site público: seria algo que a NeuroStat não divulgaria. O nome está reservado para um aparelho secreto da campanha. **Tenor** foi fundido no Fathom.
+
+O visual do **Baseline** na página de produto agora é o relatório que ele entrega ao médico, não um tablet.
 
 ## O que eu inventei (pode trocar)
 

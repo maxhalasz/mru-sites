@@ -1,25 +1,24 @@
 # Perguntas para o Max
 
-Lote 1 (28/10/2026). Responda tudo de uma vez, no seu ritmo. Enquanto isso o trabalho segue com a escolha marcada como "padrão".
+Lote 2 (28/10/2026). Respondidas no lote 1: Fathom e Tenor viraram um só, Diadem saiu do site, parceiros reais mantidos (Lonza trocada pela Sanofi), Eremos aprovada.
 
-## Aparelhos novos da NeuroStat
+## Ainda sem resposta (você disse que empurra para a próxima)
 
-1. **Imersão em líquido.** Procurei e não achei um aparelho de ressonância "de imersão em líquido" que seja diferente do resto. O que existe de mais próximo é o ímã selado com poucos litros de hélio líquido, no qual a bobina fica mergulhada (isso é real: já saiu em aparelhos compactos de cabeça de 3 e 7 tesla). Usei isso no Fathom. Se você pensava em outra coisa (o paciente flutuando num banho, por exemplo), diga.
-2. **Nomes.** Padrão: Fathom (ressonância de cabeça de 7 tesla), Diadem (capacete de MEG vestível), Tenor (ultrassom focalizado para pesquisa). Sem colisão com produto médico real nas minhas buscas. Alternativas:
-   - Fathom: Calder, Nereid, Pelagic, Thalassa, Submar.
-   - Diadem: Circlet, Tessera, Cairn, Larmor, Aureole.
-   - Tenor: Cadenza, Cantor, Isoline, Intone, Sonante.
-3. **Mais máquinas.** Propostas para a próxima rodada (escolha as que servem): (a) ressonância portátil de campo baixo em carrinho, para estação polar, navio e a sala médica da Ødemark A; (b) suíte de laboratório do sono (cama, polissonografia e controle de luz e temperatura); (c) robô de estimulação magnética com neuronavegação.
-4. **Imagens.** Faltam 3 imagens de produto 4:5 (`product-fathom.jpg`, `product-diadem.jpg`, `product-tenor.jpg`). Os prompts estão na mensagem do dia. Até lá a página mostra a arte padrão da marca.
+1. **Transcrito do Gunnar.** Alguma dica ficou óbvia demais (a filmagem do fundo do mar "que parece errada", "na lista desde o levantamento de 2010", o Baseline coletado "centralmente")? O nome "F. Carvalho" para a Gestão de Projeto serve?
+2. **Rascunhos.** Quais dos 33 documentos de rotina entregar? Estão na aba Documentos do painel, sem ninguém marcado.
 
-## Conteúdo que já está no ar e precisa do seu ok
+## Ødemark A: coordenadas e licença (sugestões)
 
-5. **Parceiros reais** (10 farmacêuticas em About, 5 em Careers, sem logotipo). Mantenho?
-6. **Eremos.** Entrou como "Eremos Desert Operations" (domínio morto eremosdesert.com), ao lado da Hiemal em About, Careers, a página inicial e Science. Nome e domínio servem?
-7. **Transcrito do Gunnar.** Alguma dica ficou óbvia demais (filmagem do fundo do mar "que parece errada", "na lista desde o levantamento de 2010", Baseline coletado "centralmente")? O nome "F. Carvalho" para a Gestão de Projeto serve?
-8. **Rascunhos.** Os 33 documentos de rotina e a biblioteca da empresa estão na aba Documentos, sem ninguém marcado. Quais entregar?
+A plataforma está em 303 m de lâmina d'água, no norte do Mar do Norte. Para o enigma do céu, o que mais pesa é a latitude (a altura da estrela polar e quanto dura a noite em novembro). Três opções, todas inventadas (confira em sokkeldirektoratet.no se quiser evitar uma licença real):
 
-## Coisas que só você tem
+| | Coordenadas | Licença | Observação |
+| --- | --- | --- | --- |
+| A | 61°52′N 2°31′E | PL 612 | ao norte de Bergen, noite de cerca de 17 horas em meados de novembro, estrela polar a 62° de altura |
+| B | 62°14′N 3°02′E | PL 1043 | um pouco mais ao norte, noite um pouco mais longa e aurora um pouco mais frequente, estrela polar a 62° de altura |
+| C | 61°38′N 1°48′E | PL 927 | mais perto da região de Tampen, noite de cerca de 17 horas, estrela polar a 62° de altura |
 
-9. Coordenadas e licença de produção da Ødemark A (para o enigma do céu).
-10. Fotos que ainda faltam: nenhuma, fora as 3 imagens novas de produto.
+Padrão se você não responder: A. As licenças de produção norueguesas se escrevem "PL" e um número de 3 ou 4 algarismos.
+
+## Imagens que faltam
+
+3. `product-fathom.jpg` (4:5, 1200 × 1500 px). O prompt está na mensagem do dia. Até lá a página mostra a arte padrão da marca.

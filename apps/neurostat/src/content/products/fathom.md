@@ -1,15 +1,15 @@
 ---
 name: "NeuroStat Fathom"
-generic: "Head-only 7 tesla MRI scanner with a sealed, immersion-cooled magnet"
-drugClass: "Magnetic resonance imaging system, class IIa"
-indication: "Structural and functional imaging of the adult brain, including research on sleep, memory and attention"
-approved: 2027
+generic: "Whole-body immersion imaging system"
+drugClass: "Ultrasound tomography system with immersion medium, class IIb"
+indication: "Whole-body imaging of adults when several separate scans would otherwise be needed, under the supervision of a radiologist"
+approved: 2028
 kind: "Imaging system"
 published: true
-tagline: "Ultra-high-field brain imaging in an ordinary scanner room."
-how: "Fathom is a head-only MRI scanner with a 7 tesla magnet. The superconducting coil is immersed in a sealed bath of liquid helium that holds about 14 litres, where a whole-body scanner holds well over a thousand. Because the helium stays sealed in, there is no quench pipe, and the scanner fits in a standard 3 tesla room. The patient lies on a couch and slides in head first. A structural scan takes about half as long as at 3 tesla for the same resolution."
-safety: ["Fathom is operated by trained radiographers under the supervision of a radiologist or neurologist.","Every implant must be checked against the 7 tesla device list before the scan. If an implant is not on the list, the patient is not scanned.","Some patients feel dizzy, taste metal or see flashes of light as they move in and out of the magnet. This passes within minutes.","Everyone in the room wears hearing protection during a scan."]
-clinical: ["In 48 healthy adults, Fathom images were compared with scans from a conventional 3 tesla whole-body scanner. Fathom showed the layers of the cortex and the subfields of the hippocampus more clearly.","Two university hospitals ran Fathom for twelve months. The magnet stayed within specification and needed no helium.","NeuroStat uses Fathom in its own studies of sleep loss and memory."]
+tagline: "A whole-body scan in one session, lying still in a warm bath."
+how: "Fathom is a closed tank filled with a body-temperature fluid that carries oxygen and can be breathed. The patient is lowered in, floats without effort and lies still. A ring of transducers sends sound waves through the body from every side. From the echoes, and from the speed of sound in each tissue, Fathom builds three-dimensional maps of the whole body that compare with a whole-body MRI, and adds blood flow, bone density and body composition from the same recording. A session takes about 26 minutes, 8 of them for the scan. Nobody has to hold their breath, and the tank is quiet."
+safety: ["Fathom is used only in a hospital, by a team that includes a radiologist and an anaesthetist. Resuscitation equipment stands next to the tank.","Patients with lung or heart disease, an implant that is not labelled for immersion, or an allergy to the fluid are not scanned. A screening interview and a lung function test come before the first session.","Most patients feel pressure in the chest and a taste of the fluid for a few minutes at the start and at the end of the scan. A cough afterwards is common and passes within an hour.","The tank is dimly lit. A hand signal ends the scan at any time, and the fluid is drained."]
+clinical: ["In 60 healthy adults, Fathom maps were compared with whole-body scans from a conventional 3 tesla MRI scanner. Fathom matched the MRI for organ outlines and tissue contrast and showed the heart and the abdomen without motion blur.","Two university hospitals used Fathom in routine care for twelve months. The median session took 26 minutes, with 8 minutes of scanning.","NeuroStat uses Fathom in its own studies of how the body recovers from sleep loss."]
 order: 6
 ---
 
