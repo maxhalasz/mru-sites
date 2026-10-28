@@ -243,3 +243,14 @@ body.locked #app { display: none; }
 .ed-chk input { width: auto; min-height: 0; }
 .ed-body { font-family: var(--mono); font-size: .88rem; min-height: 16rem; }
 .ed-help { white-space: pre-wrap; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .6rem; font-size: .8rem; }
+
+/* ---- upload dialog */
+dialog.wide { width: min(760px, calc(100vw - 2rem)); }
+.up-zone { display: grid; gap: .25rem; place-items: center; text-align: center; border: 2px dashed var(--line); border-radius: var(--radius); padding: 1.4rem 1rem; cursor: pointer; background: var(--surface-2); }
+.up-zone.over, .up-zone:hover { border-color: var(--accent); background: var(--accent-soft); }
+.up-input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.up-list { display: grid; gap: .6rem; margin-top: .7rem; }
+.up-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: .7rem; align-items: start; background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: .6rem; }
+.up-fields { display: grid; gap: .35rem; min-width: 0; }
+.up-thumb { width: 64px; height: 80px; object-fit: cover; border-radius: 5px; background: var(--raised); display: grid; place-items: center; font-weight: 700; font-size: .8rem; color: var(--muted); }
+.row .grow { flex: 1 1 12rem; min-width: 0; }

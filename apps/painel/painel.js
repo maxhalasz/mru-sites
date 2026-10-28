@@ -673,7 +673,8 @@
   }
   function viewDocumentos() {
     var wrap = h('div'), logins = S.dir.logins, docs = visibleDocs();
-    wrap.appendChild(head('Documentos', 'Marque quem recebe cada documento. Desmarque para tirar. As mudanças só valem depois de Aplicar.'));
+    wrap.appendChild(head('Documentos', 'Marque quem recebe cada documento. Desmarque para tirar. As mudanças só valem depois de Aplicar.',
+      [h('button', { class: 'btn', type: 'button', onclick: function () { openUpload(null); } }, 'Enviar PDF ou imagem')]));
     var fresh = freshDocs();
     if (fresh.count) wrap.appendChild(h('div', { class: 'note info' },
       h('b', { text: fresh.docs + (fresh.docs === 1 ? ' documento novo na biblioteca' : ' documentos novos na biblioteca') + ', ainda sem ninguém. ' }),
@@ -924,20 +925,26 @@
   function aes(keyB64, use) { return crypto.subtle.importKey('raw', unb64(keyB64), 'AES-GCM', false, use); }
   function two(n) { return ('0' + n).slice(-2); }
 
-  async function putDocContent(id, keyB64, payload, kind, ver0) {
+  var PARTS_MAX = 300;
+  var FILE_MAX = 5 * 1048576;
+  function pad(n, w) { return ('0000' + n).slice(-w); }
+  async function putDocContent(id, keyB64, payload, kind, ver0, onProgress) {
     var key = await aes(keyB64, ['encrypt']);
     var ivP = crypto.getRandomValues(new Uint8Array(12));
     var ct = b64(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: ivP }, key, enc.encode(JSON.stringify(payload))));
     var parts = [];
     for (var i = 0; i < ct.length; i += DOC_CHUNK) parts.push(ct.slice(i, i + DOC_CHUNK));
-    if (parts.length > 99) throw new Error('O documento é grande demais (' + Math.round(ct.length * 0.75 / 1024) + ' KB). O limite é cerca de 2,5 MB.');
+    if (parts.length > PARTS_MAX) throw new Error('O arquivo é grande demais. O limite é cerca de 5 MB: comprima o PDF ou reduza as imagens.');
     var ivM = crypto.getRandomValues(new Uint8Array(12));
-    var manifest = b64(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: ivM }, key, enc.encode(JSON.stringify({ n: parts.length, iv: b64(ivP), kind: kind }))));
+    var manifest = b64(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: ivM }, key, enc.encode(JSON.stringify({ n: parts.length, iv: b64(ivP), kind: kind, pw: 3 }))));
     var now = new Date().toISOString();
     for (var tries = 0, ver = ver0; tries < 6; tries++, ver++) {
       var clash = false;
-      for (var p = 0; p < parts.length && !clash; p++) {
-        if (!(await createDoc('dp-' + id + '-' + inv(ver) + '-' + two(p), { t: now, k: 'dp1', iv: '-', c: parts[p] }))) clash = true;
+      for (var p = 0; p < parts.length && !clash; p += 6) {
+        var batch = parts.slice(p, p + 6).map(function (c, k) { return createDoc('dp-' + id + '-' + inv(ver) + '-' + pad(p + k, 3), { t: now, k: 'dp1', iv: '-', c: c }); });
+        var res = await Promise.all(batch);
+        if (res.indexOf(false) >= 0) clash = true;
+        if (onProgress) onProgress(Math.min(p + 6, parts.length), parts.length);
       }
       if (clash) continue;
       if (await createDoc('dm-' + id + '-' + inv(ver), { t: now, k: 'dm1', iv: b64(ivM), c: manifest })) return ver;
@@ -963,11 +970,15 @@
         var man = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(f.iv.stringValue) }, key, unb64(f.c.stringValue))));
         if (man.gone) return null;
         var invStr = mine[i].document.name.split('/').pop().split('-')[2];
-        var pieces = [];
-        for (var p = 0; p < man.n; p++) {
-          var res = await fetch(api('/submissions/dp-' + entry.id + '-' + invStr + '-' + two(p)) + '?' + keyQ());
-          if (!res.ok) throw new Error('missing part');
-          pieces.push((await res.json()).fields.c.stringValue);
+        var pieces = new Array(man.n);
+        for (var p = 0; p < man.n; p += 8) {
+          var batch = [];
+          for (var q = p; q < Math.min(p + 8, man.n); q++) {
+            batch.push(fetch(api('/submissions/dp-' + entry.id + '-' + invStr + '-' + pad(q, man.pw || 2)) + '?' + keyQ()).then(function (idx) {
+              return function (res) { if (!res.ok) throw new Error('missing part'); return res.json().then(function (j) { pieces[idx] = j.fields.c.stringValue; }); };
+            }(q)));
+          }
+          await Promise.all(batch);
         }
         return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(man.iv) }, key, unb64(pieces.join('')))));
       } catch (e) { /* try the next older manifest */ }
@@ -1218,57 +1229,120 @@
     } else { build(); refresh(); }
   }
 
-  // Uploading a PDF or an image as a document.
+  // Uploading PDFs and images as documents.
+  function readFileAsDoc(fl) {
+    return new Promise(function (resolve, reject) {
+      if (fl.size > FILE_MAX) { reject(new Error(fl.name + ' tem ' + (fl.size / 1048576).toFixed(1).replace('.', ',') + ' MB. O limite é 5 MB.')); return; }
+      if (!/^(application\/pdf|image\/(png|jpeg|webp))$/.test(fl.type)) { reject(new Error(fl.name + ': só PDF, PNG, JPG ou WebP.')); return; }
+      var r = new FileReader();
+      r.onload = function () { resolve({ mime: fl.type, filename: fl.name, b64: String(r.result).split(',')[1], size: fl.size, url: fl.type.indexOf('image/') === 0 ? String(r.result) : '' }); };
+      r.onerror = function () { reject(new Error('Não consegui ler ' + fl.name + '.')); };
+      r.readAsDataURL(fl);
+    });
+  }
+  function cleanTitle(name) { return name.replace(/\.[^.]+$/, '').replace(/[_]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function guessNumber(name, date, i) {
+    var m = /(NS-[A-Z0-9][A-Z0-9-]*)/i.exec(name);
+    return m ? m[1].toUpperCase() : 'NS-' + String(date || '').replace(/-/g, '') + '-' + ('0' + (i + 1)).slice(-2);
+  }
+  function assignMany(ids, keys) {
+    var next = clone(S.dir.logins);
+    next.forEach(function (L) {
+      L.docs = (L.docs || []).filter(function (x) { return ids.indexOf(x) < 0; });
+      if (keys.indexOf(L.key) >= 0) ids.forEach(function (id) { L.docs.push(id); });
+    });
+    return next;
+  }
   function openUpload(entry) {
-    var meta = entry ? clone(entry) : { id: '', key: '', title: '', number: '', date: S.ctl.today || S.cfg.baseDate || '2028-10-19', folder: '', classification: 'Internal', description: '', kind: 'file', ver: 0 };
-    var picked = entry ? recipientsOf(entry.id) : [];
-    var file = null;
     var d = $('dlg');
     d.textContent = '';
-    var f = {
-      file: h('input', { type: 'file', accept: 'application/pdf,image/png,image/jpeg,image/webp' }),
-      title: h('input', { type: 'text', value: meta.title }), number: h('input', { type: 'text', value: meta.number }), date: h('input', { type: 'date', value: meta.date }),
-      folder: h('input', { type: 'text', value: meta.folder, list: 'up-folders' }), desc: h('input', { type: 'text', value: meta.description }),
-      cls: h('select', {}, CLASSES.map(function (c) { return h('option', { value: c, selected: meta.classification === c, text: c }); })),
-    };
+    d.classList.add('wide');
+    var shared = { date: entry ? entry.date : (S.ctl.today || S.cfg.baseDate || '2028-10-19'), cls: entry ? entry.classification : 'Internal', folder: entry ? entry.folder : '' };
+    var items = entry ? [{ file: null, title: entry.title, number: entry.number, desc: entry.description || '' }] : [];
+    var picked = entry ? recipientsOf(entry.id) : [];
     var err = h('p', { class: 'note', hidden: true, role: 'alert' });
+    var list = h('div', { class: 'up-list' });
+    function say(msg) { err.textContent = msg; err.hidden = !msg; }
+
+    function paint() {
+      list.textContent = '';
+      items.forEach(function (it, i) {
+        var title = h('input', { type: 'text', value: it.title, 'aria-label': 'Título' }); title.addEventListener('input', function () { it.title = title.value; });
+        var num = h('input', { type: 'text', value: it.number, 'aria-label': 'Número' }); num.addEventListener('input', function () { it.number = num.value; });
+        var desc = h('input', { type: 'text', value: it.desc, placeholder: 'Descrição curta (aparece na lista)', 'aria-label': 'Descrição' }); desc.addEventListener('input', function () { it.desc = desc.value; });
+        var thumb = it.file && it.file.url ? h('img', { class: 'up-thumb', src: it.file.url, alt: '' }) : h('div', { class: 'up-thumb up-pdf', text: (it.file ? (it.file.mime === 'application/pdf' ? 'PDF' : 'IMG') : (entry && entry.kind === 'file' ? 'ARQ' : '')) });
+        list.appendChild(h('div', { class: 'up-row' }, thumb,
+          h('div', { class: 'up-fields' }, h('div', { class: 'row', style: 'gap:.4rem' }, h('div', { class: 'grow' }, title), h('div', { style: 'width:11rem' }, num)), desc,
+            h('div', { class: 'muted small', text: it.file ? it.file.filename + ' · ' + (it.file.size / 1024 < 1000 ? Math.round(it.file.size / 1024) + ' KB' : (it.file.size / 1048576).toFixed(1).replace('.', ',') + ' MB') : 'Arquivo atual mantido' })),
+          entry ? null : h('button', { class: 'btn small ghost', type: 'button', title: 'Tirar da lista', onclick: function () { items.splice(i, 1); paint(); } }, '×')));
+      });
+    }
+    async function take(fileList) {
+      say('');
+      var files = Array.prototype.slice.call(fileList || []);
+      for (var i = 0; i < files.length; i++) {
+        try {
+          var f = await readFileAsDoc(files[i]);
+          if (entry) { items[0].file = f; if (!items[0].title) items[0].title = cleanTitle(f.filename); }
+          else items.push({ file: f, title: cleanTitle(f.filename), number: guessNumber(f.filename, shared.date, items.length), desc: '' });
+        } catch (e) { say(e.message); }
+      }
+      paint();
+    }
+    var input = h('input', { type: 'file', multiple: !entry, accept: 'application/pdf,image/png,image/jpeg,image/webp', class: 'up-input' });
+    input.addEventListener('change', function () { take(input.files); input.value = ''; });
+    var zone = h('label', { class: 'up-zone' }, h('b', { text: entry ? 'Trocar o arquivo (opcional)' : 'Solte aqui PDFs e imagens, ou clique para escolher' }),
+      h('span', { class: 'muted small', text: 'PDF, PNG, JPG ou WebP, até 5 MB cada. Pode escolher vários de uma vez.' }), input);
+    ['dragenter', 'dragover'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.add('over'); }); });
+    ['dragleave', 'drop'].forEach(function (ev) { zone.addEventListener(ev, function (e) { e.preventDefault(); zone.classList.remove('over'); }); });
+    zone.addEventListener('drop', function (e) { take(e.dataTransfer.files); });
+
+    var dateIn = h('input', { type: 'date', value: shared.date }); dateIn.addEventListener('input', function () { shared.date = dateIn.value; });
+    var cls = h('select', {}, CLASSES.map(function (c) { return h('option', { value: c, selected: shared.cls === c, text: c }); })); cls.addEventListener('change', function () { shared.cls = cls.value; });
+    var folder = h('input', { type: 'text', value: shared.folder, list: 'up-folders', placeholder: 'ex.: Study documents' }); folder.addEventListener('input', function () { shared.folder = folder.value; });
     var who = h('div', {}, S.dir.logins.map(function (L) {
       var k = h('input', { type: 'checkbox' }); k.checked = picked.indexOf(L.key) >= 0;
       k.addEventListener('change', function () { var i = picked.indexOf(L.key); if (k.checked && i < 0) picked.push(L.key); if (!k.checked && i >= 0) picked.splice(i, 1); });
-      return h('label', { class: 'ed-chk big' }, k, L.name);
+      return h('label', { class: 'ed-chk big' }, k, L.name, h('span', { class: 'muted small', text: ' · ' + L.role }));
     }));
     var save = h('button', { class: 'btn primary', type: 'button' }, entry ? 'Salvar' : 'Enviar e publicar');
-    d.appendChild(h('div', { class: 'dlg-head' }, h('h2', { id: 'dlg-title', text: entry ? 'Dados do arquivo' : 'Enviar arquivo' }), h('button', { class: 'btn ghost small', type: 'button', onclick: function () { d.close(); } }, 'Fechar')));
-    if (!entry) d.appendChild(h('div', {}, h('label', { class: 'l', text: 'PDF ou imagem (até cerca de 2 MB)' }), f.file));
-    d.appendChild(h('div', {},
-      h('label', { class: 'l', text: 'Título' }), f.title, h('label', { class: 'l', text: 'Número' }), f.number, h('label', { class: 'l', text: 'Data' }), f.date,
-      h('label', { class: 'l', text: 'Classificação' }), f.cls, h('label', { class: 'l', text: 'Pasta no portal' }), f.folder,
-      h('datalist', { id: 'up-folders' }, foldersKnown().map(function (x) { return h('option', { value: x }); })),
-      h('label', { class: 'l', text: 'Descrição curta' }), f.desc, h('label', { class: 'l', text: 'Quem recebe' }), who, err));
-    d.appendChild(h('div', { class: 'dlg-foot' }, h('span'), save));
-    f.file.addEventListener('change', function () {
-      var fl = f.file.files[0];
-      if (!fl) return;
-      if (fl.size > 2000000) { err.textContent = 'O arquivo tem ' + Math.round(fl.size / 1024) + ' KB. O limite é cerca de 2 MB.'; err.hidden = false; f.file.value = ''; return; }
-      var r = new FileReader();
-      r.onload = function () { file = { mime: fl.type || 'application/pdf', filename: fl.name, b64: String(r.result).split(',')[1] }; if (!f.title.value) f.title.value = fl.name.replace(/\.[^.]+$/, ''); err.hidden = true; };
-      r.readAsDataURL(fl);
-    });
+
+    d.appendChild(h('div', { class: 'dlg-head' }, h('h2', { id: 'dlg-title', text: entry ? 'Dados do arquivo' : 'Enviar PDFs e imagens' }), h('button', { class: 'btn ghost small', type: 'button', onclick: function () { d.close(); } }, 'Fechar')));
+    d.appendChild(zone);
+    d.appendChild(list);
+    d.appendChild(h('div', { class: 'ed-2', style: 'margin-top:.6rem' },
+      h('div', {}, h('label', { class: 'l', text: 'Data (com data futura, fica escondido até lá)' }), dateIn), h('div', {}, h('label', { class: 'l', text: 'Classificação' }), cls)));
+    d.appendChild(h('div', {}, h('label', { class: 'l', text: 'Pasta no portal' }), folder, h('datalist', { id: 'up-folders' }, foldersKnown().map(function (x) { return h('option', { value: x }); })),
+      h('label', { class: 'l', text: 'Quem recebe' }), who, err));
+    d.appendChild(h('div', { class: 'dlg-foot' }, h('span', { class: 'muted small', id: 'up-prog' }), save));
+    paint();
+    d.addEventListener('close', function () { d.classList.remove('wide'); }, { once: true });
+
     save.addEventListener('click', async function () {
-      err.hidden = true;
-      if (!entry && !file) { err.textContent = 'Escolha um arquivo.'; err.hidden = false; return; }
-      if (!f.title.value.trim() || !f.number.value.trim()) { err.textContent = 'Título e número são obrigatórios.'; err.hidden = false; return; }
-      save.disabled = true; save.textContent = 'Publicando…';
+      say('');
+      if (!items.length) { say('Escolha pelo menos um arquivo.'); return; }
+      for (var i = 0; i < items.length; i++) if (!items[i].title.trim() || !items[i].number.trim()) { say('Todo arquivo precisa de título e número.'); return; }
+      save.disabled = true;
+      var prog = $('up-prog');
       try {
-        var id = entry ? entry.id : newDocId(), key = entry ? entry.key : newDocKey(), ver = entry ? entry.ver : 0;
-        if (!entry) ver = await putDocContent(id, key, { v: 1, kind: 'file', mime: file.mime, filename: file.filename, b64: file.b64 }, 'file', 1);
-        var rec = { id: id, key: key, title: f.title.value.trim(), number: f.number.value.trim(), date: f.date.value, folder: f.folder.value.trim(), classification: f.cls.value, description: f.desc.value.trim(), kind: 'file', ver: ver };
-        await putLibIndex((S.panelDocs || []).filter(function (x) { return x.id !== id; }).concat([rec]));
-        await saveLogins(withAssignment(id, picked));
+        var recs = [];
+        for (var n = 0; n < items.length; n++) {
+          var it = items[n];
+          var id = entry ? entry.id : newDocId(), key = entry ? entry.key : newDocKey(), ver = entry ? entry.ver : 0;
+          if (it.file) {
+            prog.textContent = 'Enviando ' + (n + 1) + ' de ' + items.length + '…';
+            ver = await putDocContent(id, key, { v: 1, kind: 'file', mime: it.file.mime, filename: it.file.filename, b64: it.file.b64 }, 'file', ver + 1, function (a, b) { prog.textContent = 'Enviando ' + (n + 1) + ' de ' + items.length + ' (' + Math.round(100 * a / b) + ' %)…'; });
+          }
+          recs.push({ id: id, key: key, title: it.title.trim(), number: it.number.trim(), date: shared.date, folder: shared.folder.trim(), classification: shared.cls, description: it.desc.trim(), kind: 'file', ver: ver });
+        }
+        prog.textContent = 'Publicando…';
+        var ids = recs.map(function (r) { return r.id; });
+        await putLibIndex((S.panelDocs || []).filter(function (x) { return ids.indexOf(x.id) < 0; }).concat(recs));
+        await saveLogins(assignMany(ids, picked));
         d.close();
-        toast('Arquivo publicado.');
+        toast(recs.length === 1 ? 'Arquivo publicado.' : recs.length + ' arquivos publicados.');
         render();
-      } catch (e) { err.textContent = (e && e.message) || String(e); err.hidden = false; save.disabled = false; save.textContent = entry ? 'Salvar' : 'Enviar e publicar'; }
+      } catch (e) { say((e && e.message) || String(e)); save.disabled = false; prog.textContent = ''; }
     });
     d.showModal();
   }
@@ -1288,7 +1362,8 @@
       S.menu === 'new' ? h('div', { class: 'menu-list' }, Object.keys(NSDoc.templates).map(function (k) {
         return h('button', { type: 'button', onclick: function () { S.menu = ''; openEditor(null, NSDoc.templates[k].doc); } }, NSDoc.templates[k].label);
       }).concat([h('button', { type: 'button', onclick: function () { S.menu = ''; openUpload(null); } }, 'Enviar PDF ou imagem')])) : null);
-    wrap.appendChild(head('Editor de documentos', 'Escreva documentos no formulário padrão da NeuroStat, entregue a quem quiser e apague quando quiser. Quem já está no portal vê a mudança em segundos.', [menu]));
+    wrap.appendChild(head('Editor de documentos', 'Escreva documentos no formulário padrão da NeuroStat ou envie PDFs e imagens prontos, entregue a quem quiser e apague quando quiser. Quem já está no portal vê a mudança em segundos.',
+      [h('button', { class: 'btn', type: 'button', onclick: function () { openUpload(null); } }, 'Enviar PDF ou imagem'), menu]));
     var docs = (S.panelDocs || []).filter(function (d) { return !d.gone; }).sort(function (a, b) { return a.date < b.date ? 1 : -1; });
     var grid = h('div', { class: 'grid people' });
     docs.forEach(function (d) {

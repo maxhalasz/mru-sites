@@ -129,11 +129,15 @@
       try { man = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(fl.iv.stringValue) }, key, unb64(fl.c.stringValue)))); } catch (e) { continue; }
       if (man.gone) { d.file = null; d.nsdoc = null; d.gone = true; return; }
       var invStr = doc.name.split('/').pop().split('-')[2];
-      var pieces = [];
-      for (var p = 0; p < man.n; p++) {
-        var pr = await fetch(base + '/submissions/dp-' + d.fs + '-' + invStr + '-' + ('0' + p).slice(-2) + '?key=' + encodeURIComponent(cfg.apiKey), { cache: 'no-store' });
-        if (!pr.ok) throw new Error('The document could not be loaded.');
-        pieces.push((await pr.json()).fields.c.stringValue);
+      var pieces = new Array(man.n), pw = man.pw || 2;
+      for (var p = 0; p < man.n; p += 8) {
+        var batch = [];
+        for (var q = p; q < Math.min(p + 8, man.n); q++) {
+          batch.push(fetch(base + '/submissions/dp-' + d.fs + '-' + invStr + '-' + ('0000' + q).slice(-pw) + '?key=' + encodeURIComponent(cfg.apiKey), { cache: 'no-store' }).then(function (idx) {
+            return function (pr) { if (!pr.ok) throw new Error('The document could not be loaded.'); return pr.json().then(function (j) { pieces[idx] = j.fields.c.stringValue; }); };
+          }(q)));
+        }
+        await Promise.all(batch);
       }
       var payload = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(man.iv) }, key, unb64(pieces.join('')))));
       if (payload.kind === 'file') { d.file = { filename: payload.filename, mime: payload.mime, b64: payload.b64 }; d.nsdoc = null; }
