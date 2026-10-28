@@ -102,6 +102,7 @@ Rostos gerados por IA (StyleGAN2, pessoas que não existem) que o Max mandou em 
 | `kelvara: portrett-sverre-nordtveit.jpg` | Sverre Nordtveit, presidente do conselho | Mais velho, rosto marcado pelo tempo, jaqueta simples |
 | `kelvara: portrett-rolf-hetland.jpg` | Rolf Hetland, conselho | Óculos, olhos azuis claros, sorriso discreto |
 | `kelvara: portrett-gunnar-mackenzie.jpg` | Gunnar MacKenzie (Karriere) | Foto que o Max mandou: cabelo loiro comprido, rosto fino, boné de marinheiro, convés de petroleiro ao fundo. Quadrada, 582 × 582 px |
+| `kelvara: portrett-eli-tveit.jpg` | Eli Tveit, conselho | Imagem do Max de 28/10/2026: mulher de uns 55 anos, cabelo loiro-acinzentado até os ombros, olhos azul-acinzentados, blazer azul-marinho. 4:5, 800 × 1000 px |
 | `kelvara: portrett-del-carbone.jpg` | Del Carbone (Karriere) | Foto que o Max mandou em 27/10/2026: barbudo de cabelo comprido e macacão jeans sujo, sorrindo num corredor de metal. Quadrada, 582 × 582 px |
 | `kelvara: portrett-sofie-aune.jpg` | Sofie Aune (Karriere) | Foto que o Max mandou em 27/10/2026: mulher loira de cabelo ao vento numa passarela com neblina. Quadrada, 582 × 582 px |
 | `neurostat: portrait-samuel-okonkwo.jpg` | Dr. Samuel Okonkwo, General Counsel | Imagem do Max de 28/10/2026: homem negro de uns 55 anos, óculos sem aro, barba rente grisalha, terno azul-marinho. Recortada em 4:5, 800 × 1000 px |
@@ -110,7 +111,9 @@ Rostos gerados por IA (StyleGAN2, pessoas que não existem) que o Max mandou em 
 | `kelvara: portrett-dag-helgesen.jpg` | Dag Helgesen, conselho | Barba grisalha, óculos, sorriso simpático, paletó e colarinho branco |
 
 Sem rosto de propósito: Marcus Holt e Dr. Adriond Fisher.
-Sem rosto, esperando imagem do Max: Eli Tveit (conselho da Kelvara).
+Todos os rostos que o site pede agora têm imagem, menos os que ficam sem rosto de propósito.
+
+Imagens de produto que o Max mandou em 28/10/2026 (embalagens do Vesperil, Lunavel e Migrestil, a faixa Halo e o tablet do Baseline): recortadas em 4:5 e levadas a 1200 × 1500 px com um acabamento de filme (leve suavização, grão de luminância e de cor, vinheta suave e compressão) para esconder falhas de geração, como o microtexto da tampa da caixa. Os arquivos são `product-vesperil.jpg`, `product-lunavel.jpg`, `product-migrestil.jpg`, `product-halo.jpg` e `product-baseline.jpg`, em `apps/neurostat/public/img/`.
 Rosto sobrando: a mulher mais velha de óculos escuros, que não serve para foto de empresa. Dá para usar numa personagem de campanha.
 
 Para trocar um rosto, mantenha o nome do arquivo.
