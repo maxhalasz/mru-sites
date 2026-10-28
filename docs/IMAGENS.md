@@ -104,10 +104,13 @@ Rostos gerados por IA (StyleGAN2, pessoas que não existem) que o Max mandou em 
 | `kelvara: portrett-gunnar-mackenzie.jpg` | Gunnar MacKenzie (Karriere) | Foto que o Max mandou: cabelo loiro comprido, rosto fino, boné de marinheiro, convés de petroleiro ao fundo. Quadrada, 582 × 582 px |
 | `kelvara: portrett-del-carbone.jpg` | Del Carbone (Karriere) | Foto que o Max mandou em 27/10/2026: barbudo de cabelo comprido e macacão jeans sujo, sorrindo num corredor de metal. Quadrada, 582 × 582 px |
 | `kelvara: portrett-sofie-aune.jpg` | Sofie Aune (Karriere) | Foto que o Max mandou em 27/10/2026: mulher loira de cabelo ao vento numa passarela com neblina. Quadrada, 582 × 582 px |
+| `neurostat: portrait-samuel-okonkwo.jpg` | Dr. Samuel Okonkwo, General Counsel | Imagem do Max de 28/10/2026: homem negro de uns 55 anos, óculos sem aro, barba rente grisalha, terno azul-marinho. Recortada em 4:5, 800 × 1000 px |
+| `neurostat: portrait-lukas-bachmann.jpg` | Lukas Bachmann, conselho | Imagem do Max de 28/10/2026: homem de uns 62 anos, cabelo ralo grisalho penteado para o lado, terno cinza, gravata escura. 4:5, 800 × 1000 px |
+| `neurostat: portrait-reto-zbinden.jpg` | Reto Zbinden, conselho | Imagem do Max de 28/10/2026: homem de uns 67 anos, cabelo branco, bigode branco, rosto corado, paletó azul-marinho. 4:5, 800 × 1000 px |
 | `kelvara: portrett-dag-helgesen.jpg` | Dag Helgesen, conselho | Barba grisalha, óculos, sorriso simpático, paletó e colarinho branco |
 
 Sem rosto de propósito: Marcus Holt e Dr. Adriond Fisher.
-Sem rosto por falta de imagem adequada: Dr. Samuel Okonkwo, Lukas Bachmann, Eli Tveit.
+Sem rosto, esperando imagem do Max: Eli Tveit (conselho da Kelvara).
 Rosto sobrando: a mulher mais velha de óculos escuros, que não serve para foto de empresa. Dá para usar numa personagem de campanha.
 
 Para trocar um rosto, mantenha o nome do arquivo.
