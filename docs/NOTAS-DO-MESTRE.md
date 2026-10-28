@@ -115,7 +115,7 @@ Tudo isto está fora do pitch e é substituível:
 
 ## Decisões ainda abertas
 
-- Coordenadas e licença de produção de Ødemark A (têm de bater com o puzzle do céu). Ødemark A fica perto do Loki's Castle (cerca de 73°33′N 8°09′E, Mar da Noruega, fundo de uns 2 350 m): as opções estão em `PERGUNTAS-PARA-O-MAX.md`. Não aparecem no site enquanto você não escolher, e os textos "northern North Sea" mudam para "Norwegian Sea" nessa hora.
+- Ødemark A fica na região do Loki's Castle (73°33′N 8°09′E, Mar da Noruega, fundo de uns 2 350 m), mais ao sul para ficar mais perto de Ågotnes: **71°00′N 4°30′E, PL 188** (28/10/2026, detalhes em `PERGUNTAS-PARA-O-MAX.md`). Estão na tabela de fatos da página Operations da Kelvara. Os 303 m de profundidade ficam como ficção: ali o fundo é de oceano profundo. Os textos dizem "Norwegian Sea" / "Norskehavet".
 - Eremos: aprovar, trocar ou tirar.
 - Revisão dos três depoimentos e do anúncio da compra, em inglês e em norueguês.
 

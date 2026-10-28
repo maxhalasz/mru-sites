@@ -21,7 +21,7 @@ Visual: gente em lugar extremo (estação polar, plataforma offshore, base milit
 | `product-migrestil.jpg` | Max | 4:5, 1200 × 1500 px | Embalagem do Migrestil | idem |
 | `product-halo.jpg` | Max | 4:5, 1200 × 1500 px | Faixa de EEG de eletrodo seco, vista de frente e de lado | Aparência de brinquedo ou de gadget de consumo |
 | `product-baseline.jpg` | Eu (já feita) | 4:5, 1200 × 1500 px | Relatório do Baseline ao médico responsável, sem dados de pessoa | Tablet, símbolos coloridos, dados reais |
-| `product-fathom.jpg` | Max | 4:5, 1200 × 1500 px | Tanque de imersão para o corpo inteiro, de linhas arredondadas, parecido com um tanque de flutuação modernizado, sobre fundo claro (#f2f5f9) | Marcas reais, aparência de câmara criogênica de ficção científica |
+| `product-fathom.jpg` | Max (recebida e no ar em 28/10/2026) | 4:5, 1200 × 1500 px | Tanque de imersão para o corpo inteiro, de linhas arredondadas, parecido com um tanque de flutuação modernizado, sobre fundo claro (#f2f5f9) | Marcas reais, aparência de câmara criogênica de ficção científica |
 | `portrait-alessandro-ferri-lutz.jpg` | Max | 4:5, 800 × 1000 px | CEO. Ítalo-suíço, rico, relógio visível, roupa cara e discreta | |
 | `portrait-rafael-steinmetz.jpg` | Max | 4:5, 800 × 1000 px | CFO | |
 | `portrait-felix-haldane.jpg` | Max | 4:5, 800 × 1000 px | CSO | |
