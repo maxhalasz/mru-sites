@@ -53,12 +53,12 @@ NeuroStat: lista de empresas do grupo (About), logística do estudo (página do 
 
 ## Empresas fora da marca (ainda sem site)
 
-Duas empresas de fachada que a NeuroStat usa em lugares remotos, ao lado da Aegis. Nomes escolhidos pelo Max em 26/10/2026, todos internacionais (regra: nada da NeuroStat ou da DRE leva nome em língua local).
+Duas empresas de fachada que a NeuroStat usa em lugares remotos, ao lado da Aegis. Nomes internacionais (regra: nada da NeuroStat ou da DRE leva nome em língua local).
 
 - **Hiemal**: opera estações polares (apoio, logística e manutenção). Do latim "invernal".
-- **Eremos**: opera sítios no deserto (a ideia inicial era o Atacama). Do grego "deserto".
+- **Eremos**: opera sítios no deserto (a ideia inicial era o Atacama). Do grego "deserto". **Sem aprovação do Max** (28/10/2026): foi sugestão minha. Aparece em About, Careers, página inicial e Science. Alternativas: Aridian, Heliora, Solvane, Xerion.
 
-Nenhuma aparece nos sites hoje. Se aparecerem na lista de empresas do grupo (About) ou em documentos do portal, usar sempre esses nomes. A Aegis usa o logo que o Max mandou, em `packages/brand/logos/`.
+Se aparecerem em documentos do portal, usar sempre esses nomes. A Aegis usa o logo que o Max mandou, em `packages/brand/logos/`.
 
 ## Vagas e registro
 
@@ -115,7 +115,8 @@ Tudo isto está fora do pitch e é substituível:
 
 ## Decisões ainda abertas
 
-- Coordenadas e licença de produção de Ødemark A (têm de bater com o puzzle do céu). Não aparecem no site enquanto você não mandar.
+- Coordenadas e licença de produção de Ødemark A (têm de bater com o puzzle do céu). Ødemark A fica perto do Loki's Castle (cerca de 73°33′N 8°09′E, Mar da Noruega, fundo de uns 2 350 m): as opções estão em `PERGUNTAS-PARA-O-MAX.md`. Não aparecem no site enquanto você não escolher, e os textos "northern North Sea" mudam para "Norwegian Sea" nessa hora.
+- Eremos: aprovar, trocar ou tirar.
 - Revisão dos três depoimentos e do anúncio da compra, em inglês e em norueguês.
 
 ## Lembretes de segurança
