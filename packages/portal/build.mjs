@@ -11,7 +11,7 @@
 //   "NSP1" | salt (16) | iv (12) | ciphertext | auth tag (16)
 // Key: PBKDF2-SHA256, 600000 rounds, over "username\npassword" (username in lower case), 32 bytes.
 // Cipher: AES-256-GCM. The browser decrypts with WebCrypto in public/partner/portal.js.
-import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync, statSync, rmSync } from 'node:fs';
 import { createCipheriv, createHash, pbkdf2Sync, randomBytes } from 'node:crypto';
 import { join, extname, basename } from 'node:path';
 import YAML from 'yaml';
@@ -74,6 +74,7 @@ function buildLibrary(accountNames) {
   mkdirSync(libDir, { recursive: true });
   const library = [];
   const seen = new Set();
+  const keep = new Set();
   for (const account of accountNames) {
     const b = loadAccount(account, true);
     for (const d of b.docs) {
@@ -81,9 +82,12 @@ function buildLibrary(accountNames) {
       if (seen.has(id)) continue;
       seen.add(id);
       const entry = store.docs[id] || (store.docs[id] = { key: randomBytes(32).toString('base64'), sha: '' });
+      // the file name says nothing about the document: a random name kept next to the key
+      if (!entry.file) entry.file = randomBytes(12).toString('hex');
+      keep.add(entry.file + '.enc');
       const plain = JSON.stringify({ mime: d.file ? d.file.mime : '', filename: d.file ? d.file.filename : '', b64: d.file ? d.file.b64 : '', stamp: d.stamp });
       const sha = createHash('sha256').update(plain).digest('hex');
-      const path = join(libDir, id + '.enc');
+      const path = join(libDir, entry.file + '.enc');
       if (entry.sha !== sha || !existsSync(path)) {
         const iv = randomBytes(12);
         const cipher = createCipheriv('aes-256-gcm', Buffer.from(entry.key, 'base64'), iv);
@@ -92,10 +96,12 @@ function buildLibrary(accountNames) {
         entry.sha = sha;
       }
       library.push({ id, account, title: d.title, number: d.number, date: d.date, folder: d.folder, classification: d.classification,
-        description: d.description, hasFile: !!d.file, key: entry.key });
+        description: d.description, hasFile: !!d.file, key: entry.key, lib: entry.file });
     }
   }
   writeFileSync(keyFile, JSON.stringify(store, null, 2) + '\n');
+  // files of documents that are gone, or that were named after their document, are removed
+  for (const n of readdirSync(libDir)) if (n.endsWith('.enc') && !keep.has(n)) rmSync(join(libDir, n));
   return { library, dirKey: store.dirKey };
 }
 

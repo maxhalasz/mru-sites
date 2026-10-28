@@ -82,12 +82,13 @@ async function loadDir() {
 }
 
 const lib = Object.fromEntries(cfg.library.map((d) => [d.id, d]));
-const sigOf = (L) => JSON.stringify([L.user, L.pass, L.name, L.role, L.welcome, L.folders, (L.docs || []).slice().sort()]);
+const metaOf = (id) => { const d = lib[id]; return d ? [d.title, d.number, d.date, d.classification, d.folder, d.description, d.lib || ''].join('|') : ''; };
+const sigOf = (L) => JSON.stringify([L.user, L.pass, L.name, L.role, L.welcome, L.folders, (L.docs || []).slice().sort(), (L.docs || []).slice().sort().map(metaOf)]);
 
 async function putKeyring(L) {
   const ring = { v: 1, name: L.name, role: L.role, welcome: L.welcome || '', folders: L.folders || [],
     docs: (L.docs || []).filter((id) => lib[id]).map((id) => { const d = lib[id];
-      return { id: d.id, folder: d.folder || '', title: d.title, number: d.number, date: d.date, classification: d.classification, description: d.description || '', lib: d.id, key: d.key }; }) };
+      return { id: d.id, folder: d.folder || '', title: d.title, number: d.number, date: d.date, classification: d.classification, description: d.description || '', lib: d.lib || d.id, key: d.key }; }) };
   const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
   const baseKey = await crypto.subtle.importKey('raw', enc.encode(L.user + '\n' + L.pass), 'PBKDF2', false, ['deriveKey']);
   const k = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: ROUNDS, hash: 'SHA-256' }, baseKey, { name: 'AES-GCM', length: 256 }, false, ['encrypt']);

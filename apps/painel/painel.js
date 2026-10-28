@@ -287,7 +287,7 @@
 
   // ---- logins: the directory and the keyrings ---------------------------------------------------
 
-  function metaOf(id) { var d = S.lib[id]; return d ? [d.title, d.number, d.date, d.classification, d.folder, d.description].join('|') : ''; }
+  function metaOf(id) { var d = S.lib[id]; return d ? [d.title, d.number, d.date, d.classification, d.folder, d.description, d.lib || ''].join('|') : ''; }
   function sigOf(L) { return JSON.stringify([L.user, L.pass, L.name, L.role, L.welcome, L.folders, (L.docs || []).slice().sort(), (L.docs || []).slice().sort().map(metaOf)]); }
   function plainLogin(L) { return { key: L.key, user: L.user, pass: L.pass, name: L.name, role: L.role, welcome: L.welcome || '', folders: L.folders || [], docs: L.docs || [], ver: L.ver || 0, sig: L.sig || '' }; }
 
@@ -324,7 +324,7 @@
     var ring = { v: 1, name: L.name, role: L.role, welcome: L.welcome || '', folders: L.folders || [],
       docs: (L.docs || []).filter(function (id) { return S.lib[id]; }).map(function (id) {
         var d = S.lib[id];
-        return { id: d.id, folder: d.folder || '', title: d.title, number: d.number, date: d.date, classification: d.classification, description: d.description || '', lib: d.fs ? '' : d.id, fs: d.fs ? d.id : undefined, key: d.key };
+        return { id: d.id, folder: d.folder || '', title: d.title, number: d.number, date: d.date, classification: d.classification, description: d.description || '', lib: d.fs ? '' : (d.lib || d.id), fs: d.fs ? d.id : undefined, key: d.key };
       }) };
     var salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
     var base = await crypto.subtle.importKey('raw', enc.encode(L.user + '\n' + L.pass), 'PBKDF2', false, ['deriveKey']);
@@ -1042,7 +1042,7 @@
   }
   async function viewStatic(d) {
     try {
-      var res = await fetch(SITE + '/partner/lib/' + d.id + '.enc', { cache: 'no-store' });
+      var res = await fetch(SITE + '/partner/lib/' + (d.lib || d.id) + '.enc', { cache: 'no-store' });
       if (!res.ok) throw new Error('arquivo não encontrado (' + res.status + ')');
       var data = new Uint8Array(await res.arrayBuffer());
       var key = await crypto.subtle.importKey('raw', unb64(d.key), 'AES-GCM', false, ['decrypt']);
