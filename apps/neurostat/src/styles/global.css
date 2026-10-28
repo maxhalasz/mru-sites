@@ -224,6 +224,32 @@ button.tile:hover { background: var(--bg); }
 .doc-sheet { overflow: hidden; }
 .doc-sheet .nsd { margin: 0 auto; box-shadow: 0 2px 14px rgba(20, 36, 58, .25); }
 
+/* Document viewer (PDF pages drawn in the browser) */
+.dv { position: relative; display: flex; flex-direction: column; background: #e8ecf1; }
+.dv-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .25rem .8rem; padding: .35rem .6rem; background: #fff; border-bottom: 1px solid var(--line); }
+.dv-group { display: flex; align-items: center; gap: .1rem; }
+.dv-btn { width: 36px; height: 36px; display: inline-grid; place-items: center; border: 1px solid transparent; background: transparent; color: var(--navy); border-radius: 4px; cursor: pointer; padding: 0; text-decoration: none; }
+.dv-btn:hover { background: var(--bg); border-color: var(--line); }
+.dv-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.dv-count, .dv-zoom { font: .85rem var(--font-doc); color: var(--slate); min-width: 4.4rem; text-align: center; }
+.dv-body { position: relative; overflow: hidden; }
+.dv-scroll { height: 78vh; overflow: auto; padding: 12px 0 18px; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; outline: none; }
+.dv-pages { display: flex; flex-direction: column; align-items: center; gap: 12px; width: max-content; min-width: 100%; padding: 0 8px; }
+.dv-page { position: relative; background: #fff; box-shadow: 0 1px 3px rgba(20, 36, 58, .25), 0 6px 18px rgba(20, 36, 58, .12); flex: none; }
+.dv-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.dv-msg { color: var(--slate); padding: 2.5rem 1rem; text-align: center; margin: 0; }
+.dv-img { display: block; max-width: 100%; height: auto; margin: 0 auto; box-shadow: 0 1px 3px rgba(20, 36, 58, .25), 0 6px 18px rgba(20, 36, 58, .12); }
+.dv-native { display: block; width: 100%; height: 78vh; border: 0; background: #fff; }
+.dv-note { margin: 0; padding: .5rem; background: #fff; }
+@media (max-width: 760px) {
+  .dv-bar { flex-wrap: nowrap; gap: 0; padding: .25rem .3rem; justify-content: space-between; }
+  .dv-btn { width: 34px; height: 34px; }
+  .dv-count { min-width: 3.2rem; font-size: .78rem; }
+  .dv-zoom { display: none; }
+  .dv-scroll { height: 72vh; padding: 8px 0 14px; }
+  .dv-native { height: 72vh; }
+}
+
 /* Image stand-ins: brand artwork until real photographs are added */
 .ph { position: relative; overflow: hidden; background: linear-gradient(140deg, #1d3556 0%, #0e1a2c 100%); color: #9fb2c8; }
 .ph-art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -271,3 +297,30 @@ button.tile:hover { background: var(--bg); }
 #site-notice-full { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--navy); color: #fff; text-align: center; }
 #site-notice-full p { max-width: 38rem; margin: 0; font: 400 1.35rem/1.5 var(--font-head); }
 html.notice-full { overflow: hidden; }
+
+/* Phones. Everything below sits inside a media query, so nothing changes on a computer. */
+@media (max-width: 640px) {
+  .utility .wrap { justify-content: space-between; gap: .1rem .9rem; min-height: 0; padding-top: .25rem; padding-bottom: .25rem; font-size: .82rem; }
+  .utility a { padding: .3rem 0; }
+  .utility .region { display: none; }
+  .card { padding: 1.15rem 1.2rem; }
+  .card .more { padding-top: .5rem; }
+  .intra-head { gap: .6rem; }
+  .intra-actions { width: 100%; justify-content: space-between; }
+  .doc-list { max-height: none; overflow: visible; padding-right: 0; }
+  .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .tabs button { white-space: nowrap; }
+  .news-item { grid-template-columns: 1fr; }
+  .news-d { grid-row: auto; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .doc-meta { gap: .8rem; }
+  .doc-stamp { width: 84px; }
+  /* cookie notice: shorter, buttons side by side */
+  .cookie { padding-bottom: env(safe-area-inset-bottom); }
+  .cookie .wrap { gap: .7rem; padding-top: .75rem; padding-bottom: .75rem; }
+  .cookie p { font-size: .84rem; line-height: 1.45; }
+  .cookie .actions { width: 100%; flex-wrap: nowrap; gap: .5rem; }
+  .cookie .actions .btn { flex: 1 1 0; min-width: 0; padding: .65rem .4rem; font-size: .8rem; white-space: nowrap; text-align: center; }
+  /* form fields stay at 16 px so phones do not zoom in on focus */
+  input, select, textarea { font-size: 16px; }
+}

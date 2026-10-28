@@ -223,3 +223,19 @@ input[type=text], input[type=email], select, textarea { width: 100%; font: inher
 #site-notice-full { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--black); color: #fff; text-align: center; }
 #site-notice-full p { max-width: 38rem; margin: 0; font: 400 1.2rem/1.6 var(--font-head); }
 html.notice-full { overflow: hidden; }
+
+/* Phones. Everything below sits inside a media query, so nothing changes on a computer. */
+@media (max-width: 640px) {
+  .nav a { font-size: .78rem; letter-spacing: .08em; }
+  .topjobs { font-size: .72rem; }
+  th { font-size: .72rem; }
+  .topbar .wrap { min-height: 32px; gap: .8rem; }
+  /* cookie notice: shorter, buttons side by side */
+  .cookie { padding-bottom: env(safe-area-inset-bottom); }
+  .cookie .wrap { gap: .7rem; padding-top: .75rem; padding-bottom: .75rem; }
+  .cookie p { font-size: .84rem; line-height: 1.45; }
+  .cookie .actions { width: 100%; flex-wrap: nowrap; gap: .5rem; }
+  .cookie .actions .btn { flex: 1 1 0; min-width: 0; padding: .65rem .4rem; font-size: .8rem; white-space: nowrap; text-align: center; }
+  /* form fields stay at 16 px so phones do not zoom in on focus */
+  input, select, textarea { font-size: 16px; }
+}

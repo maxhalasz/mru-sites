@@ -22,6 +22,7 @@
 
   var enc = new TextEncoder();
   var urls = [];
+  var viewer = null; // the document viewer that is open
   var current = null; // the signed-in account: { b, user, pass, hash, ver, dynamic, sig }
 
   function state() {
@@ -428,6 +429,7 @@
   async function open(d, user) {
     urls.forEach(function (u) { URL.revokeObjectURL(u); });
     urls = [];
+    if (viewer) { viewer.destroy(); viewer = null; }
     logEvent('portal-open', [{ label: 'Username', value: user }, { label: 'Document', value: d.number + ' ' + d.title }]);
     var v = document.getElementById('viewer');
     if ((d.lib || d.fs) && d.file === undefined) {
@@ -452,14 +454,17 @@
       return;
     }
     if (d.file) {
-      var url = URL.createObjectURL(b64ToBlob(d.file.b64, d.file.mime));
-      urls.push(url);
-      html += '<p><a class="btn ghost" href="' + url + '" download="' + esc(d.file.filename) + '">Download</a></p>';
-      html += '<div class="frame">';
-      html += d.file.mime === 'application/pdf'
-        ? '<iframe title="' + esc(d.title) + '" src="' + url + '"></iframe>'
-        : '<img alt="' + esc(d.title) + '" src="' + url + '" />';
-      html += '<div class="watermark" aria-hidden="true">' + new Array(24).join('<span>' + esc(wm) + '</span>') + '</div></div>';
+      v.innerHTML = html + '<div class="frame dv-frame" id="dv-box"></div>';
+      var box = document.getElementById('dv-box');
+      if (window.DocView) {
+        viewer = window.DocView.show(box, d.file, wm, function (url) {
+          // pdf.js could not run here: use the browser's own viewer
+          box.innerHTML = '<p class="dv-note"><a class="btn ghost" href="' + url + '" download="' + esc(d.file.filename) + '">Download</a></p><iframe class="dv-native" title="' + esc(d.title) + '" src="' + url + '"></iframe>' +
+            '<div class="watermark" aria-hidden="true">' + new Array(24).join('<span>' + esc(wm) + '</span>') + '</div>';
+        });
+      }
+      v.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
     } else {
       html += '<p class="muted">This entry has no attached file.</p>';
     }
@@ -469,6 +474,7 @@
 
   function signOut() {
     current = null;
+    if (viewer) { viewer.destroy(); viewer = null; }
     ui = { tab: 'mine', q: '', cls: '', sub: '' };
     urls.forEach(function (u) { URL.revokeObjectURL(u); });
     urls = [];
