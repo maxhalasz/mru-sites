@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Nova guia</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="painel.css" />
+</head>
+<body class="locked">
+  <div id="stage"><input id="keys" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="." />
+    <div id="busy" hidden></div>
+    <input id="keyask" type="password" hidden autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="." />
+  </div>
+
+  <main id="app">
+    <section id="panel-view" hidden>
+      <div class="shell">
+        <aside class="side">
+          <div class="brand">
+            <span class="mark" aria-hidden="true"></span>
+            <span class="brand-text"><b>Painel</b><small>do Mestre</small></span>
+          </div>
+          <nav class="nav" id="tabs" role="tablist" aria-label="Seções"></nav>
+          <div class="side-foot">
+            <p class="muted small" id="state-line">Carregando…</p>
+            <button class="btn block" id="reload-all" type="button" title="Faz todas as páginas abertas dos sites recarregarem agora">Recarregar páginas abertas</button>
+            <button class="btn ghost block" id="sign-out" type="button">Trancar</button>
+          </div>
+        </aside>
+        <div class="main">
+          <p id="toast" class="toast" role="status" hidden></p>
+          <div id="tab-body"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="dlg" aria-labelledby="dlg-title"></dialog>
+  <script src="nsdoc.js"></script>
+  <script src="painel.js"></script>
+</body>
+</html>
