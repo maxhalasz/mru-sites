@@ -89,6 +89,10 @@ Documentos que estão lá (todos corporativos e secos, no modelo padrão de form
 
 Regra: todo documento precisa ter um propósito único na história. Os rascunhos de rotina e a biblioteca da empresa (33 documentos) estão na aba Documentos do painel, sem ninguém marcado, e você entrega só o que servir. Documentos novos você escreve no Editor do painel. Veja `tools/portal-docs/held.txt`.
 
+## Aparelhos novos da NeuroStat (28/10/2026)
+
+Três máquinas maiores entraram em Products, no Newsroom e na história da empresa: **Fathom** (ressonância de cabeça de 7 tesla com ímã selado imerso em hélio, CE em maio de 2027), **Diadem** (capacete de MEG vestível com 64 magnetômetros, lançado em março de 2028) e **Tenor** (ultrassom focalizado de baixa intensidade para pesquisa, maio de 2028). Todas têm instruções de uso em PDF. As perguntas em aberto estão em `docs/PERGUNTAS-PARA-O-MAX.md`.
+
 ## O que eu inventei (pode trocar)
 
 Tudo isto está fora do pitch e é substituível:

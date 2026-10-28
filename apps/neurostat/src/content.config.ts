@@ -25,7 +25,7 @@ export const collections = {
       drugClass: z.string(),
       indication: z.string(),
       approved: z.number(),
-      kind: z.enum(['Medicine', 'Medical device', 'Digital platform']),
+      kind: z.enum(['Medicine', 'Medical device', 'Digital platform', 'Imaging system']),
       order: z.number().default(0),
       published,
       leaflet: z.string().optional(),

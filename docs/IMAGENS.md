@@ -21,6 +21,9 @@ Visual: gente em lugar extremo (estação polar, plataforma offshore, base milit
 | `product-migrestil.jpg` | Max | 4:5, 1200 × 1500 px | Embalagem do Migrestil | idem |
 | `product-halo.jpg` | Max | 4:5, 1200 × 1500 px | Faixa de EEG de eletrodo seco, vista de frente e de lado | Aparência de brinquedo ou de gadget de consumo |
 | `product-baseline.jpg` | Max | 4:5, 1200 × 1500 px | Tablet com a tela de um dos testes, sem dados de pessoa | Dados reais |
+| `product-fathom.jpg` | Max | 4:5, 1200 × 1500 px | Scanner de cabeça (MRI) de 7 tesla, compacto, sobre fundo claro (#f2f5f9) | Marcas reais, aparência de aparelho de hospital genérico |
+| `product-diadem.jpg` | Max | 4:5, 1200 × 1500 px | Capacete leve com sensores (MEG vestível), visto de frente e de lado | Aparência de brinquedo ou de gadget de consumo |
+| `product-tenor.jpg` | Max | 4:5, 1200 × 1500 px | Armação de cabeça com transdutores de ultrassom, ao lado de um scanner | Aparência de arma ou de equipamento de tortura |
 | `portrait-alessandro-ferri-lutz.jpg` | Max | 4:5, 800 × 1000 px | CEO. Ítalo-suíço, rico, relógio visível, roupa cara e discreta | |
 | `portrait-rafael-steinmetz.jpg` | Max | 4:5, 800 × 1000 px | CFO | |
 | `portrait-felix-haldane.jpg` | Max | 4:5, 800 × 1000 px | CSO | |

@@ -73,7 +73,7 @@ Para testar uma data sem mexer no painel, abra o site no seu computador (`npm ru
 
 1. Dentro do novo app, copie `public/js/log-config.js` e `public/js/control.js` de um dos sites e mude o nome em `site:`.
 2. Carregue `/js/log-config.js` e `/js/control.js` no layout, como os outros sites fazem.
-3. Rode `npm run gm-bundle` e faça o commit do arquivo `.bin`. O painel passa a listar o site em "Avisos", e a data compartilhada já vale para ele.
+3. Rode `npm run panel-bundle` e faça o commit do arquivo `.bin` do painel. O painel passa a listar o site em "Avisos", e a data compartilhada já vale para ele.
 
 ## Apagar as entradas de teste
 
@@ -91,7 +91,7 @@ A pasta `private/` existe só neste computador e não vai para o GitHub:
 
 - `doc-keys.json`: as chaves de cada documento da biblioteca e a chave da lista de logins. **Se perder, os documentos já publicados deixam de abrir para todos os logins, e a lista de logins fica ilegível.**
 - `log-keys.json`: a chave que lê as mensagens e a chave que assina os avisos. **Se perder, as mensagens ficam ilegíveis para sempre e o painel não consegue mais publicar.**
-- `credentials.gm`: usuário e senha do mestre.
+- `credentials.gm`: o login antigo do mestre em `/partner/`, que foi desligado em 28/10/2026. O arquivo não é mais usado.
 - `firebase.json`: projeto e chave pública do Firebase.
 
 Faça uma cópia da pasta inteira num pen drive ou na nuvem.
@@ -102,13 +102,9 @@ O painel guarda dentro do pacote criptografado a lista de logins de portal, os d
 
 Para trocar a palavra ou a senha, edite `private/credentials.panel` (palavra, senha e `gm`, separados por tab) e rode `npm run panel-bundle`. Se trocar a palavra, avise para eu atualizar a conferência dela na página (`PHRASE_HASH` em `apps/painel/painel.js`).
 
-## Mudar a senha do mestre (tela de leitura do portal)
+## O login antigo do mestre
 
-O login do mestre em `https://neurostat-group.github.io/partner/` continua existindo, só para ler as mensagens.
-
-1. Edite a senha em `private/credentials.gm`.
-2. Rode `npm run gm-bundle` na pasta do projeto.
-3. Faça o commit do arquivo `.bin` que mudou em `apps/neurostat/public/partner/d/` e dê push.
+Antes do painel, as mensagens eram lidas entrando em `/partner/` com um login secreto. Esse login foi desligado em 28/10/2026: o painel mostra tudo na aba Mensagens e não existe mais outra porta de entrada. Para trazê-lo de volta, rode `npm run gm-bundle` (usa `private/credentials.gm`) e faça o commit do arquivo gerado em `apps/neurostat/public/partner/d/`.
 
 ## Se alguma coisa parar de funcionar
 
